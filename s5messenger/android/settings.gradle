@@ -1,0 +1,3 @@
+rootProject.name = 's5messenger'
+
+include ':app'
