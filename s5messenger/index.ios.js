@@ -1,8 +1,13 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
  * @flow
  */
+
+import { AppRegistry } from 'react-native';
+import setup from './app/setup';
+
+AppRegistry.registerComponent('s5messenger', () => setup);
+
+/* @ TODO Remove the below codes
 
 import React, { Component } from 'react';
 import {
@@ -51,3 +56,4 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('s5messenger', () => s5messenger);
+*/
