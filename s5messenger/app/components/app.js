@@ -10,7 +10,6 @@ import {
   StyleSheet,
   StatusBar,
   View,
-  Linking,
 } from 'react-native';
 
 import { loadConfig, updateInstallation } from 's5-action';
@@ -22,11 +21,6 @@ import { connect } from 'react-redux';
 
 class App extends Component {
 
-  constructor(props) {
-    super();
-    this.handleOpenURL = this.handleOpenURL.bind(this);
-  };
-
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
 
@@ -36,26 +30,15 @@ class App extends Component {
     this.props.dispatch(loadConfig());
 
     updateInstallation({VERSION});
-
-    Linking.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
-
-    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
   handleAppStateChange(currentAppState) {
     if (currentAppState === 'active') { // active, background, inactive
       // TODO: Notification 같은 정보를 가져옴 !
-    }
-  }
-
-  handleOpenURL(event) {
-    if( event.url.indexOf( "s5messenger:") > -1 ){
-      var url = event.url.replace('s5messenger://', '');
-      this.props.dispatch(launchExternalUrl(url));
     }
   }
 
@@ -90,11 +73,5 @@ function select(store) {
   };
 }
 
-function launchExternalUrl(url): Action {
-  return {
-    type: 'LAUNCH_EXTERNAL_URL',
-    externalUrl:url
-  };
-}
 
 module.exports = connect(select)(App);

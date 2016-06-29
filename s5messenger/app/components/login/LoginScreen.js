@@ -7,86 +7,55 @@
 
 import React, { Component } from 'react';
 import {
-  Animated,
-  Dimensions,
   Image,
   StatusBarIOS,
   StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
-import LoginButton from './LoginButton';
+import SigninView from './SigninView';
+import SignupView from './SignupView';
 
 class LoginScreen extends Component {
 
   state = {
-    anim: new Animated.Value(0),
+    current: 'Signin',
   };
 
   componentDidMount() {
     StatusBarIOS && StatusBarIOS.setStyle('default');
-    Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
   }
+
+
 
   render() {
-    return (
-      <Image
-        style={styles.container}
-        source={require('./img/login-background.png')}>
-        <View style={styles.section}>
-          <Animated.Image
-            style={this.fadeIn(0)}
-            source={require('./img/devconf-logo.png')}
+
+    if(this.state.current === 'Signin') {
+      return (
+        <Image
+          style={styles.container}
+          source={require('./img/login-background.png')}>
+          <SigninView
+            onSwitchView={(text) => this.setState({current: text})}
           />
-        </View>
-        <View style={styles.section}>
-          <Animated.Text style={[styles.h1, this.fadeIn(700, -20)]}>
-            Pin to
-          </Animated.Text>
-          <Animated.Text style={[styles.h1, {marginTop: -30}, this.fadeIn(700, 20)]}>
-            All Trip
-          </Animated.Text>
-          <Animated.Text style={[styles.h2, this.fadeIn(1000, 10)]}>
-            Right Now / GS Gangseo N Tower
-          </Animated.Text>
-          <Animated.Text style={[styles.h3, this.fadeIn(1200, 10)]}>
-            SEOUL KOREA
-          </Animated.Text>
-        </View>
-        <Animated.View style={[styles.section, styles.last, this.fadeIn(2500, 20)]}>
-          <Text style={styles.loginComment}>
-            Use Facebook to find your friends at S5.
-          </Text>
-          <LoginButton source="First screen" />
-        </Animated.View>
-      </Image>
-    );
+        </Image>
+      );
+    } else{
+      return (
+        <Image
+          style={styles.container}
+          source={require('./img/login-background.png')}>
+          <SignupView
+            onSwitchView={(text) => this.setState({current: text})}
+            />
+        </Image>
+      );
+
+    }
   }
 
-  fadeIn(delay, from = 0) {
-    const {anim} = this.state;
-    return {
-      opacity: anim.interpolate({
-        inputRange: [delay, Math.min(delay + 500, 3000)],
-        outputRange: [0, 1],
-        extrapolate: 'clamp',
-      }),
-      transform: [{
-        translateY: anim.interpolate({
-          inputRange: [delay, Math.min(delay + 500, 3000)],
-          outputRange: [from, 0],
-          extrapolate: 'clamp',
-        }),
-      }],
-    };
-  }
 }
-
-const scale = Dimensions.get('window').width / 375;
 
 var styles = StyleSheet.create({
   container: {
@@ -102,34 +71,6 @@ var styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  last: {
-    justifyContent: 'flex-end',
-  },
-  h1: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: Math.round(74 * scale),
-    color: '#032250',
-    backgroundColor: 'transparent',
-  },
-  h2: {
-    textAlign: 'center',
-    fontSize: 17,
-    color: '#032250',
-    marginVertical: 20,
-  },
-  h3: {
-    fontSize: 12,
-    textAlign: 'center',
-    color: '#7F91A7',
-    letterSpacing: 1,
-  },
-  loginComment: {
-    marginBottom: 14,
-    fontSize: 12,
-    color: '#032250',
-    textAlign: 'center',
   },
 });
 

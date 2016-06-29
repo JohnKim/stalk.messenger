@@ -20,15 +20,15 @@ react-native 기반의 모바일 메신져
 
 ### s5server-session
 
-parse-server & express & xpush 로 구현된 session 서버
+**parse-server & express & xpush 로 구현된 session 서버**
+
+Mongodb, redis, zookeeper 가 사전에 실행해야 함.
+
+```
+## 서버 실행하기.
+$ ./s5server-session/bin/session-server --config ./config.local.json
+```
 
 ### s5server-channel
 
-구현 예정
-
-### react-native 모듈
-
-$ npm install --save react-native-linear-gradient react-native-image-picker@latest
-$ rnpm link
-
-npm install --save moment parse react-redux redux redux-logger redux-persist redux-thunk
+구현하고 있음.
