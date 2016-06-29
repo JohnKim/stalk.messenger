@@ -14,13 +14,10 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Text,
 } from 'react-native';
 
-import { skipLogin } from 's5-action';
 import { connect } from 'react-redux';
-
-import { Text } from 'S5Text';
-import S5Colors from 'S5Colors';
 
 import LoginButton from './LoginButton';
 
@@ -40,16 +37,6 @@ class LoginScreen extends Component {
       <Image
         style={styles.container}
         source={require('./img/login-background.png')}>
-        <TouchableOpacity
-          accessibilityLabel="Skip login"
-          accessibilityTraits="button"
-          style={styles.skip}
-          onPress={() => this.props.dispatch(skipLogin())}>
-          <Animated.Image
-            style={this.fadeIn(2800)}
-            source={require('./img/x.png')}
-          />
-        </TouchableOpacity>
         <View style={styles.section}>
           <Animated.Image
             style={this.fadeIn(0)}
@@ -123,32 +110,26 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     fontSize: Math.round(74 * scale),
-    color: S5Colors.darkText,
+    color: '#032250',
     backgroundColor: 'transparent',
   },
   h2: {
     textAlign: 'center',
     fontSize: 17,
-    color: S5Colors.darkText,
+    color: '#032250',
     marginVertical: 20,
   },
   h3: {
     fontSize: 12,
     textAlign: 'center',
-    color: S5Colors.lightText,
+    color: '#7F91A7',
     letterSpacing: 1,
   },
   loginComment: {
     marginBottom: 14,
     fontSize: 12,
-    color: S5Colors.darkText,
+    color: '#032250',
     textAlign: 'center',
-  },
-  skip: {
-    position: 'absolute',
-    right: 0,
-    top: 20,
-    padding: 15,
   },
 });
 

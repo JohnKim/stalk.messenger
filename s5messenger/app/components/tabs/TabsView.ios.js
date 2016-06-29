@@ -9,17 +9,13 @@ import {
   StatusBarIOS,
   TabBarIOS,
   Navigator,
+  Text,
 } from 'react-native';
 
 import { switchTab } from 's5-action';
 import { connect } from 'react-redux';
-import S5Colors from 'S5Colors';
 
-import ProfileView from './profile';
-import PostView from './post';
-import NotificationView from './notification';
-
-class TabsView extends React.Component {
+class TabsView extends Component {
 
   componentDidMount() {
     StatusBarIOS && StatusBarIOS.setStyle('light-content');
@@ -34,32 +30,8 @@ class TabsView extends React.Component {
   render() {
 
     return (
-      <TabBarIOS tintColor={S5Colors.darkText}>
-        <TabBarIOS.Item
-          title="My trips"
-          selected={this.props.tab === 'profile'}
-          onPress={this.onTabSelect.bind(this, 'profile')}
-          icon={require('./profile/img/profile-icon.png')}
-          selectedIcon={require('./profile/img/profile-icon-active.png')}>
-          <ProfileView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="Trips"
-          selected={this.props.tab === 'post'}
-          onPress={this.onTabSelect.bind(this, 'post')}
-          icon={require('./post/img/post-icon.png')}
-          selectedIcon={require('./post/img/post-icon-active.png')}>
-          <PostView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="Notifications"
-          selected={this.props.tab === 'notification'}
-          onPress={this.onTabSelect.bind(this, 'notification')}
-          icon={require('./notification/img/notification-icon.png')}
-          selectedIcon={require('./notification/img/notification-icon-active.png')}>
-          <NotificationView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-      </TabBarIOS>
+      <Text>aaaa
+      </Text>
     );
   }
 

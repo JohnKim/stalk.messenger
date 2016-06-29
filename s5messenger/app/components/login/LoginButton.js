@@ -9,7 +9,7 @@ import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 
 import S5Button from 'S5Button';
-import { logInWithFacebook } from 's5-action';
+import { logIn } from 's5-action';
 import { connect } from 'react-redux';
 
 class LoginButton extends Component {
