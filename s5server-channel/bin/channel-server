@@ -1,0 +1,131 @@
+#!/usr/bin/env node
+
+var fs = require('fs'),
+  net = require('net'),
+
+  argv = require('optimist').argv,
+  stalkServer = require('../lib/index'),
+  utils = require('../lib/utils'),
+  daemon = require('../lib/daemon/daemon-handler');
+
+var help = [
+  "usage: channel-server [options] ",
+  "",
+  "Starts a STALK Channel Server using the specified command-line options",
+  "",
+  "options:",
+  "  --port   PORT       Port that the channel server should run on",
+  "  --config OUTFILE    Location of the configuration file for the channel server",
+  "  --host   DOMAIN     Hostname",
+  "  -h, --help          You're staring at it"
+].join('\n');
+
+var welcome = [
+  " ",
+  " ,  ",
+  " |\\  ",
+  " \\ | ",
+  "  | \\ /          OPENSOURCE MESSENGER PROJECT",
+  "   \\|/    _,                   SESSION SERVER",
+  "    /  __/ /      _____________   __   __ __  ",
+  "   | _/ _.'      / __/_  __/ _ | / /  / //_/  ",
+  "   |/__/        _\\ \\  / / / __ |/ /__/ ,<    ",
+  "    \\          /___/ /_/ /_/ |_/____/_/|_|   ",
+  " ",
+  " "
+].join('\n');
+
+if (argv.h || argv.help /*|| Object.keys(argv).length === 3 || !argv.config */) {
+  return console.log(help);
+}
+
+var config = {},
+  server;
+
+var startServer = function () {
+
+  daemon.startDaemon(options, function (err) {
+    if (err) {
+      console.error('\n\n process daemon was not yet finished \n');
+      if (err.code == 'PID_EXISTED') {
+        console.info(err.message);
+      }
+    } else {
+
+      // FINALLY STARTING !!
+      server = stalkServer.createChannelServer(options);
+
+    }
+  });
+};
+
+if (argv.config) {
+  try {
+    var data = fs.readFileSync(argv.config);
+    config = JSON.parse(data.toString());
+  } catch (ex) {
+    console.error('Error starting channel server: ' + ex);
+    process.exit(1);
+  }
+}
+
+var options = {};
+
+options['config_path'] = argv.config;
+
+if (config.zookeeper) options['zookeeper'] = config.zookeeper;
+if (config.redis) options['redis'] = config.redis;
+if (config.mongodb) options['mongodb'] = config.mongodb; // 필요한 경우만 사용.
+if (config.home){
+  if(config.home.startsWith("/")){
+    options['home'] = config.home;
+  }else{
+    return console.error('\n\n [ERROR] home directory must to be full paths from root(/) \n\n');
+  }
+}
+if (config.apps) options['apps'] = config.apps;
+
+// set host
+options['host'] = argv.host || utils.getIP();
+options['logo'] = welcome;
+
+// set port
+options['port'] = 9000; // default port
+var isSpecifiedPort = false;
+if (config.channelServer) {
+  options['port'] = config.channelServer.port;
+  isSpecifiedPort = true;
+}
+if (argv.port) {
+  options['port'] = argv.port;
+  isSpecifiedPort = true;
+}
+
+if (!isSpecifiedPort) {
+
+  var checkPort = function (callback, port) {
+    port = port || 9000;
+
+    var tester = net.createServer()
+      .once('error', function (err) {
+
+        checkPort(callback, port + 100);
+
+      })
+      .once('listening', function () {
+        tester.once('close', function () {
+            callback(port);
+          })
+          .close();
+      })
+      .listen(port);
+  };
+
+  checkPort(function (port) {
+    options['port'] = port;
+    startServer();
+  });
+
+} else {
+  startServer();
+}
