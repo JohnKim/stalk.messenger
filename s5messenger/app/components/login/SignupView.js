@@ -3,9 +3,12 @@
 import React, { Component } from 'react';
 import {
   View,
+  Text,
   TextInput,
 } from 'react-native';
+
 import { connect } from 'react-redux';
+import { signup } from 's5-action';
 
 import Button from './Button';
 import styles from './styles.js';
@@ -17,52 +20,46 @@ class SignupView extends Component {
     email: '',
     username: '',
     password: '',
+    passwordChecked: '',
+    message: '',
   };
 
   signup(){
 
-    this.setState({
-      loaded: false
-    });
+    this.setState({ message: '' });
 
-    app.createUser({
-      'email': this.state.email,
-      'password': this.state.password
-    }, (error, userData) => {
+    if(!this.state.email) {
+      this.setState({ message: 'Email must be filled' });
+      this.refs['email'].focus();
+      return false;
+    }
 
-      if(error){
-        switch(error.code){
+    if(!this.state.username) {
+      this.setState({ message: 'Username must be filled' });
+      this.refs['username'].focus();
+      return false;
+    }
 
-          case "EMAIL_TAKEN":
-            alert("The new user account cannot be created because the email is already in use.");
-          break;
-
-          case "INVALID_EMAIL":
-            alert("The specified email is not a valid email.");
-          break;
-
-          default:
-            alert("Error creating user:");
-        }
-
-      }else{
-        alert('Your account was created!');
-      }
-
+    if(!this.state.password) {
       this.setState({
-        email: '',
-        password: '',
-        loaded: true
+        message: 'Password must be filled' ,
+        passwordChecked: '',
       });
+      this.refs['password'].focus();
+      return false;
+    }
 
-    });
+    if(this.state.passwordChecked != this.state.password) {
+      this.setState({
+        message: 'Both passwords must be same with',
+        password: '',
+        passwordChecked: '',
+      });
+      return false;
+    }
 
-  }
+    this.props.signup( this.state );
 
-  goToLogin(){
-    this.props.navigator.push({
-      component: Login
-    });
   }
 
   render() {
@@ -71,24 +68,37 @@ class SignupView extends Component {
         <View style={styles.body}>
 
   		    <TextInput
+            ref="email"
     		    style={styles.textinput}
     		    onChangeText={(text) => this.setState({email: text})}
     		    value={this.state.email}
             placeholder={"Email Address"}
   		    />
           <TextInput
+            ref="username"
             style={styles.textinput}
             onChangeText={(text) => this.setState({username: text})}
             value={this.state.username}
             placeholder={"Username"}
           />
           <TextInput
+            ref="password"
             style={styles.textinput}
             onChangeText={(text) => this.setState({password: text})}
             value={this.state.password}
             secureTextEntry={true}
             placeholder={"Password"}
           />
+          <TextInput
+            style={styles.textinput}
+            onChangeText={(text) => this.setState({passwordChecked: text})}
+            value={this.state.passwordChecked}
+            secureTextEntry={true}
+            placeholder={"Check Password with same"}
+          />
+          <Text>
+            {this.state.message}
+          </Text>
           <Button
             text="Signup"
             onpress={this.signup.bind(this)}
@@ -97,7 +107,7 @@ class SignupView extends Component {
 
           <Button
             text="Got an Account?"
-            onpress={this.goToLogin.bind(this)}
+            onpress={() => this.props.onSwitchView('Signup')}
             button_styles={styles.transparent_button}
             button_text_styles={styles.transparent_button_text} />
         </View>
@@ -106,5 +116,14 @@ class SignupView extends Component {
   }
 }
 
+SignupView.propTypes = {
+  onSwitchView: React.PropTypes.func.isRequired,
+};
 
-module.exports = connect()(SignupView);
+function actions(dispatch) {
+  return {
+    signup: (data) => dispatch(signup(data))
+  };
+}
+
+module.exports = connect(null ,actions)(SignupView);

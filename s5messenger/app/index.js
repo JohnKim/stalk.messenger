@@ -25,8 +25,6 @@ export default class Messenger extends React.Component {
 
   render() {
 
-    console.log('----------------> ddd' + this.state.isLoading);
-
     if (this.state.isLoading) {
       return null;
     }
