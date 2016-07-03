@@ -26,7 +26,7 @@ var welcome = [
   " |\\  ",
   " \\ | ",
   "  | \\ /          OPENSOURCE MESSENGER PROJECT",
-  "   \\|/    _,                   SESSION SERVER",
+  "   \\|/    _,                   CHANNEL SERVER",
   "    /  __/ /      _____________   __   __ __  ",
   "   | _/ _.'      / __/_  __/ _ | / /  / //_/  ",
   "   |/__/        _\\ \\  / / / __ |/ /__/ ,<    ",
