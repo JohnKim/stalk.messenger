@@ -58,7 +58,11 @@ class SignupView extends Component {
       return false;
     }
 
-    this.props.signup( this.state );
+    this.props.signup( this.state, (error) => {
+      if(error.code == 202){ // 202 Account already exists for this username.
+        this.setState({ message: 'Account already exists for this username.' });
+      }
+    });
 
   }
 
@@ -107,7 +111,7 @@ class SignupView extends Component {
 
           <Button
             text="Got an Account?"
-            onpress={() => this.props.onSwitchView('Signup')}
+            onpress={() => this.props.onSwitchView('Signin')}
             button_styles={styles.transparent_button}
             button_text_styles={styles.transparent_button_text} />
         </View>
@@ -122,7 +126,7 @@ SignupView.propTypes = {
 
 function actions(dispatch) {
   return {
-    signup: (data) => dispatch(signup(data))
+    signup: (data, callback) => dispatch(signup(data, callback))
   };
 }
 

@@ -12,8 +12,13 @@ import {
   Text,
 } from 'react-native';
 
+import S5Colors from 'S5Colors';
 import { switchTab } from 's5-action';
 import { connect } from 'react-redux';
+
+import FriendsView from './friends';
+import ChatsView from './chats';
+import ProfileView from './profile';
 
 class TabsView extends Component {
 
@@ -30,8 +35,32 @@ class TabsView extends Component {
   render() {
 
     return (
-      <Text>aaaa
-      </Text>
+      <TabBarIOS tintColor={S5Colors.darkText}>
+        <TabBarIOS.Item
+          title="Friends"
+          selected={this.props.tab === 'friends'}
+          onPress={this.onTabSelect.bind(this, 'friends')}
+          icon={require('./friends/img/icon.png')}
+          selectedIcon={require('./friends/img/icon-active.png')}>
+          <FriendsView navigator={this.props.navigator} />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Chats"
+          selected={this.props.tab === 'chats'}
+          onPress={this.onTabSelect.bind(this, 'chats')}
+          icon={require('./chats/img/icon.png')}
+          selectedIcon={require('./chats/img/icon-active.png')}>
+          <ChatsView navigator={this.props.navigator} />
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Profile"
+          selected={this.props.tab === 'profile'}
+          onPress={this.onTabSelect.bind(this, 'profile')}
+          icon={require('./profile/img/icon.png')}
+          selectedIcon={require('./profile/img/icon-active.png')}>
+          <ProfileView navigator={this.props.navigator} />
+        </TabBarIOS.Item>
+      </TabBarIOS>
     );
   }
 

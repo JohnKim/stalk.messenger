@@ -27,8 +27,6 @@ class LoginScreen extends Component {
     StatusBarIOS && StatusBarIOS.setStyle('default');
   }
 
-
-
   render() {
 
     if(this.state.current === 'Signin') {

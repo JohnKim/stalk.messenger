@@ -13,9 +13,9 @@ export const SIGNED_UP    = 'SIGNED_UP';
 export const LOGGED_IN  = 'LOGGED_IN';
 export const LOGGED_OUT = 'LOGGED_OUT';
 
-export function signup(data) {
+export function signup(data, callback) {
 
-  return (dispatch: Dispatch) => {
+  return (dispatch) => {
 
     var user = new Parse.User();
     user.set("username", data.username);
@@ -34,16 +34,17 @@ export function signup(data) {
         });
       },
       error: function(user, error) {
-        console.error("Error: " + error.code + " " + error.message);
+        callback(error);
+        console.log("Error: " + error.code + " " + error.message);
       }
     });
 
   };
 }
 
-export function signin(data) {
+export function signin(data, callback) {
 
-  return (dispatch: Dispatch) => {
+  return (dispatch) => {
 
     Parse.User.logIn(data.username, data.password, {
       success: function(user) {
@@ -58,7 +59,8 @@ export function signin(data) {
 
       },
       error: function(user, error) {
-        console.error("Error: " + error.code + " " + error.message);
+        callback(error);
+        console.log("Error: " + error.code + " " + error.message);
       }
 
     });

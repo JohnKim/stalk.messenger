@@ -37,7 +37,11 @@ class SigninView extends Component {
       return false;
     }
 
-    this.props.signin( this.state );
+    this.props.signin( this.state, (error) => {
+      if(error.code == 101){ // Invalid username/password
+        this.setState({ message: 'Invalid username/password' });
+      }
+    });
   }
 
   render(){
@@ -89,7 +93,7 @@ SigninView.propTypes = {
 
 function actions(dispatch) {
   return {
-    signin: (data) => dispatch(signin(data))
+    signin: (data, callback) => dispatch(signin(data, callback))
   };
 }
 
