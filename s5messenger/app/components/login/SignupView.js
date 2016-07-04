@@ -74,14 +74,14 @@ class SignupView extends Component {
   		    <TextInput
             ref="email"
     		    style={styles.textinput}
-    		    onChangeText={(text) => this.setState({email: text})}
+    		    onChangeText={(text) => this.setState({email: text.toLowerCase()})}
     		    value={this.state.email}
             placeholder={"Email Address"}
   		    />
           <TextInput
             ref="username"
             style={styles.textinput}
-            onChangeText={(text) => this.setState({username: text})}
+            onChangeText={(text) => this.setState({username: text.toLowerCase()})}
             value={this.state.username}
             placeholder={"Username"}
           />
