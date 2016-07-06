@@ -3,9 +3,9 @@
  */
 
 const commonActions = require('./common');
-const loginActions = require('./login');
+const userActions = require('./user');
 
 module.exports = {
   ...commonActions,
-  ...loginActions,
+  ...userActions,
 };

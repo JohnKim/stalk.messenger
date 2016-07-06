@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+var express = require('express');
+var ParseDashboard = require('parse-dashboard');
+var argv = require('optimist').argv;
+var utils = require('../lib/utils');
+var fs = require('fs');
+
+var PORT = 4040;
+
+var config = {}, options = {};
+
+if (argv.config) {
+  try {
+    var data = fs.readFileSync(argv.config);
+    config = JSON.parse(data.toString());
+  } catch (ex) {
+    console.error('Error starting session server: ' + ex);
+    process.exit(1);
+  }
+}else{
+  console.error('"--config" must be defined for starting dashboard.');
+  process.exit(1);
+}
+
+options['host'] = argv.host || 'localhost'; //utils.getIP();
+options['port'] = 8080;
+if (config.port) options['port'] = config.port;
+if (argv.port) options['port'] = argv.port;
+
+if (config.app) options['app'] = config.app;
+if (config.master) options['master'] = config.master;
+
+var app = {
+  "serverURL": options.host+':'+options.port+'/parse',
+  "appId": options.app || 'STALK',
+  "masterKey": options.master || 's3cR3T',
+  "appName": "stalk messenger"
+};
+
+console.log(app);
+
+var dashboard = new ParseDashboard({ "apps": [ app ] });
+
+var app = express();
+app.use('/dashboard', dashboard);
+
+var httpServer = require('http').createServer(app);
+httpServer.listen(PORT, () => {
+    //Callback triggered when server is successfully listening. Hurray!
+    console.log("\nparse-dashboard listening on: http://localhost:%s/dashboard \n", PORT);
+});
