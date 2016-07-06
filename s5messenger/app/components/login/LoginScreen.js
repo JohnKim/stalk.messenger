@@ -1,6 +1,5 @@
 /**
  *
- *
  * @flow
  */
 'use strict';
@@ -27,8 +26,6 @@ class LoginScreen extends Component {
     StatusBarIOS && StatusBarIOS.setStyle('default');
   }
 
-
-
   render() {
 
     if(this.state.current === 'Signin') {
@@ -41,7 +38,7 @@ class LoginScreen extends Component {
           />
         </Image>
       );
-    } else{
+    } else {
       return (
         <Image
           style={styles.container}

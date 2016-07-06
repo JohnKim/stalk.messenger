@@ -59,12 +59,6 @@ class SignupView extends Component {
 
   }
 
-  goToLogin(){
-    this.props.navigator.push({
-      component: Login
-    });
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -97,9 +91,10 @@ class SignupView extends Component {
 
           <Button
             text="Got an Account?"
-            onpress={this.goToLogin.bind(this)}
+            onpress={() => this.props.onSwitchView('Signin')}
             button_styles={styles.transparent_button}
             button_text_styles={styles.transparent_button_text} />
+
         </View>
       </View>
     );
