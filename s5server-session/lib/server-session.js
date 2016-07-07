@@ -18,12 +18,9 @@ var SessionServer = exports.SessionServer = function (options, cb) {
   var api = new ParseServer({
     databaseURI: options.mongodb || 'mongodb://localhost:27017/stalk-messenger',
     cloud: __dirname + '/cloud/main.js',
-    appId: process.env.APP_ID || 'STALK',
+    appId: options.app || 'STALK',
     masterKey: options.master || 's3cR3T', //Add your master key here. Keep it secret!
-    serverURL: options.host+':'+options.port+'/parse',
-    liveQuery: {
-      classNames: ["Posts", "Comments"] // @ TODO List of classes to support for query subscriptions
-    }
+    serverURL: options.host+':'+options.port+'/parse'
   });
 
   var staticPath = path.normalize(__dirname + '/../public');

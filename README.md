@@ -1,3 +1,5 @@
+**이 프로젝트는 개발 중입니다. 동작하지 않으며, clone 받지 말아주세요. 빨리 개발해서 정식 릴리즈 하도록 하겠습니다.**
+
 ```
 ,
 |\
@@ -27,6 +29,9 @@ Mongodb, redis, zookeeper 가 사전에 실행해야 함.
 ```
 ## 서버 실행하기.
 $ ./s5server-session/bin/session-server --config ./config.local.json
+
+## parse-dashboard 실행하기. ( 실행 후 `http://[host]:[port]/dashboard` 로 접속)
+$ ./s5server-session/bin/parse-dashboard --config ./config.local.json
 ```
 
 ### 3. s5server-channel
