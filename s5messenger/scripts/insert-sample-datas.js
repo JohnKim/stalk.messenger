@@ -1,6 +1,6 @@
 import faker from 'faker';
 import Parse from 'parse/node';
-import DataGenerator from './lib/dataGenerator';
+import Data from './lib/dataGenerator';
 
 var {SERVER_URL, APP_ID} = require('../env');
 
@@ -12,6 +12,11 @@ var Folder = Parse.Object.extend('Folder');
 
 async function main() {
 
+  await createUser("test01");
+  await createUser("test02");
+  await createFakeUsers(3);
+
+/*
   // USERS (SIGN_UP)
   for (var index = 0; index < 60; index++) {
     await signup();
@@ -35,57 +40,40 @@ async function main() {
     console.log( folders[index] );
     await new Folder(folders[index]).save();
   }
-
+*/
   return 'OK';
 }
 
 main()
   .then(console.dir, console.error);
 
+/* ******************************************************************* */
 
-function signup() {
-  var user = new Parse.User();
+async function createFakeUsers(num) {
 
-  // Essential values
-  user.set("username",    faker.internet.userName()); // username
-  user.set("password",    faker.internet.password()); // password
+  var maxNum = num || 5;
 
-  // Additional values
-  user.set("email",       faker.internet.email());    // email
-  user.set("nickName",    faker.name.findName());     // nickName
-  user.set("profileImage",faker.internet.avatar());   // profileImage
+  for (var index = 0; index < maxNum; index++) {
+    await Data.signup().signUp(null, {
+      success: function(user) {
+        console.log(user);
+      },
+      error: function(user, error) {
+        console.log("Error: " + error.code + " " + error.message);
+      }
+    });
+  }
+};
 
-  user.signUp(null, {
+
+async function createUser(username, password, email, nickName, profileImage) {
+
+  await Data.signup(username, password, email, nickName, profileImage).signUp(null, {
     success: function(user) {
       console.log(user);
     },
     error: function(user, error) {
-      // Show the error message somewhere and let the user try again.
       console.log("Error: " + error.code + " " + error.message);
     }
   });
-
-}
-
-function getPostData() {
-
-  var point = new Parse.GeoPoint({latitude: 40.0, longitude: -30.0});
-
-  let returnPostData = {
-    title: faker.lorem.sentence(),
-    description: faker.lorem.paragraphs(),
-    location: point
-  };
-
-  let resultArray = [];
-  let count = faker.random.number({min: 1, max: 10});
-  for (var index = 0; index < count; index++) {
-    resultArray[index] = faker.random.word();
-  }
-
-  returnPostData['tags'] = resultArray;
-
-  return returnPostData;
-}
-
-module.exports = { getPostData };
+};

@@ -3,6 +3,7 @@ var path        = require('path');
 var express     = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var bodyParser  = require('body-parser');
+var cors = require('cors');
 
 
 /**
@@ -15,13 +16,18 @@ var SessionServer = exports.SessionServer = function (options, cb) {
     throw new Error('Both `options` and `options.port` are required.');
   }
 
-  var api = new ParseServer({
+  var parseArgs = {
     databaseURI: options.mongodb || 'mongodb://localhost:27017/stalk-messenger',
     cloud: __dirname + '/cloud/main.js',
     appId: options.app || 'STALK',
+    appName: "stalk messenger",
     masterKey: options.master || 's3cR3T', //Add your master key here. Keep it secret!
     serverURL: options.host+':'+options.port+'/parse'
-  });
+  };
+
+  console.log(parseArgs);
+
+  var api = new ParseServer(parseArgs);
 
   var staticPath = path.normalize(__dirname + '/../public');
 
@@ -30,6 +36,7 @@ var SessionServer = exports.SessionServer = function (options, cb) {
   var app = express();
   app.use( bodyParser.urlencoded({ extended: false }) ); 	// parse application/x-www-form-urlencoded
   app.use( bodyParser.json() );							              // parse application/json
+  app.use( cors() );
   app.use('/public', express.static(staticPath));
 
   app.use('/parse', api);

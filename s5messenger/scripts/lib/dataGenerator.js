@@ -2,15 +2,15 @@ import faker from 'faker';
 import Parse from 'parse/node';
 
 var notNullValue = function(value, fakerValue) {
-  return value? value: fakeValue;
+  return value? value: fakerValue;
 }
 
-export signup = function(username, password, email, nuckName, profileImage) {
+exports.signup = function(username, password, email, nickName, profileImage) {
   var user = new Parse.User();
 
   // Essential values
   user.set("username",    notNullValue(username, faker.internet.userName())); // username
-  user.set("password",    notNullValue(password, faker.internet.password())); // password
+  user.set("password",    notNullValue(password, "password")); // password
 
   // Additional values
   user.set("email",       notNullValue(email, faker.internet.email()));    // email
