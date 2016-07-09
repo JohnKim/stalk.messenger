@@ -23,7 +23,7 @@ if (argv.config) {
   process.exit(1);
 }
 
-options['host'] = argv.host || 'localhost'; //utils.getIP();
+options['host'] = argv.host || utils.getIP();
 options['port'] = 8080;
 if (config.port) options['port'] = config.port;
 if (argv.port) options['port'] = argv.port;
@@ -32,7 +32,7 @@ if (config.app) options['app'] = config.app;
 if (config.master) options['master'] = config.master;
 
 var app = {
-  "serverURL": options.host+':'+options.port+'/parse',
+  "serverURL": "http://"+options.host+':'+options.port+'/parse', // protocal 이 반드시 명시되어야 함. TODO : 나중에 https 도 고려해서 수정 필요.
   "appId": options.app || 'STALK',
   "masterKey": options.master || 's3cR3T',
   "appName": "stalk messenger"

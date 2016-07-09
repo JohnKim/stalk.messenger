@@ -5,7 +5,7 @@ var notNullValue = function(value, fakerValue) {
   return value? value: fakerValue;
 }
 
-exports.signup = function(username, password, email, nickName, profileImage) {
+exports.user = function(username, password, email, nickName, profileImage) {
   var user = new Parse.User();
 
   // Essential values
@@ -18,6 +18,25 @@ exports.signup = function(username, password, email, nickName, profileImage) {
   user.set("profileImage",notNullValue(profileImage, faker.internet.avatar()));   // profileImage
 
   return user;
+}
+
+exports.friend = function(username, friend_username) {
+
+  var query = new Parse.Query(Parse.User);
+  query.equalTo("username", friend_username);
+  query.find({
+    success: function(results) {
+        console.log(JSON.stringify(results, null, '\t'));
+        for (var i = 0; i < results.length; i++) {
+          var object = results[i];
+          console.log(object.id + ' - ' + object);
+      }
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+
 }
 
 /*
