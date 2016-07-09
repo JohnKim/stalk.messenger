@@ -15,6 +15,10 @@ Parse.serverURL = `${SERVER_URL}/parse`;
 
 var Friends = Parse.Object.extend("Friends");
 
+var notNullValue = function(value, fakerValue) {
+  return value? value: fakerValue;
+}
+
 function createUser(username, password, email, nickName, profileImage) {
 
   var user = new Parse.User();
@@ -86,13 +90,16 @@ function listFriend(username){
 
   var query = new Parse.Query(Friends);
   query.equalTo("username", username);
+  query.include("contact");
   query.find({
     success: function(friends) {
+
+      console.log(JSON.stringify(friends, null, '\t'));
 
       for (var i = 0; i < friends.length; i++) {
         // This does not require a network access.
         var friend = friends[i].get("contact");
-
+        console.log(friend.get("username"));
         console.log(JSON.stringify(friend, null, '\t'));
       }
 
@@ -103,6 +110,24 @@ function listFriend(username){
   });
 
 }
+
+function listFriend2(username){
+
+  var innerQuery = new Parse.Query(Friends);
+  innerQuery.equalTo("username", username);
+  innerQuery.select("contact");
+
+  var query = new Parse.Query(Parse.User);
+  query.matchesQuery("contact", innerQuery);
+  query.find({
+    success: function(users) {
+      console.log(JSON.stringify(users, null, '\t'));
+    }
+  });
+
+}
+
+
 
 switch (argv[2]) {
   case "user:create":
@@ -132,9 +157,11 @@ switch (argv[2]) {
 }
 
 function throwError(msg) {
-    console.info('\n', msg || 'ERROR !! ', '\n');
-    process.exit(0);
+  console.info('\n', msg || 'ERROR !! ', '\n');
+  process.exit(0);
 }
+
+
 
 /*
 

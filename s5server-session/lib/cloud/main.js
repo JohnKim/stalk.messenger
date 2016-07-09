@@ -1,4 +1,4 @@
 
-Parse.Cloud.define('hello', function(req, res) {
-  res.success('Hi');
-});
+require(__dirname + '/follows.js');
+require(__dirname + '/chats.js');
+require(__dirname + '/messages.js');
