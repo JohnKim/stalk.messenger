@@ -35,6 +35,5 @@ export default class Messenger extends React.Component {
       </Provider>
     );
   }
-
-
+  
 }

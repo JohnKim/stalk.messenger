@@ -49,6 +49,12 @@ export function signin(data, callback) {
     Parse.User.logIn(data.username, data.password, {
       success: function(user) {
 
+        var currentUser = Parse.User.current();
+
+        console.log('-----------------------------------------------------');
+        console.log(currentUser);
+        console.log('-----------------------------------------------------');
+
         return dispatch({
           type: LOGGED_IN,
           data: {

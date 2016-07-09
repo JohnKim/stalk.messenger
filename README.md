@@ -28,9 +28,10 @@ Mongodb, redis, zookeeper 가 사전에 실행해야 함.
 
 ```
 ## 서버 실행하기.
+$ export VERBOSE=1  # 로깅 verbose
 $ ./s5server-session/bin/session-server --config ./config.local.json
 
-## parse-dashboard 실행하기. ( 실행 후 `http://[host]:[port]/dashboard` 로 접속)
+## parse-dashboard 실행하기. ( 실행 후 `http://[host]:4040/dashboard` 로 접속)
 $ ./s5server-session/bin/parse-dashboard --config ./config.local.json
 ```
 
@@ -53,21 +54,21 @@ $ ./s5server-channel/bin/channel-server --config ./config.local.json
 - [ ] 로그아웃
 
 ##### 데이터 모델링
-- [ ]  parse object 데이터 모델링 (Relation 관계 정의)
-- [ ]  samples 데이터 생성 스크립드 작성
-- [ ]  Relational Diagram 작업
+- [x] parse object 데이터 모델링 (Relation 관계 정의)
+- [ ] samples 데이터 생성 스크립드 작성
+- [ ] Relational Diagram 작업
 
 ##### Friends Tab
-- [ ]  GiftedListView Sample 코드 구현 (Friends Tab, Search Popup List View)
-- [ ]  Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
-- [ ]  Parse.Users 검색 View 구현
+- [ ] GiftedListView Sample 코드 구현 (Friends Tab, Search Popup List View)
+- [ ] Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
+- [ ] Parse.Users 검색 View 구현
 
 ##### Chats Tab
-- [ ]  GiftedListView Sample 코드 구현
-- [ ]  GiftedMessenger Sample 코드 구현
-- [ ]  Chats 목록 조회 기능 구현
-- [ ]  Chat View 구현
+- [ ] GiftedListView Sample 코드 구현
+- [ ] GiftedMessenger Sample 코드 구현
+- [ ] Chats 목록 조회 기능 구현
+- [ ] Chat View 구현
 
 ##### Profile Tab
-- [ ]  Profile 이미지 업로드 구현
+- [ ] Profile 이미지 업로드 구현
 - [ ] Profile 관리 기능 구현

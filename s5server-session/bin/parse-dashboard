@@ -48,5 +48,5 @@ app.use('/dashboard', dashboard);
 var httpServer = require('http').createServer(app);
 httpServer.listen(PORT, () => {
     //Callback triggered when server is successfully listening. Hurray!
-    console.log("\nparse-dashboard listening on: http://localhost:%s/dashboard \n", PORT);
+    console.log("\nparse-dashboard listening on: %s:%s/dashboard \n", options['host'], PORT);
 });

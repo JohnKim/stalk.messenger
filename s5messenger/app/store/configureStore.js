@@ -34,7 +34,7 @@ var createS5Store = applyMiddleware(
   logger
 )(createStore);
 
-function configureStore(onComplete: ?() => void) {
+function configureStore(onComplete) {
 
   // TODO(frantic): reconsider usage of redux-persist, maybe add cache breaker
 
