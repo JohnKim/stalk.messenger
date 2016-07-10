@@ -13,14 +13,16 @@ import {SERVER_URL, APP_ID} from '../env';
 
 import App from './components/app';
 
-export default class Messenger extends React.Component {
+export default class Messenger extends Component {
 
   state = {
     isLoading: true,
-    store: configureStore(() => this.setState({isLoading: false})),
+    store: null,
   };
 
   componentDidMount() {
+    var store = configureStore(() => this.setState({isLoading: false}));
+    this.setState({store});
   }
 
   render() {
@@ -35,5 +37,5 @@ export default class Messenger extends React.Component {
       </Provider>
     );
   }
-  
+
 }

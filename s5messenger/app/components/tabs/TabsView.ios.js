@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import {
-  StatusBarIOS,
   TabBarIOS,
   Navigator,
   Text,
@@ -23,7 +22,6 @@ import ProfileView from './profile';
 class TabsView extends Component {
 
   componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('light-content');
   }
 
   onTabSelect(tab) {

@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 import {
   Image,
-  StatusBarIOS,
   StyleSheet,
 } from 'react-native';
 
@@ -23,7 +22,6 @@ class LoginScreen extends Component {
   };
 
   componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('default');
   }
 
   render() {

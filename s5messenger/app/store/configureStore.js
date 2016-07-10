@@ -36,8 +36,11 @@ var createS5Store = applyMiddleware(
 
 function configureStore(onComplete) {
 
-  // TODO(frantic): reconsider usage of redux-persist, maybe add cache breaker
+  //const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createS5Store)
+  //const store = createStoreWithMiddleware(reducers)
+  //onComplete();
 
+  // TODO(frantic): reconsider usage of redux-persist, maybe add cache breaker
   const store = autoRehydrate()(createS5Store)(reducers);
   persistStore(store, {storage: AsyncStorage}, onComplete);
 

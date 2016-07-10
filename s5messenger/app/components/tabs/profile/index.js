@@ -16,7 +16,6 @@ import {
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
-import RefreshableListView from 'S5RefreshableListView';
 
 const PAGE_SIZE = 20;
 

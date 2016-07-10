@@ -22,10 +22,16 @@ import { connect } from 'react-redux';
 class App extends Component {
 
   componentDidMount() {
+
+
+console.log('ddddddddddddddddddddddddddddddddddddd');
+
+
     AppState.addEventListener('change', this.handleAppStateChange);
 
     // TODO: Make this list smaller, we basically download the whole internet
     // TODO: 초기화 때 서버로 부터 가져와야 할 것들 필요 함.
+
 
     this.props.dispatch(loadConfig());
 
