@@ -24,7 +24,7 @@ var StyleSheet = require('S5StyleSheet');
 
 const PAGE_SIZE = 20;
 
-class FollowsView extends React.Component {
+class NotificationView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -133,4 +133,4 @@ function actions(dispatch) {
   };
 }
 
-module.exports = connect(select, actions)(FollowsView);
+module.exports = connect(select, actions)(NotificationView);

@@ -22,7 +22,7 @@ Parse.Cloud.define('follows', function(request, response) {
 });
 
 
-Parse.Cloud.define('createFollow', function(request, response) {
+Parse.Cloud.define('follows.create', function(request, response) {
   Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;
@@ -46,10 +46,10 @@ Parse.Cloud.define('createFollow', function(request, response) {
           follow.set("userTo", user);
 
           follow.save(null, {
-            success: function(friend) {
+            success: function(follow) {
               return response.success(user);
             },
-            error: function(friend, error) {
+            error: function(follow, error) {
               return response.error(error);
             }
           });
@@ -63,7 +63,7 @@ Parse.Cloud.define('createFollow', function(request, response) {
 });
 
 
-Parse.Cloud.define('removeFollow', function(request, response) {
+Parse.Cloud.define('follow.remove', function(request, response) {
   Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;

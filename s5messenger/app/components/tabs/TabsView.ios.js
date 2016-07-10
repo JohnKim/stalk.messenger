@@ -15,7 +15,7 @@ import S5Colors from 'S5Colors';
 import { switchTab } from 's5-action';
 import { connect } from 'react-redux';
 
-import FriendsView from './friends';
+import FollowsView from './follows';
 import ChatsView from './chats';
 import ProfileView from './profile';
 
@@ -35,12 +35,12 @@ class TabsView extends Component {
     return (
       <TabBarIOS tintColor={S5Colors.darkText}>
         <TabBarIOS.Item
-          title="Friends"
-          selected={this.props.tab === 'friends'}
-          onPress={this.onTabSelect.bind(this, 'friends')}
-          icon={require('./friends/img/icon.png')}
-          selectedIcon={require('./friends/img/icon-active.png')}>
-          <FriendsView navigator={this.props.navigator} />
+          title="Follows"
+          selected={this.props.tab === 'follows'}
+          onPress={this.onTabSelect.bind(this, 'follows')}
+          icon={require('./follows/img/icon.png')}
+          selectedIcon={require('./follows/img/icon-active.png')}>
+          <FollowsView navigator={this.props.navigator} />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="Chats"

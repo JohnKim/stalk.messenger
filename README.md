@@ -58,8 +58,8 @@ $ ./s5server-channel/bin/channel-server --config ./config.local.json
 - [ ] samples 데이터 생성 스크립드 작성
 - [ ] Relational Diagram 작업
 
-##### Friends Tab
-- [ ] GiftedListView Sample 코드 구현 (Friends Tab, Search Popup List View)
+##### Follows Tab
+- [ ] GiftedListView Sample 코드 구현 (Follows Tab, Search Popup List View)
 - [ ] Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
 - [ ] Parse.Users 검색 View 구현
 

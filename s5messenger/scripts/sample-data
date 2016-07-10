@@ -1,7 +1,7 @@
+#!/usr/bin/env babel-node
 
 import faker from 'faker';
 import Parse from 'parse/node';
-import Data from './lib/dataGenerator';
 
 var argv = process.argv;
 
@@ -63,7 +63,7 @@ function createFollow(username, follow_username){
     var currentUser = Parse.User.current();
     console.log(currentUser);
 
-    Parse.Cloud.run('createFollow', {'username': follow_username}, {
+    Parse.Cloud.run('follows.create', {'username': follow_username}, {
       success: function(result) {
         console.log(result);
       },
@@ -95,11 +95,11 @@ switch (argv[2]) {
     if(!argv[3]) { createUser(); } else{ createUser(argv[3]); }
     break;
   case "follow:create":
-    if(!argv[3] || !argv[4]) throwError(' USAGE : babel-node sample-data friend:create [username] [firend\'s username]');
+    if(!argv[3] || !argv[4]) throwError(' USAGE : babel-node sample-data follow:create [username] [firend\'s username]');
     createFollow(argv[3], argv[4]);
     break;
   case "follow:list":
-    if(!argv[3]) throwError(' USAGE : babel-node sample-data friend:list [username] ');
+    if(!argv[3]) throwError(' USAGE : babel-node sample-data follow:list [username] ');
     follows(argv[3]);
     break;
   default:

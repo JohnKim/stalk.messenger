@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 import {
   View,
   Navigator,
+  StyleSheet,
 } from 'react-native';
 
 import { loadPostByPage } from 's5-action';
@@ -20,11 +21,9 @@ import Header from 'S5Header';
 import RefreshableListView from 'S5RefreshableListView';
 import PostCell from '../post/PostCell';
 
-var StyleSheet = require('S5StyleSheet');
-
 const PAGE_SIZE = 20;
 
-class FollowsView extends React.Component {
+class FollowsScreen extends Component {
 
   constructor(props) {
     super(props);
@@ -85,18 +84,18 @@ class FollowsView extends React.Component {
 
   render() {
 
-    const filterItem = {
-      title: 'Filter',
-      icon: require('../../../common/img/filter.png'),
+    const searchItem = {
+      title: 'Search',
+      icon: require('./img/search.png'),
       onPress: () => alert('Filter button pressed!'),
     };
 
     return (
       <View style={styles.container}>
         <Header
-          title="Notification"
+          title="Follows"
           style={{backgroundColor: '#224488'}}
-          rightItem={{...filterItem, layout: 'icon'}}
+          rightItem={{...searchItem, layout: 'icon'}}
         />
         <RefreshableListView
           onFetch={this._onFetch}
@@ -108,7 +107,7 @@ class FollowsView extends React.Component {
 
 }
 
-NotificationView.propTypes = {
+FollowsScreen.propTypes = {
   user: React.PropTypes.object,
   navigator: React.PropTypes.object, // Navigator
   loadPost: React.PropTypes.func, // (page: number) => Array<Post>
@@ -133,4 +132,4 @@ function actions(dispatch) {
   };
 }
 
-module.exports = connect(select, actions)(FollowsView);
+module.exports = connect(select, actions)(FollowsScreen);

@@ -81,7 +81,7 @@ class AppNavigator extends Component {
             return Navigator.SceneConfigs.FloatFromBottomAndroid;
           }
           // TODO: Proper scene support
-          if (route.shareSettings || route.friend) {
+          if (route.shareSettings || route.follow) {
             return Navigator.SceneConfigs.FloatFromRight;
           } else {
             return Navigator.SceneConfigs.FloatFromBottom;
