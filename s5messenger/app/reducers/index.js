@@ -8,4 +8,5 @@ module.exports = combineReducers({
   config: require('./config'),
   navigation: require('./navigation'),
   user: require('./user'),
+  follows: require('./follows'),
 });

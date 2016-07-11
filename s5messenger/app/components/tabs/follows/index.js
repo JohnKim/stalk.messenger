@@ -5,21 +5,20 @@
 
 'use strict';
 
-
 import React, { Component } from 'react';
 import {
   View,
   Navigator,
   StyleSheet,
+  Text,
 } from 'react-native';
 
-import { loadPostByPage } from 's5-action';
+import { loadFollows } from 's5-action';
 import { connect } from 'react-redux';
 
-import { Text } from 'S5Text';
 import Header from 'S5Header';
 import RefreshableListView from 'S5RefreshableListView';
-import PostCell from '../post/PostCell';
+import FollowCell from '../FollowCell';
 
 const PAGE_SIZE = 20;
 
