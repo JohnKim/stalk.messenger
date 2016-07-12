@@ -109,14 +109,21 @@ function follows(username){
             .find()
             .then(
               (list) => {
-
-                list.map(fromParseObject);
-
+                list.map(followsParseObject);
               },
               (error) => { console.log(error); }
             );
         });
 
+}
+
+function followsParseObject(object){
+  var user = object.get('userTo');
+  console.log ({
+    id: object.id,
+    username: user.get('username'),
+    email: user.get('email'),
+  });
 }
 
 switch (argv[2]) {

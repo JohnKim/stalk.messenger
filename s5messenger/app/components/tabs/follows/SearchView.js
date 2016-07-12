@@ -12,19 +12,19 @@ import {
   Navigator,
 } from 'react-native';
 
-import { loadPostByPage } from 's5-action';
+import { searchUsersByPage } from 's5-action';
 import { connect } from 'react-redux';
 
 import { Text } from 'S5Text';
 import Header from 'S5Header';
 import RefreshableListView from 'S5RefreshableListView';
-import PostCell from '../post/PostCell';
+import UserCell from './UserCell';
 
 var StyleSheet = require('S5StyleSheet');
 
 const PAGE_SIZE = 20;
 
-class NotificationView extends React.Component {
+class SearchUserView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -38,23 +38,17 @@ class NotificationView extends React.Component {
 
   _onFetch(page = 1, callback, options) {
 
-    this.props.loadPost(page)
+    searchUsersByPage(page)
       .then(function(result){
 
-        let rows = result.map( (object) => {
-
-          let location = object.get("location").toJSON();
-
+        let rows = result.map( (user) => {
           return {
-            id: object.id,
-            title: object.get('title'),
-            description: object.get('description'),
-            slug: object.get('slug') || '',
-            location: { longitude: location.longitude, latitude: location.latitude } || {},
-            tags: object.get('tags') || [],
-            created: object.createdAt.getTime(),
+            id: user.id,
+            username: user.get('username'),
+            email: user.get('email'),
+            nickName: user.get('nickName'),
+            profileImage: user.get('profileImage')
           };
-
         });
 
         if(rows.length < PAGE_SIZE){
@@ -70,7 +64,7 @@ class NotificationView extends React.Component {
 
   _renderRowView(post) {
     return (
-      <PostCell
+      <UserCell
         key={post.id}
         post={post}
         onPress={() => this.openPostDetail(post)}
@@ -81,34 +75,33 @@ class NotificationView extends React.Component {
   openPostDetail(post) {
     console.log(post);
   }
-
-
   render() {
-
-    const filterItem = {
-      title: 'Filter',
-      icon: require('../../../common/img/filter.png'),
-      onPress: () => alert('Filter button pressed!'),
-    };
 
     return (
       <View style={styles.container}>
         <Header
-          title="Notification"
           style={{backgroundColor: '#224488'}}
-          rightItem={{...filterItem, layout: 'icon'}}
+          title="Search Users"
+          leftItem={{
+            icon: require('../../../common/img/back.png'),
+            title: 'Back',
+            layout: 'icon',
+            onPress: () => this.props.navigator.pop(),
+          }}
         />
+
         <RefreshableListView
           onFetch={this._onFetch}
           rowView={this._renderRowView}
         />
+
       </View>
     );
   }
 
 }
 
-NotificationView.propTypes = {
+SearchUserView.propTypes = {
   user: React.PropTypes.object,
   navigator: React.PropTypes.object, // Navigator
   loadPost: React.PropTypes.func, // (page: number) => Array<Post>
@@ -127,10 +120,4 @@ function select(store) {
   };
 }
 
-function actions(dispatch) {
-  return {
-    loadPost: (page: number) => dispatch(loadPostByPage(page, PAGE_SIZE)),
-  };
-}
-
-module.exports = connect(select, actions)(NotificationView);
+module.exports = connect(select)(SearchUserView);

@@ -27,11 +27,13 @@ function follows(state = initialState, action) {
 }
 
 function fromParseObject(object){
+  var user = object.get('userTo');
   return {
     id: object.id,
-    username: object.get('username'),
-    nickname: object.get('nickname'),
-    email: object.get('nickname'),
+    username: user.get('username'),
+    email: user.get('email'),
+    nickName: user.get('nickName'),
+    profileImage: user.get('profileImage')
   };
 }
 
