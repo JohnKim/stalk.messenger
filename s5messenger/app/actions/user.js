@@ -1,7 +1,7 @@
 
 import Parse from 'parse/react-native';
 import {updateInstallation} from './common';
-
+import {loadFollows} from './follows';
 
 export const SIGNED_UP  = 'SIGNED_UP';
 export const LOGGED_IN  = 'LOGGED_IN';
@@ -46,12 +46,11 @@ export function signin(data, callback) {
     Parse.User.logIn(data.username, data.password, {
       success: function(user) {
 
-        return dispatch({
+        dispatch(loadFollows());
+
+        dispatch({
           type: LOGGED_IN,
-          data: {
-            username: user.username,
-            email: user.email,
-          },
+          data: user,
         });
 
       },

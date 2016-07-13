@@ -6,19 +6,27 @@ import { LOGGED_IN, LOGGED_OUT, SIGNED_UP} from 's5-action';
 
 const initialState = {
   isLoggedIn: false,
+  username: null,
+  email: null,
+  nickName: null,
   profileImage: null,
-  id: null,
-  name: null,
 };
 
 function user(state = initialState, action) {
+console.log('asdfasdf');
+  console.log(action);
 
   if (action.type === LOGGED_IN || action.type === SIGNED_UP) {
-    let {id, name} = action.data;
+    let {username, email, nickName, profileImage} = fromParseObject(action.data);
+
+    console.log(action.data);
+
     return {
       isLoggedIn: true,
-      id,
-      name,
+      username,
+      email,
+      nickName,
+      profileImage,
     };
   }
 
@@ -27,6 +35,16 @@ function user(state = initialState, action) {
   }
 
   return state;
+}
+
+function fromParseObject(user){
+  return {
+    id: user.id,
+    username: user.get('username'),
+    email: user.get('email'),
+    nickName: user.get('nickName'),
+    profileImage: user.get('profileImage')
+  };
 }
 
 module.exports = user;

@@ -13,6 +13,8 @@ export function loadFollows() {
 
   return (dispatch) => {
 
+    var currentUser = Parse.User.current();
+    
     new Parse.Query(Follows)
       .equalTo('userFrom', currentUser)
       .include('userTo')

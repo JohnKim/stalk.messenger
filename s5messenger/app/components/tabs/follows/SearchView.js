@@ -10,15 +10,14 @@ import React, { Component } from 'react';
 import {
   View,
   Navigator,
+  Text
 } from 'react-native';
 
 import { searchUsersByPage } from 's5-action';
 import { connect } from 'react-redux';
 
-import { Text } from 'S5Text';
 import Header from 'S5Header';
 import RefreshableListView from 'S5RefreshableListView';
-import UserCell from './UserCell';
 
 var StyleSheet = require('S5StyleSheet');
 
@@ -62,19 +61,50 @@ class SearchUserView extends React.Component {
 
   }
 
-  _renderRowView(post) {
+  _renderRowView(user) {
     return (
-      <UserCell
-        key={post.id}
-        post={post}
-        onPress={() => this.openPostDetail(post)}
-      />
+      <View key={user.id}>
+        <TouchableHighlight onPress={() => this.openPostDetail(user)}>
+          <View style={styles.row}>
+            <Text style={styles.rowTitleText}>
+              {user.username}
+            </Text>
+            <Text style={styles.rowDetailText}>
+              {user.email}
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <View style={styles.separator} />
+      </View>
+    );
+  }
+
+  _renderTextInput(): ?ReactElement<any> {
+    if (this.props.disableSearch) {
+      return null;
+    }
+    return (
+      <View style={styles.searchRow}>
+        <TextInput
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="always"
+          onChangeText={text => {
+            this.setState({filter: text});
+          }}
+          placeholder="Search..."
+          style={[styles.searchTextInput]}
+          testID="explorer_search"
+          value={this.state.filter}
+        />
+      </View>
     );
   }
 
   openPostDetail(post) {
     console.log(post);
   }
+
   render() {
 
     return (
@@ -89,7 +119,7 @@ class SearchUserView extends React.Component {
             onPress: () => this.props.navigator.pop(),
           }}
         />
-
+        {this._renderTextInput()}
         <RefreshableListView
           onFetch={this._onFetch}
           rowView={this._renderRowView}
@@ -111,7 +141,39 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  }
+  },
+  searchRow: {
+    backgroundColor: '#eeeeee',
+    padding: 10,
+  },
+  searchTextInput: {
+    backgroundColor: 'white',
+    borderColor: '#cccccc',
+    borderRadius: 3,
+    borderWidth: 1,
+    paddingLeft: 8,
+    height: 35,
+  },
+  row: {
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+  },
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#bbbbbb',
+    marginLeft: 15,
+  },
+  rowTitleText: {
+    fontSize: 17,
+    fontWeight: '500',
+  },
+  rowDetailText: {
+    fontSize: 15,
+    color: '#888888',
+    lineHeight: 20,
+  },
 });
 
 function select(store) {

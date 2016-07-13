@@ -32,8 +32,6 @@ type Props = {
 
 class S5RefreshableListView extends Component {
 
-  //props: Props;
-
   constructor(props: Props) {
     super(props);
 
@@ -205,12 +203,12 @@ class S5RefreshableListView extends Component {
 
         firstLoader={true} // display a loader for the first fetching
 
-        pagination={true} // enable infinite scrolling using touch to load more
+        pagination={this.props.pagination || true} // enable infinite scrolling using touch to load more
         paginationFetchigView={this._renderPaginationFetchigView}
         paginationAllLoadedView={this.renderPaginationAllLoadedView}
         paginationWaitingView={this._renderPaginationWaitingView}
 
-        refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
+        refreshable={this.props.refreshable || true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
         refreshableViewHeight={50} // correct height is mandatory
         refreshableDistance={40} // the distance to trigger the pull-to-refresh - better to have it lower than refreshableViewHeight
         refreshableFetchingView={this._renderRefreshableFetchingView}
