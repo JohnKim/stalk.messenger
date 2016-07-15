@@ -13,13 +13,9 @@ const initialState = {
 };
 
 function user(state = initialState, action) {
-console.log('asdfasdf');
-  console.log(action);
 
   if (action.type === LOGGED_IN || action.type === SIGNED_UP) {
     let {username, email, nickName, profileImage} = fromParseObject(action.data);
-
-    console.log(action.data);
 
     return {
       isLoggedIn: true,
