@@ -25,24 +25,51 @@ export default class FollowsCell extends Component {
 
   render() {
 
-    if(this.props.onProfilePress)
+    if(this.props.onProfilePress) {
 
-    return (
-      <TouchableHighlight onPress={this.props.onPress} >
-        <View style={styles.container}>
-            <Image source={{uri: this.state.user.profileImage}}
-              style={styles.image} />
-          <View style={styles.makerDetailsContainer}>
-              <Text style={styles.makerTitle}>
-                {this.state.user.nickName}
-              </Text>
-            <Text style={styles.makerDetails}>
-              {this.state.user.username}
-            </Text>
+      return (
+
+          <View style={styles.container}>
+            <TouchableHighlight onPress={this.props.onPress} >
+              <Image source={{uri: this.state.user.profileImage}}
+                style={styles.image} />
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this.props.onProfilePress} >
+              <View style={styles.makerDetailsContainer}>
+                  <Text style={styles.makerTitle}>
+                    {this.state.user.nickName}
+                  </Text>
+                <Text style={styles.makerDetails}>
+                  {this.state.user.username}
+                </Text>
+              </View>
+            </TouchableHighlight>
           </View>
-        </View>
-      </TouchableHighlight>
-    );
+
+      );
+
+    } else {
+
+      return (
+        <TouchableHighlight onPress={this.props.onPress} >
+          <View style={styles.container}>
+              <Image source={{uri: this.state.user.profileImage}}
+                style={styles.image} />
+            <View style={styles.makerDetailsContainer}>
+                <Text style={styles.makerTitle}>
+                  {this.state.user.nickName}
+                </Text>
+              <Text style={styles.makerDetails}>
+                {this.state.user.username}
+              </Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      );
+
+    }
+
+
   }
 }
 
