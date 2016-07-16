@@ -48,10 +48,12 @@ class FollowsScreen extends Component {
 		this.setState({listViewData: newData});
 	}
 
-  onPressFollowCell(user) {
+  _onRowPress(user) {
+    console.log('--------------', this);
     console.log(user);
-    console.log(user);
-    console.log(user);
+  }
+
+  _onProfileImagePress(user) {
     console.log(user);
   }
 
@@ -65,7 +67,8 @@ class FollowsScreen extends Component {
       <FollowCell
         key={data.id}
         user={data}
-        onPress={(data) => this.onPressFollowCell.bind(this)}
+        onPress={() => this._onRowPress(data)}
+        onProfilePress={() => this._onProfileImagePress(data)}
         />
     )
   }
@@ -89,7 +92,7 @@ class FollowsScreen extends Component {
 
         <SwipeListView
 						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-						renderRow={ data => this._renderRow(data) }
+						renderRow={ (data) => this._renderRow(data) }
 						renderHiddenRow={ (data, secId, rowId, rowMap) => (
 							<View style={styles.rowBack}>
 								<Text>Left</Text>
@@ -104,8 +107,6 @@ class FollowsScreen extends Component {
 						leftOpenValue={75}
 						rightOpenValue={-150}
 					/>
-
-
 
       </View>
 

@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import { switchTab } from 's5-action';
 
 import TabsView from './tabs/TabsView';
+import SearchUserView from './tabs/follows/SearchUserView';
 
 class AppNavigator extends Component {
 
@@ -95,20 +96,9 @@ class AppNavigator extends Component {
 
   renderScene = (route, navigator) => {
 
-/*
-    if (route.profileSettings) {
-
-      return <SettingsView navigator={navigator} />;
-    } else if (route.folderForm){
-      return <FolderForm navigator={navigator} />;
-    } else if (route.updateScrap){
-      return <ScrapForm navigator={navigator} />;
-    } else if (route.viewPost){
-      return <ScrapView navigator={navigator} pid={route.pid}/>;
-    } else if (route.listPost){
-      return <PostTabView navigator={navigator} />;
+    if(route.searchUserView) {
+      return <SearchUserView navigator={navigator} />;
     }
-*/
     return <TabsView navigator={navigator} />;
   }
 

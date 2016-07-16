@@ -23,28 +23,10 @@ export default class FollowsCell extends Component {
     };
   }
 
-  _renderCell() {
-
-
-
-    return (
-
-      <View style={styles.container}>
-          <Image source={{uri: this.state.user.profileImage}}
-            style={styles.image} />
-        <View style={styles.makerDetailsContainer}>
-            <Text style={styles.makerTitle}>
-              {this.state.user.nickName}
-            </Text>
-          <Text style={styles.makerDetails}>
-            {this.state.user.username}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
   render() {
+
+    if(this.props.onProfilePress)
+
     return (
       <TouchableHighlight onPress={this.props.onPress} >
         <View style={styles.container}>

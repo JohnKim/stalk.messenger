@@ -59,8 +59,8 @@ $ ./s5server-channel/bin/channel-server --config ./config.local.json
 - [ ] Relational Diagram 작업
 
 ##### Follows Tab
-- [ ] GiftedListView Sample 코드 구현 (Follows Tab, Search Popup List View)
-- [ ] Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
+- [x] GiftedListView Sample 코드 구현 (Follows Tab, Search Popup List View)
+- [x] Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
 - [ ] Parse.Users 검색 View 구현
 
 ##### Chats Tab

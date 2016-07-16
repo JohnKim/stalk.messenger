@@ -56,6 +56,35 @@ function createUser(username, password, email, nickName, profileImage) {
   });
 };
 
+// data = {keyword, pageNumber, pageSize}
+function searchUsers(data) {
+
+console.log(data);
+
+  let limit = data.pageSize || 20; //constants.DEFAULT_PAGE_SIZE;
+  let skip = ((data.pageNumber || 1) - 1) * limit;
+
+  let usernameQuery = new Parse.Query(Parse.User);
+  usernameQuery.startsWith("username", data.keyword);
+
+  let emailQuery = new Parse.Query(Parse.User);
+  emailQuery.startsWith("email", data.keyword);
+
+  let query = Parse.Query.or(usernameQuery, emailQuery); // TODO check new ??
+
+  if(skip > 0) query = query.skip(skip);
+  query = query.limit(limit).ascending('username');
+
+  query.find({
+    success: (list) => {
+      console.log(list);
+    },
+    error: (err) => {
+      console.log(err);
+    },
+  });
+}
+
 function createFollow(username, follow_username){
 
   new Parse.Query(Parse.User)
@@ -129,6 +158,10 @@ function followsParseObject(object){
 switch (argv[2]) {
   case "user:create":
     if(!argv[3]) { createUser(); } else{ createUser(argv[3]); }
+    break;
+  case "user:search":
+    if(!argv[3]) throwError(' USAGE : babel-node sample-data user:search [keyword] ');
+    searchUsers({ keyword: argv[3] });
     break;
   case "follows:create":
     if(!argv[3] || !argv[4]) throwError(' USAGE : babel-node sample-data follow:create [username] [firend\'s username]');

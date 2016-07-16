@@ -82,27 +82,32 @@ export function logOut() {
 // @params data = {keyword, pageNumber, pageSize}
 export function searchUsersByPage(data, callback) {
 
+  console.log(data);
+
   let limit = data.pageSize || constants.DEFAULT_PAGE_SIZE;
   let skip = ((data.pageNumber || 1) - 1) * limit;
 
-  let usernameQuery = new Parse.Query(Parse.User);
-  usernameQuery.startsWith("username", data.keyword);
+  if(data.keyword) {
+    let usernameQuery = new Parse.Query(Parse.User);
+    usernameQuery.startsWith("username", data.keyword);
 
-  let emailQuery = new Parse.Query(Parse.User);
-  emailQuery.startsWith("email", data.keyword);
+    let emailQuery = new Parse.Query(Parse.User);
+    emailQuery.startsWith("email", data.keyword);
 
-  let query = Parse.Query.or(usernameQuery, emailQuery); // TODO check new ??
+    let query = Parse.Query.or(usernameQuery, emailQuery); // TODO check new ??
 
-  if(skip > 0) query = query.skip(skip);
-  query = query.limit(limit).ascending('username');
+    if(skip > 0) query = query.skip(skip);
+    query = query.limit(limit).ascending('username');
 
-  query.find({
-    success: (list) => {
-      callback(null, list);
-    },
-    error: (err) => {
-      callback(err);
-    },
-  });
-
+    query.find({
+      success: (list) => {
+        callback(null, list);
+      },
+      error: (err) => {
+        callback(err);
+      },
+    });
+  } else{
+    callback(null, []);
+  }
 }

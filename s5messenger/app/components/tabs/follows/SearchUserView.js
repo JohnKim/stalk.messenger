@@ -10,7 +10,10 @@ import React, { Component } from 'react';
 import {
   View,
   Navigator,
-  Text
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+  TextInput,
 } from 'react-native';
 
 import { searchUsersByPage } from 's5-action';
@@ -18,8 +21,6 @@ import { connect } from 'react-redux';
 
 import Header from 'S5Header';
 import RefreshableListView from 'S5RefreshableListView';
-
-var StyleSheet = require('S5StyleSheet');
 
 const PAGE_SIZE = 20;
 
@@ -37,8 +38,13 @@ class SearchUserView extends React.Component {
 
   _onFetch(page = 1, callback, options) {
 
-    searchUsersByPage(page)
-      .then(function(result){
+    searchUsersByPage(
+      {
+        keyword: this.state.filter,
+        pageNumber: page,
+        pageSize: PAGE_SIZE
+      }
+    , function(err, result){
 
         let rows = result.map( (user) => {
           return {
@@ -110,10 +116,10 @@ class SearchUserView extends React.Component {
     return (
       <View style={styles.container}>
         <Header
-          style={{backgroundColor: '#224488'}}
           title="Search Users"
+          foreground="dark"
           leftItem={{
-            icon: require('../../../common/img/back.png'),
+            icon: require('../../common/img/back.png'),
             title: 'Back',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
