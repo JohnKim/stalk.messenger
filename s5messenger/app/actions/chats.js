@@ -26,8 +26,6 @@ export function loadChats() {
       .then(
         (list) => {
 
-          console.log(list);
-
           InteractionManager.runAfterInteractions(() => {
             dispatch(({type: LOADED_CHATS, list}));
           });
@@ -40,45 +38,14 @@ export function loadChats() {
 
 }
 
-export function createChat(userId) {
+export function createChats(id) {
 
   return (dispatch) => {
-
-    var currentUser = Parse.User.current();
-
-    var query = new Parse.Query(Channels);
-    query.containsAll("users", [currentUser, ]);
-    query.descending("gpa");
-    query.first().then(function(channel) {
-      students[0].set("valedictorian", true);
-      // Force this callback to fail.
-      return Parse.Promise.error("There was an error.");
-
-    }).then(function(valedictorian) {
-      // Now this will be skipped.
-      return query.find();
-
-    }).then(function(students) {
-      // This will also be skipped.
-      students[1].set("salutatorian", true);
-      return students[1].save();
-    }, function(error) {
-      // This error handler WILL be called. error will be "There was an error.".
-      // Let's handle the error by returning a new promise.
-      return Parse.Promise.as("Hello!");
-
-    }).then(function(hello) {
-      // Everything is done!
-    }, function(error) {
-      // This isn't called because the error was already handled.
-    });
-
-
-    return Parse.Cloud.run('follows:create', {username}, {
+    return Parse.Cloud.run('chats-create', {id}, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: ADDED_FOLLOWS, result}));
+          dispatch(({type: ADDED_CHATS, result}));
         });
 
       },
@@ -90,14 +57,14 @@ export function createChat(userId) {
 
 }
 
-export function removeChat(username) {
+export function removeChats(username) {
 
   return (dispatch) => {
-    return Parse.Cloud.run('follows:remove', {username}, {
+    return Parse.Cloud.run('chats-remove', {username}, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_FOLLOWS, result}));
+          dispatch(({type: REMOVED_CHATS, result}));
         });
 
       },

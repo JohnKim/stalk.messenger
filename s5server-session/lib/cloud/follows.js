@@ -1,7 +1,6 @@
 
 var Follows = Parse.Object.extend('Follows');
 
-
 Parse.Cloud.define('follows', function(request, response) {
   Parse.Cloud.useMasterKey();
 
@@ -22,7 +21,7 @@ Parse.Cloud.define('follows', function(request, response) {
 });
 
 
-Parse.Cloud.define('follows.create', function(request, response) {
+Parse.Cloud.define('follows-create', function(request, response) {
   Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;
@@ -63,7 +62,7 @@ Parse.Cloud.define('follows.create', function(request, response) {
 });
 
 
-Parse.Cloud.define('follow.remove', function(request, response) {
+Parse.Cloud.define('follow-remove', function(request, response) {
   Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;

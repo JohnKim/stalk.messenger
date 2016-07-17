@@ -1,7 +1,9 @@
 
 import Parse from 'parse/react-native';
+
 import {updateInstallation} from './common';
 import {loadFollows} from './follows';
+import {loadChats} from './chats';
 
 export const SIGNED_UP  = 'SIGNED_UP';
 export const LOGGED_IN  = 'LOGGED_IN';
@@ -47,7 +49,7 @@ export function signin(data, callback) {
       success: function(user) {
 
         dispatch(loadFollows());
-
+        dispatch(loadChats());
         dispatch({
           type: LOGGED_IN,
           data: user,

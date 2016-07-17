@@ -2,6 +2,7 @@
 var Chats = Parse.Object.extend("Chats");
 var Channels = Parse.Object.extend("Channels");
 
+
 Parse.Cloud.define('chats', function(request, response) {
   Parse.Cloud.useMasterKey();
 
@@ -21,7 +22,7 @@ Parse.Cloud.define('chats', function(request, response) {
 });
 
 
-Parse.Cloud.define('chats.create', function(request, response) {
+Parse.Cloud.define('chats-create', function(request, response) {
   Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;
@@ -33,8 +34,6 @@ Parse.Cloud.define('chats.create', function(request, response) {
   if (!params.userId) {
     return response.error({message: 'Need username for following.'});
   }
-
-
 
   var user = new Parse.User();
   user.id = params.userId;
@@ -83,4 +82,5 @@ Parse.Cloud.define('chats.create', function(request, response) {
     );
 
   });
+
 });

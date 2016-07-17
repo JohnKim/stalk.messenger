@@ -269,14 +269,22 @@ function followsParseObject(object){
 function chatsParseObject(object){
   var channel = object.get("channel");
   var users = channel.get("users");
-  users.forEach(function (item, index, array) {
-    console.log(item.get("username"),item.get("nickName"), index);
-  });
-  console.log ({
-    id: object.id,
-    channel_id: channel.id,
-    users,
-  });
+
+  users.reduceRight(function(acc, item, index, object) {
+    if (item.get("username") === 'test1') {
+      object.splice(index, 1);
+    } else {
+      object[index] = {
+        id: item.id,
+        username: item.get('username'),
+        email: item.get('email'),
+        nickName: item.get('nickName'),
+        profileImage: item.get('profileImage')
+      }
+    }
+  }, []);
+
+  console.log(users);
 
 }
 
@@ -296,11 +304,11 @@ switch (argv[2]) {
     if(!argv[3]) throwError(' USAGE : sample-data follow:list [username] ');
     follows(argv[3]);
     break;
-  case "chat:create":
+  case "chats:create":
     if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data chat:create [username] [firend\'s username]');
     createChat(argv[3], argv[4]);
     break;
-  case "chat:list":
+  case "chats:list":
     if(!argv[3]) throwError(' USAGE : sample-data chat:list [username] ');
     chats(argv[3]);
     break;

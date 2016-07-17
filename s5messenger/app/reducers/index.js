@@ -9,4 +9,5 @@ module.exports = combineReducers({
   navigation: require('./navigation'),
   user: require('./user'),
   follows: require('./follows'),
+  chats: require('./chats'),
 });

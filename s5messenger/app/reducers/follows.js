@@ -6,7 +6,7 @@ import { LOADED_FOLLOWS, ADDED_FOLLOWS, REMOVED_FOLLOWS, LOGGED_OUT } from 's5-a
 
 const initialState = {
   list: [],
-  loadedAt: null,
+  lastLoadedAt: null,
 };
 
 function follows(state = initialState, action) {
@@ -15,7 +15,7 @@ function follows(state = initialState, action) {
       let list = action.list.map(fromParseObject);
       return {
         list,
-        loadedAt: new Date(),
+        lastLoadedAt: new Date(),
       };
   }
 
