@@ -15,6 +15,8 @@ Parse.initialize(APP_ID);
 Parse.serverURL = `${SERVER_URL}/parse`;
 
 var Follows = Parse.Object.extend("Follows");
+var Chats = Parse.Object.extend("Chats");
+var Channels = Parse.Object.extend("Channels");
 
 var notNullValue = function(value, fakerValue) {
   return value? value: fakerValue;
@@ -146,6 +148,91 @@ function follows(username){
 
 }
 
+function createChat(username1, username2){
+
+  var userQuery1 = new Parse.Query(Parse.User)
+  userQuery1.equalTo("username", username1);
+
+  var userQuery2 = new Parse.Query(Parse.User)
+  userQuery2.equalTo("username", username2);
+
+  var mainQuery = Parse.Query.or(userQuery1, userQuery2);
+  mainQuery.find({
+    success: function(results) {
+
+      var currentUser = results[0];
+      var targetUser = results[1];
+      if(results[1].get("username") == username1){
+        currentUser = results[1];
+        targetUser = results[0];
+      }
+      var userId = targetUser.id;
+
+      /*****************************************/
+      console.log(currentUser.get("username"), targetUser.get("username"), userId);
+
+      var query = new Parse.Query(Parse.User);
+      query.get(userId, {
+        success: function(xxxxxxxxxxx) {
+
+          var user = new Parse.User();
+          user.id = userId;
+
+          var query = new Parse.Query(Channels);
+          query.containsAll("users", [currentUser, user]);
+          query.first().then(function(channel) {
+
+            console.log("#1",channel);
+            if(!channel) {
+              var channels = new Channels();
+              channels.addUnique("users", currentUser);
+              channels.addUnique("users", user);
+              return channels.save();
+            }else{
+              return Parse.Promise.as(channel);
+            }
+
+
+          }).then(function(channel) {
+
+            console.log("#2",channel);
+
+            var queryChats = new Parse.Query(Chats);
+            queryChats.equalTo("user", currentUser);
+            queryChats.equalTo("channel", channel);
+            queryChats.first().then( (chat) => {
+
+              console.log("#3",chat);
+
+              if(!chat){
+                var chats = new Chats();
+                chats.set("user", currentUser);
+                chats.set("channel", channel);
+                chats.save().then(
+                  (result) => { console.log(result) },
+                  (error) => { console.log(error) }
+                );
+              }else{
+                console.log("이미 존재함 !!!");
+              }
+            });
+
+          });
+
+        },
+        error: function(object, error) {
+          console.log(error);
+        }
+      });
+
+
+
+      /*****************************************/
+    }
+  });
+
+}
+
 function followsParseObject(object){
   var user = object.get('userTo');
   console.log ({
@@ -160,16 +247,20 @@ switch (argv[2]) {
     if(!argv[3]) { createUser(); } else{ createUser(argv[3]); }
     break;
   case "user:search":
-    if(!argv[3]) throwError(' USAGE : babel-node sample-data user:search [keyword] ');
+    if(!argv[3]) throwError(' USAGE : sample-data user:search [keyword] ');
     searchUsers({ keyword: argv[3] });
     break;
   case "follows:create":
-    if(!argv[3] || !argv[4]) throwError(' USAGE : babel-node sample-data follow:create [username] [firend\'s username]');
+    if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data follow:create [username] [firend\'s username]');
     createFollow(argv[3], argv[4]);
     break;
   case "follows:list":
-    if(!argv[3]) throwError(' USAGE : babel-node sample-data follow:list [username] ');
+    if(!argv[3]) throwError(' USAGE : sample-data follow:list [username] ');
     follows(argv[3]);
+    break;
+  case "chat:create":
+    if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data chat:create [username] [firend\'s username]');
+    createChat(argv[3], argv[4]);
     break;
   default:
     console.log("Sorry, we are out of " + argv[2] + ".");

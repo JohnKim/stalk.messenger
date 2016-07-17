@@ -49,12 +49,11 @@ class FollowsScreen extends Component {
 	}
 
   _onRowPress(user) {
-    console.log('--------------', this);
-    console.log(user);
+    console.log('_onRowPress', user);
   }
 
   _onProfileImagePress(user) {
-    console.log(user);
+    console.log('_onProfileImagePress', user);
   }
 
   _openSearchUserView() {

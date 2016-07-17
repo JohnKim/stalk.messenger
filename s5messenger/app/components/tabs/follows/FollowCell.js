@@ -14,7 +14,7 @@ import {
   PixelRatio,
 } from 'react-native';
 
-export default class FollowsCell extends Component {
+export default class FollowCell extends Component {
 
   constructor(props) {
     super(props);
