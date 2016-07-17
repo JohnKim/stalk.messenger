@@ -233,6 +233,30 @@ function createChat(username1, username2){
 
 }
 
+function chats(username) {
+  new Parse.Query(Parse.User)
+    .equalTo("username", username)
+    .first()
+    .then(
+      (currentUser) => {
+
+        console.log(currentUser);
+        new Parse.Query(Chats)
+          .equalTo('user', currentUser)
+          .include('channel.users')
+          .find()
+          .then(
+            (list) => {
+              list.map(chatsParseObject);
+            },
+            (error) => { console.log(error); }
+          );
+
+
+      });
+}
+
+
 function followsParseObject(object){
   var user = object.get('userTo');
   console.log ({
@@ -240,6 +264,20 @@ function followsParseObject(object){
     username: user.get('username'),
     email: user.get('email'),
   });
+}
+
+function chatsParseObject(object){
+  var channel = object.get("channel");
+  var users = channel.get("users");
+  users.forEach(function (item, index, array) {
+    console.log(item.get("username"),item.get("nickName"), index);
+  });
+  console.log ({
+    id: object.id,
+    channel_id: channel.id,
+    users,
+  });
+
 }
 
 switch (argv[2]) {
@@ -261,6 +299,10 @@ switch (argv[2]) {
   case "chat:create":
     if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data chat:create [username] [firend\'s username]');
     createChat(argv[3], argv[4]);
+    break;
+  case "chat:list":
+    if(!argv[3]) throwError(' USAGE : sample-data chat:list [username] ');
+    chats(argv[3]);
     break;
   default:
     console.log("Sorry, we are out of " + argv[2] + ".");
