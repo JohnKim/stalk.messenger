@@ -12,6 +12,10 @@ export const LOGGED_OUT = 'LOGGED_OUT';
 const InteractionManager = require('InteractionManager');
 const constants = require('./_constants');
 
+/**
+ * sign up
+ * @params data: { username, password, email }
+ **/
 export function signup(data, callback) {
 
   return (dispatch) => {
@@ -20,6 +24,7 @@ export function signup(data, callback) {
     user.set("username", data.username);
     user.set("password", data.password);
     user.set("email", data.email);
+    user.set("nickName", data.username);
 
     user.signUp(null, {
       success: function(user) {
@@ -29,6 +34,7 @@ export function signup(data, callback) {
           data: {
             username: user.username,
             email: user.email,
+            nickName: data.username,
           },
         });
       },
@@ -41,6 +47,10 @@ export function signup(data, callback) {
   };
 }
 
+/**
+ * sign in (login)
+ * @params data: { username, password }
+ **/
 export function signin(data, callback) {
 
   return (dispatch) => {
@@ -66,15 +76,20 @@ export function signin(data, callback) {
   };
 }
 
+/**
+ * logout
+ * @params N/A
+ **/
 export function logOut() {
   return (dispatch) => {
+
     Parse.User.logOut();
     updateInstallation({user: null, channels: []});
 
-    // TODO: Make sure reducers clear their state
     return dispatch({
       type: LOGGED_OUT,
     });
+
   };
 }
 

@@ -39,31 +39,35 @@ class ChatsScreen extends Component {
     this.setState({
       listViewData: this.props.chats.list
     });
+
+    console.log(this.props.chats);
   }
 
-	deleteRow(secId, rowId, rowMap) {
+	leaveChat(secId, rowId, rowMap) {
+
+    console.log(secId, rowId, rowMap);
+
 		rowMap[`${secId}${rowId}`].closeRow();
 		const newData = [...this.state.listViewData];
 		newData.splice(rowId, 1);
 		this.setState({listViewData: newData});
 	}
 
-  _onRowPress(user) {
-    console.log('_onRowPress', user);
+  _onRowPress(chat) {
+    this.props.navigator.push({
+      chatView: true,
+      chat,
+    });
+    console.log('_onRowPress', chat);
   }
 
-  _onProfileImagePress(user) {
-    console.log('_onProfileImagePress', user);
-  }
-
-  _renderRow(data) {
+  _renderRow(chat) {
 
     return (
       <ChatCell
-        key={data.id}
-        user={data}
-        onPress={() => this._onRowPress(data)}
-        onProfilePress={() => this._onProfileImagePress(data)}
+        key={chat.id}
+        chat={chat}
+        onPress={() => this._onRowPress(chat)}
         />
     )
   }
@@ -84,14 +88,13 @@ class ChatsScreen extends Component {
 							<View style={styles.rowBack}>
 								<Text>Left</Text>
 								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-									<Text style={styles.backTextWhite}>Right</Text>
+									<Text style={styles.backTextWhite}>Mark as Read</Text>
 								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
-									<Text style={styles.backTextWhite}>Delete</Text>
+								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.leaveChat(secId, rowId, rowMap) }>
+									<Text style={styles.backTextWhite}>Leave</Text>
 								</TouchableOpacity>
 							</View>
 						)}
-						leftOpenValue={75}
 						rightOpenValue={-150}
 					/>
 

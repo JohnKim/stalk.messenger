@@ -24,7 +24,9 @@ export default class ChatCell extends Component {
   }
 
   render() {
-
+    // this.state.chat.name : the name of this channel (defined from chats reducer).
+    // this.state.chat.users.length : count for users in this chat channel.
+    
     return (
       <TouchableHighlight onPress={this.props.onPress} >
         <View style={styles.container}>
@@ -35,7 +37,7 @@ export default class ChatCell extends Component {
                 {this.state.chat.name}
               </Text>
             <Text style={styles.makerDetails}>
-              {this.state.chat.name}
+               ({this.state.chat.users.length})
             </Text>
           </View>
         </View>

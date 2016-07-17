@@ -13,6 +13,10 @@ const InteractionManager = require('InteractionManager');
 const Chats = Parse.Object.extend('Chats');
 const Channels = Parse.Object.extend('Channels');
 
+/**
+ * Load list of all chatting channels once logined
+ * @params N/A
+ **/
 export function loadChats() {
 
   return (dispatch) => {
@@ -38,6 +42,10 @@ export function loadChats() {
 
 }
 
+/**
+ * create chatting channel
+ * @params id : user.id of target user
+ **/
 export function createChats(id) {
 
   return (dispatch) => {
@@ -57,10 +65,17 @@ export function createChats(id) {
 
 }
 
-export function removeChats(username) {
+/**
+ * Remove(leave) chatting channel
+ * @params id : user.id of target user
+ **/
+export function removeChats(id) {
 
   return (dispatch) => {
-    return Parse.Cloud.run('chats-remove', {username}, {
+
+    // TODO disconnect socket first.
+
+    return Parse.Cloud.run('chats-remove', {id}, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {

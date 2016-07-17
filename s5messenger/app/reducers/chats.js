@@ -31,6 +31,7 @@ function chatsParseObject(object){
   var channel = object.get("channel");
   var users = channel.get("users");
 
+  var names = [];
   users.reduceRight(function(acc, item, index, object) {
     if (item.get("username") === 'test1') {
       object.splice(index, 1);
@@ -42,12 +43,13 @@ function chatsParseObject(object){
         nickName: item.get('nickName'),
         profileImage: item.get('profileImage')
       }
+      names.push(item.get('username'));
     }
   }, []);
 
-
   return {
     id: object.id,
+    name: names.join(", "),
     users,
   };
 };

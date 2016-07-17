@@ -8,7 +8,7 @@ var cors = require('cors');
 
 /**
  *
- * options : host, port, logo, home, zookeeper, redis, mongodb, app
+ * options : {host, port, logo, home, zookeeper, redis, mongodb, app}
  */
 var SessionServer = exports.SessionServer = function (options, cb) {
 

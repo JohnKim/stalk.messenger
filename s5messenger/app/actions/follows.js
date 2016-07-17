@@ -9,12 +9,16 @@ const InteractionManager = require('InteractionManager');
 
 const Follows = Parse.Object.extend('Follows');
 
+/**
+ * Load list of all follows once logined
+ * @params N/A
+ **/
 export function loadFollows() {
 
   return (dispatch) => {
 
     var currentUser = Parse.User.current();
-    
+
     new Parse.Query(Follows)
       .equalTo('userFrom', currentUser)
       .include('userTo')
@@ -34,10 +38,14 @@ export function loadFollows() {
 
 }
 
-export function createFollow(username) {
+/**
+ * create follow relation
+ * @params id : user.id of target user
+ **/
+export function createFollow(id) {
 
   return (dispatch) => {
-    return Parse.Cloud.run('follows:create', {username}, {
+    return Parse.Cloud.run('follows-create', {id}, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
@@ -53,10 +61,14 @@ export function createFollow(username) {
 
 }
 
-export function removeFollow(username) {
+/**
+ * Remove follow relation
+ * @params id : user.id of target user
+ **/
+export function removeFollow(id) {
 
   return (dispatch) => {
-    return Parse.Cloud.run('follows:remove', {username}, {
+    return Parse.Cloud.run('follows-remove', {id}, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {

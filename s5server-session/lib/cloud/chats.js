@@ -84,3 +84,11 @@ Parse.Cloud.define('chats-create', function(request, response) {
   });
 
 });
+
+Parse.Cloud.define('chats-remove', function(request, response) {
+
+  // TODO logic here
+  // remove chats and channel data (input request.params.id : channel.id)
+  response.success("TODO");
+
+});

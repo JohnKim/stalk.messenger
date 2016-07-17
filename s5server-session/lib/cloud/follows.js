@@ -30,35 +30,22 @@ Parse.Cloud.define('follows-create', function(request, response) {
   }
 
   var params = request.params;
-  if (!params.username) {
-    return response.error({message: 'Need username for following.'});
+  if (!params.id) {
+    return response.error({message: 'Need user id for following.'});
   }
 
-  new Parse.Query(Parse.User)
-    .equalTo("username", params.username)
-    .first()
-    .then(
-      (user) => {
-        if(user) {
-          var follow = new Follows();
-          follow.set("userFrom", currentUser);
-          follow.set("userTo", user);
+  var user = new Parse.User();
+  user.id = params.id;
 
-          follow.save(null, {
-            success: function(follow) {
-              return response.success(user);
-            },
-            error: function(follow, error) {
-              return response.error(error);
-            }
-          });
-        } else {
-          return response.error({message: params.username + ' was not existed.'});
-        }
+  var follow = new Follows();
+  follow.set("userFrom", currentUser);
+  follow.set("userTo", user);
+  follow.save()
+  .then(
+    (value) => { response.success(value); },
+    (error) => { response.error(error); }
+  );
 
-      },
-      (error) => { response.error(error); }
-    );
 });
 
 
@@ -71,35 +58,23 @@ Parse.Cloud.define('follow-remove', function(request, response) {
   }
 
   var params = request.params;
-  if (!params.username) {
-    return response.error({message: 'Need username for following.'});
+  if (!params.id) {
+    return response.error({message: 'Need user id for following.'});
   }
 
-  new Parse.Query(Parse.User)
-    .equalTo("username", params.username)
+  var user = new Parse.User();
+  user.id = params.id;
+
+  new Parse.Query(Follows)
+    .equalTo('userFrom', currentUser)
+    .equalTo('userTo', user)
     .first()
     .then(
-      (user) => {
-
-        if(user) {
-
-          new Parse.Query(Follows)
-            .equalTo('userFrom', currentUser)
-            .equalTo('userTo', user)
-            .first()
-            .then(
-              (result) => {
-                result.destory();
-                response.success(result);
-              },
-              (error) => { response.error(error); }
-            );
-
-        } else {
-          return response.error({message: params.username + ' was not existed.'});
-        }
-
+      (result) => {
+        result.destory();
+        response.success(result);
       },
       (error) => { response.error(error); }
     );
+
 });

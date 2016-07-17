@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import { switchTab } from 's5-action';
 
 import TabsView from './tabs/TabsView';
+import ChatView from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
 
 class AppNavigator extends Component {
@@ -96,8 +97,10 @@ class AppNavigator extends Component {
 
   renderScene = (route, navigator) => {
 
-    if(route.searchUserView) {
+    if(route.searchUserView) { // search user view
       return <SearchUserView navigator={navigator} />;
+    } else if(route.chatView) { // chatting view
+      return <ChatView navigator={navigator} chat={route.chat} />;
     }
     return <TabsView navigator={navigator} />;
   }
