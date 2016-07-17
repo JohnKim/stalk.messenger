@@ -56,10 +56,6 @@ class ChatsScreen extends Component {
     console.log('_onProfileImagePress', user);
   }
 
-  _openSearchUserView() {
-    this.props.navigator.push({searchUserView: 1});
-  }
-
   _renderRow(data) {
 
     return (
@@ -73,20 +69,12 @@ class ChatsScreen extends Component {
   }
 
 	render() {
-
-    var rightItem = {
-      title: 'search',
-      icon: require('./img/search.png'),
-      onPress: this._openSearchUserView.bind(this),
-    };
-
 		return (
       <View style={styles.container}>
 
         <Header
           title="Chats"
           style={{backgroundColor: '#224488'}}
-          rightItem={{...rightItem, layout: 'icon'}}
         />
 
         <SwipeListView
