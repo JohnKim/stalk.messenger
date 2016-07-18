@@ -1,6 +1,6 @@
-import Parse  from 'parse/node';
-import faker  from 'faker';
-import Common from './_common';
+import Parse    from 'parse/node';
+import faker    from 'faker';
+import Common   from './_common';
 import response from './_response';
 
 var Chats     = Parse.Object.extend("Chats");
@@ -11,8 +11,12 @@ exports.create = async function (username, targetUsername) {
   var currentUser = new Parse.User();
   currentUser.id = await Common.getUserId(username);
 
+  var params = {id: await Common.getUserId(targetUsername) };
+
+  /** /START/ cloud code **/
+
   var user = new Parse.User();
-  user.id = await Common.getUserId(targetUsername);
+  user.id = params.id;
 
   var query = new Parse.Query(Channels);
   query.containsAll("users", [currentUser, user]);
@@ -29,7 +33,7 @@ exports.create = async function (username, targetUsername) {
       }
     },
     (error) => {
-      response.error({message: 'Need username for following.'});
+      response.error(error);
     }
 
   ).then(function(channel) {
@@ -49,14 +53,69 @@ exports.create = async function (username, targetUsername) {
             (error) => { response.error(error); }
           );
         }else{
-          response.success(value); // TODO 에러 처리
+          response.success(chat);
         }
       },
       (error) => {
-        response.error({message: 'Need username for following.'});
+        response.error(error);
       }
     );
 
   });
 
+  /** /END/ cloud code **/
+
 }
+
+exports.load = async function (username) {
+
+  var currentUser = new Parse.User();
+  currentUser.id = await Common.getUserId(username);
+
+  new Parse.Query(Chats)
+    .equalTo('user', currentUser)
+    .include('channel.users')
+    .find().then(
+      (list) => { response.success(value); },
+      (error) => { response.error(error); }
+    );
+
+  new Parse.Query(Follows)
+    .equalTo('userFrom', currentUser)
+    .include('userTo')
+    .find().then(
+      (list) => {
+        list.map(chatsParseObject);
+      },
+      (error) => { console.log(error); }
+    );
+};
+
+// TODO 확인 할 것 !!!
+function chatsParseObject(object){
+
+  var channel = object.get("channel");
+  var users = channel.get("users");
+
+  var names = [];
+  users.reduceRight(function(acc, item, index, object) {
+    if (item.get("username") === 'test1') {
+      object.splice(index, 1);
+    } else {
+      object[index] = {
+        id: item.id,
+        username: item.get('username'),
+        email: item.get('email'),
+        nickName: item.get('nickName'),
+        profileImage: item.get('profileImage')
+      }
+      names.push(item.get('username'));
+    }
+  }, []);
+
+  console.log( {
+    id: object.id,
+    name: names.join(", "),
+    users,
+  } );;
+};

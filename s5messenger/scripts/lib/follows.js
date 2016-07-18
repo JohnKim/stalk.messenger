@@ -10,8 +10,11 @@ exports.create = async function (username, targetUsername) {
   var currentUser = new Parse.User();
   currentUser.id = await Common.getUserId(username);
 
+  var params = {id: await Common.getUserId(targetUsername) };
+
+  /** /START/ cloud code **/
   var user = new Parse.User();
-  user.id = await Common.getUserId(targetUsername);
+  user.id = params.id;
 
   var follow = new Follows();
   follow.set("userFrom", currentUser);
@@ -21,6 +24,7 @@ exports.create = async function (username, targetUsername) {
     (value) => { response.success(value); },
     (error) => { response.error(error); }
   );
+  /** /END/ cloud code **/
 
 };
 
@@ -45,8 +49,11 @@ exports.remove = async function (username, targetUsername) {
   var currentUser = new Parse.User();
   currentUser.id = await Common.getUserId(username);
 
+  var params = {id: await Common.getUserId(targetUsername) };
+
+  /** /START/ cloud code **/
   var user = new Parse.User();
-  user.id = await Common.getUserId(targetUsername);
+  user.id = params.id;
 
   new Parse.Query(Follows)
     .equalTo('userFrom', currentUser)
@@ -57,17 +64,20 @@ exports.remove = async function (username, targetUsername) {
 
         if(result) {
           result.destroy().then(
-            (object) => { console.log(object); },
-            (error) => { console.log(error); }
+            (object)  => { response.success(object);  },
+            (error)   => { response.error(error);     }
           );
         } else {
-          console.log('not existed.');
+          // ParseError.OBJECT_NOT_FOUND = 101 (Error code indicating the specified object doesn't exist.)
+          response.error( {code: 101, message: "object doesn't exist."} );
         }
 
       },
-      (error) => { console.log(error); }
+      (error) => { response.error(error); }
 
     );
+  /** /END/ cloud code **/
+
 };
 
 function followsParseObject(object){

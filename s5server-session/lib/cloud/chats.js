@@ -31,12 +31,12 @@ Parse.Cloud.define('chats-create', function(request, response) {
   }
 
   var params = request.params;
-  if (!params.userId) {
+  if (!params.id) {
     return response.error({message: 'Need username for following.'});
   }
 
   var user = new Parse.User();
-  user.id = params.userId;
+  user.id = params.id;
 
   var query = new Parse.Query(Channels);
   query.containsAll("users", [currentUser, user]);

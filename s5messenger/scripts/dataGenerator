@@ -325,11 +325,11 @@ switch (argv[2]) {
 
   case "chats:create":
     if(!argv[3] || !argv[4]) throwError(' USAGE : dataGenerator chat:create [username] [firend\'s username]');
-    createChat(argv[3], argv[4]);
+    Chats.create(argv[3], argv[4]);
     break;
   case "chats:list":
     if(!argv[3]) throwError(' USAGE : dataGenerator chat:list [username] ');
-    chats(argv[3]);
+    Chats.load(argv[3]);
     break;
   case "test":
   //foo();
