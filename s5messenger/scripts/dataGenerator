@@ -3,10 +3,14 @@
 import faker from 'faker';
 import Parse from 'parse/node';
 
+import User from './lib/user';
+import Follows from './lib/follows';
+import Chats from './lib/chats';
+
 var argv = process.argv;
 
 if(argv.length < 3) {
-  throwError('   USAGE : babel-node sample-data [COMMAND] [Additional Options]');
+  throwError('   USAGE : babel-node dataGenerator [COMMAND] [Additional Options]');
 }
 
 var {SERVER_URL, APP_ID} = require('../env');
@@ -14,9 +18,38 @@ var {SERVER_URL, APP_ID} = require('../env');
 Parse.initialize(APP_ID);
 Parse.serverURL = `${SERVER_URL}/parse`;
 
-var Follows = Parse.Object.extend("Follows");
-var Chats = Parse.Object.extend("Chats");
+
 var Channels = Parse.Object.extend("Channels");
+
+function getUserId(username) {
+  return new Promise( (resolve, reject) => {
+    new Parse.Query(Parse.User)
+      .equalTo("username", username)
+      .first()
+      .then(
+        (currentUser) => { resolve(currentUser.id); },
+        (err) => { console.error(error); reject(err); }
+      );
+  });
+}
+
+function promisingOperation() {
+  console.log("11");
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            if( Math.round(Math.random()) )
+                resolve('Success!');
+            else
+                reject('Failure!');
+        }, 1000);
+    });
+}
+
+async function foo() {
+    console.log("00");
+    var message = await promisingOperation();
+    console.log(message);
+}
 
 var notNullValue = function(value, fakerValue) {
   return value? value: fakerValue;
@@ -61,7 +94,7 @@ function createUser(username, password, email, nickName, profileImage) {
 // data = {keyword, pageNumber, pageSize}
 function searchUsers(data) {
 
-console.log(data);
+  console.log(data);
 
   let limit = data.pageSize || 20; //constants.DEFAULT_PAGE_SIZE;
   let skip = ((data.pageNumber || 1) - 1) * limit;
@@ -87,42 +120,23 @@ console.log(data);
   });
 }
 
-function createFollow(username, follow_username){
+async function createFollow(username, targetUsername){
 
-  new Parse.Query(Parse.User)
-    .equalTo("username", username)
-    .first()
-    .then(
-      (currentUser) => {
+  var id = await getUserId(username);
+  var currentUser = new Parse.User();
+  currentUser.id = id;
 
+  id = await getUserId(targetUsername);
+  var user = new Parse.User();
+  user.id = id;
 
-        new Parse.Query(Parse.User)
-          .equalTo("username", follow_username)
-          .first()
-          .then(
-            (user) => {
-              if(user) {
-                var follow = new Follows();
-                follow.set("userFrom", currentUser);
-                follow.set("userTo", user);
-
-                follow.save(null, {
-                  success: function(follow) {
-                    console.log(follow);
-                  },
-                  error: function(follow, error) {
-                    console.log(error);
-                  }
-                });
-              } else {
-                console.log( params.username + ' was not existed.');
-              }
-
-            },
-            (error) => { console.log(error); }
-          );
-
-        });
+  var follow = new Follows();
+  follow.set("userFrom", currentUser);
+  follow.set("userTo", user);
+  follow.save().then(
+    (follow) => { console.log(follow); },
+    (error) => { console.log(error); }
+  );
 
 }
 
@@ -290,27 +304,38 @@ function chatsParseObject(object){
 
 switch (argv[2]) {
   case "user:create":
-    if(!argv[3]) { createUser(); } else{ createUser(argv[3]); }
+    if(!argv[3]) { User.create(); } else{ User.create(argv[3]); }
     break;
   case "user:search":
-    if(!argv[3]) throwError(' USAGE : sample-data user:search [keyword] ');
-    searchUsers({ keyword: argv[3] });
+    if(!argv[3]) throwError(' USAGE : dataGenerator user:search [keyword] ');
+    User.search({ keyword: argv[3] });
     break;
   case "follows:create":
-    if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data follow:create [username] [firend\'s username]');
-    createFollow(argv[3], argv[4]);
+    if(!argv[3] || !argv[4]) throwError(' USAGE : dataGenerator follow:create [username] [firend\'s username]');
+    Follows.create(argv[3], argv[4]);
+    break;
+  case "follows:remove":
+    if(!argv[3] || !argv[4]) throwError(' USAGE : dataGenerator follow:remove [username] [firend\'s username]');
+    Follows.remove(argv[3], argv[4]);
     break;
   case "follows:list":
-    if(!argv[3]) throwError(' USAGE : sample-data follow:list [username] ');
-    follows(argv[3]);
+    if(!argv[3]) throwError(' USAGE : dataGenerator follow:list [username] ');
+    Follows.load(argv[3]);
     break;
+
   case "chats:create":
-    if(!argv[3] || !argv[4]) throwError(' USAGE : sample-data chat:create [username] [firend\'s username]');
+    if(!argv[3] || !argv[4]) throwError(' USAGE : dataGenerator chat:create [username] [firend\'s username]');
     createChat(argv[3], argv[4]);
     break;
   case "chats:list":
-    if(!argv[3]) throwError(' USAGE : sample-data chat:list [username] ');
+    if(!argv[3]) throwError(' USAGE : dataGenerator chat:list [username] ');
     chats(argv[3]);
+    break;
+  case "test":
+  //foo();
+  console.log(argv[3]);
+    getUserId(argv[3]);
+
     break;
   default:
     console.log("Sorry, we are out of " + argv[2] + ".");
