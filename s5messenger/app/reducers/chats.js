@@ -1,7 +1,6 @@
 /**
  * Follows Reducer
  */
-
 import { LOADED_CHATS, ADDED_CHATS, REMOVED_CHATS, LOGGED_OUT } from 's5-action';
 
 const initialState = {
@@ -9,9 +8,12 @@ const initialState = {
   lastLoadedAt: null,
 };
 
+let currentUser = null; // to emit current user data into chat users of the channel.
+
 function follows(state = initialState, action) {
 
   if (action.type === LOADED_CHATS) {
+      currentUser = action.user; // to emit current user data into chat users of the channel.
       let list = action.list.map(chatsParseObject);
       return {
         list,
@@ -32,18 +34,21 @@ function chatsParseObject(object){
   var users = channel.get("users");
 
   var names = [];
-  users.reduceRight(function(acc, item, index, object) {
-    if (item.get("username") === 'test1') {
+  users.reduceRight(function(acc, user, index, object) {
+
+    console.log(user.id === currentUser.id, user.id, currentUser.id);
+
+    if (user.id === currentUser.id) {
       object.splice(index, 1);
     } else {
       object[index] = {
-        id: item.id,
-        username: item.get('username'),
-        email: item.get('email'),
-        nickName: item.get('nickName'),
-        profileImage: item.get('profileImage')
+        id: user.id,
+        username: user.get('username'),
+        email: user.get('email'),
+        nickName: user.get('nickName'),
+        profileImage: user.get('profileImage')
       }
-      names.push(item.get('username'));
+      names.push(user.get('username'));
     }
   }, []);
 

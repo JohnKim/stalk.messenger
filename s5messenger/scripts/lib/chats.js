@@ -15,6 +15,12 @@ exports.create = async function (username, targetUsername) {
 
   /** /START/ cloud code **/
 
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
+  }
+
   var user = new Parse.User();
   user.id = params.id;
 
@@ -23,6 +29,7 @@ exports.create = async function (username, targetUsername) {
   query.first().then(
 
     (channel) => {
+
       if(!channel) {
         var channels = new Channels();
         channels.addUnique("users", currentUser);
@@ -31,37 +38,49 @@ exports.create = async function (username, targetUsername) {
       }else{
         return Parse.Promise.as(channel);
       }
+
     },
     (error) => {
+
       response.error(error);
+
     }
 
-  ).then(function(channel) {
+  ).then(
 
-    var queryChats = new Parse.Query(Chats);
-    queryChats.equalTo("user", currentUser);
-    queryChats.equalTo("channel", channel);
-    queryChats.first().then(
+    (channel) => {
 
-      (chat) => {
-        if(!chat){
-          var chats = new Chats();
-          chats.set("user", currentUser);
-          chats.set("channel", channel);
-          chats.save().then(
-            (value) => { response.success(value); },
-            (error) => { response.error(error); }
-          );
-        }else{
-          response.success(chat);
+      var queryChats = new Parse.Query(Chats);
+      queryChats.equalTo("user", currentUser);
+      queryChats.equalTo("channel", channel);
+      queryChats.first().then(
+
+        (chat) => {
+          if(!chat){
+            var chats = new Chats();
+            chats.set("user", currentUser);
+            chats.set("channel", channel);
+            chats.save().then(
+              (value) => { response.success(value); },
+              (error) => { response.error(error); }
+            );
+          }else{
+            response.success(chat);
+          }
+        },
+        (error) => {
+          response.error(error);
         }
-      },
-      (error) => {
-        response.error(error);
-      }
-    );
+      );
 
-  });
+    },
+    (error) => {
+
+      response.error(error);
+
+    }
+
+  );
 
   /** /END/ cloud code **/
 
@@ -80,12 +99,13 @@ exports.load = async function (username) {
       (error) => { response.error(error); }
     );
 
-  new Parse.Query(Follows)
+  new Parse.Query(Chats)
     .equalTo('userFrom', currentUser)
     .include('userTo')
     .find().then(
       (list) => {
         list.map(chatsParseObject);
+        console.log('ABCDE');
       },
       (error) => { console.log(error); }
     );
@@ -99,7 +119,8 @@ function chatsParseObject(object){
 
   var names = [];
   users.reduceRight(function(acc, item, index, object) {
-    if (item.get("username") === 'test1') {
+
+    if (item.id === 'test1') {
       object.splice(index, 1);
     } else {
       object[index] = {
@@ -117,5 +138,6 @@ function chatsParseObject(object){
     id: object.id,
     name: names.join(", "),
     users,
-  } );;
+  } );
+
 };

@@ -31,7 +31,11 @@ export function loadChats() {
         (list) => {
 
           InteractionManager.runAfterInteractions(() => {
-            dispatch(({type: LOADED_CHATS, list}));
+            dispatch(({
+              type: LOADED_CHATS,
+              user: currentUser,
+              list,
+            }));
           });
 
         },

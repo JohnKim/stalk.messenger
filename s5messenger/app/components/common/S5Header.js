@@ -120,10 +120,6 @@ class S5HeaderIOS extends Component {
 }
 
 class ItemWrapperIOS extends React.Component {
-  props: {
-    item: Item;
-    color: string;
-  };
 
   render() {
     const {item, color} = this.props;
@@ -207,8 +203,8 @@ Header.height = HEADER_HEIGHT;
 
 Header.propTypes = {
   title: React.PropTypes.string,
-  leftItem: Item,
-  rightItem: Item,
+  leftItem: React.PropTypes.instanceOf(Item),
+  rightItem: React.PropTypes.instanceOf(Item),
   extraItems: React.PropTypes.arrayOf(Item),
   foreground: React.PropTypes.oneOf(['light', 'dark']),
   style: View.propTypes.style,

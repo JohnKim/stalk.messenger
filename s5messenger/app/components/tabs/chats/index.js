@@ -94,7 +94,7 @@ class ChatsScreen extends Component {
 									<Text style={styles.backTextWhite}>Leave</Text>
 								</TouchableOpacity>
 							</View>
-						)}
+						) }
 						rightOpenValue={-150}
 					/>
 
@@ -111,7 +111,6 @@ ChatsScreen.propTypes = {
   navigator: React.PropTypes.object, // Navigator
   loadPost: React.PropTypes.func, // (page: number) => Array<Post>
 };
-
 
 const styles = StyleSheet.create({
 	container: {

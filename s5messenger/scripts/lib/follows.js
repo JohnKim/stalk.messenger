@@ -13,6 +13,13 @@ exports.create = async function (username, targetUsername) {
   var params = {id: await Common.getUserId(targetUsername) };
 
   /** /START/ cloud code **/
+
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
+  }
+
   var user = new Parse.User();
   user.id = params.id;
 
@@ -52,6 +59,13 @@ exports.remove = async function (username, targetUsername) {
   var params = {id: await Common.getUserId(targetUsername) };
 
   /** /START/ cloud code **/
+
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
+  }
+
   var user = new Parse.User();
   user.id = params.id;
 
