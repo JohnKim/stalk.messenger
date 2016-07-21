@@ -6,7 +6,7 @@
 
 import { SWITCH_TAB, LOGGED_OUT} from 's5-action';
 
-const initialState = { tab: 'chats'}; // frends, chats, profile
+const initialState = { tab: 'follows'}; //follows, chats, profile
 
 function navigation(state = initialState, action) {
   if (action.type === SWITCH_TAB) {
