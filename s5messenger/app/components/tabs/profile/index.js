@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { logOut } from 's5-action';
+import { logOut, testAsync, testAsync2 } from 's5-action';
 
 import Header from 'S5Header';
 import S5Button from 'S5Button';
@@ -23,7 +23,9 @@ import S5Button from 'S5Button';
 class SampleView extends React.Component {
 
   testFunc() {
-    console.log('SAMPLE');
+
+    this.props.dispatch(testAsync2());
+
   }
 
   render() {

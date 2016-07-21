@@ -58,7 +58,7 @@ S5Button.propTypes = {
   type: React.PropTypes.oneOf(['primary', 'secondary', 'bordered']),
   icon: React.PropTypes.number,
   caption: React.PropTypes.string,
-  style: TouchableOpacity.propTypes.style,
+  style: React.PropTypes.any,
   onPress: React.PropTypes.func.isRequired,
 };
 

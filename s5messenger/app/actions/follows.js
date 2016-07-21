@@ -9,13 +9,9 @@ const InteractionManager = require('InteractionManager');
 
 const Follows = Parse.Object.extend('Follows');
 
-/**
- * Load list of all follows once logined
- * @params N/A
- **/
-export function loadFollows() {
+function loadFollowsAsync () {
 
-  return (dispatch) => {
+  return new Promise( (resolve, reject) => {
 
     var currentUser = Parse.User.current();
 
@@ -25,14 +21,24 @@ export function loadFollows() {
       .find()
       .then(
         (list) => {
-
-          InteractionManager.runAfterInteractions(() => {
-            dispatch(({type: LOADED_FOLLOWS, list}));
-          });
-
+          resolve(list);
         },
-        (error) => { console.warn(error); }
+        (err) => { console.error(error); reject(err); }
       );
+  });
+
+};
+
+/**
+ * Load list of all follows once logined
+ * @params N/A
+ **/
+export function loadFollows() {
+
+  return async (dispatch) => {
+
+    var list = await loadFollowsAsync();
+    return dispatch(({type: LOADED_FOLLOWS, list}));
 
   };
 

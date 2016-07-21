@@ -13,13 +13,9 @@ const InteractionManager = require('InteractionManager');
 const Chats = Parse.Object.extend('Chats');
 const Channels = Parse.Object.extend('Channels');
 
-/**
- * Load list of all chatting channels once logined
- * @params N/A
- **/
-export function loadChats() {
+function loadChatsAsync () {
 
-  return (dispatch) => {
+  return new Promise( (resolve, reject) => {
 
     var currentUser = Parse.User.current();
 
@@ -29,18 +25,31 @@ export function loadChats() {
       .find()
       .then(
         (list) => {
+          resolve(list);
+        },
+        (err) => { console.error(error); reject(err); }
+      );
+  });
 
-          InteractionManager.runAfterInteractions(() => {
-            dispatch(({
+};
+
+/**
+ * Load list of all chatting channels once logined
+ * @params N/A
+ **/
+export function loadChats() {
+
+  return async (dispatch) => {
+
+    var currentUser = Parse.User.current();
+
+    var list = await loadChatsAsync();
+    
+    return dispatch(({
               type: LOADED_CHATS,
               user: currentUser,
               list,
             }));
-          });
-
-        },
-        (error) => { console.warn(error); }
-      );
 
   };
 

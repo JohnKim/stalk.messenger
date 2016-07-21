@@ -58,17 +58,21 @@ export function signin(data, callback) {
     Parse.User.logIn(data.username, data.password, {
       success: function(user) {
 
-        dispatch(loadFollows());
-        dispatch(loadChats());
-        dispatch({
-          type: LOGGED_IN,
-          data: user,
-        });
+        dispatch( loadFollows() ).then(
+          (sauce) => dispatch( loadChats() ),
+          (error) => callback(error)
+        ).then(
+          (sauce) => dispatch({
+            type: LOGGED_IN,
+            data: user,
+          }),
+          (error) => callback(error)
+        );
 
       },
       error: function(user, error) {
-        callback(error);
         console.log("Error: " + error.code + " " + error.message);
+        callback(error);
       }
 
     });

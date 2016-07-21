@@ -3,109 +3,116 @@
   *
   */
 import Parse from 'parse/react-native';
-
-export const LOADED_CHATS   = 'LOADED_CHATS';
-export const ADDED_CHATS    = 'ADDED_CHATS';
-export const REMOVED_CHATS  = 'REMOVED_CHATS';
+import { loadFollows }        from './follows';
+import { loadChats }          from './chats';
 
 const InteractionManager = require('InteractionManager');
 
 const Chats = Parse.Object.extend('Chats');
 const Channels = Parse.Object.extend('Channels');
+const Follows = Parse.Object.extend('Follows');
 
-/**
- * Load list of all chatting channels once logined
- * @params N/A
- **/
-export function loadChats() {
+var initDatas = async function (dispatch) {
 
-  return (dispatch) => {
-
-    var currentUser = Parse.User.current();
-
-    new Parse.Query(Chats)
-      .equalTo('user', currentUser)
-      .include('channel.users')
-      .find()
-      .then(
-        (list) => {
-
-          InteractionManager.runAfterInteractions(() => {
-            dispatch(({
-              type: LOADED_CHATS,
-              user: currentUser,
-              list,
-            }));
-          });
-
-        },
-        (error) => { console.warn(error); }
-      );
-
-  };
-
-}
-
-async function queryFacebookAPI(path, ...args) {
-  return new Promise((resolve, reject) => {
-    FacebookSDK.api(path, ...args, (response) => {
-      if (response && !response.error) {
-        resolve(response);
-      } else {
-        reject(response && response.error);
+  try {
+    console.log('0001. ')
+      await Promise.all([
+        dispatch(loadFollows()),
+        dispatch(loadChats()),
+        timeout(15000),
+      ]);
+      console.log('0002. ')
+    } catch (e) {
+      const message = e.message || e;
+      if (message !== 'Timed out' && message !== 'Canceled by user') {
+        console.warn(e);
+      }else{
+        console.log(e);
       }
-    });
+      return;
+    } finally {
+      console.log('done!!!');
+    }
+
+};
+
+var timeout = async function (ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => reject(new Error('Timed out')), ms);
   });
 }
 
+export function testAsync2() {
 
+  return (dispatch, getState) => {
 
+    console.log('STEP 1');
 
-/**
- * create chatting channel
- * @params id : user.id of target user
- **/
-export function createChats(id) {
-
-  return (dispatch) => {
-    return Parse.Cloud.run('chats-create', {id}, {
-      success: (result) => {
-
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: ADDED_CHATS, result}));
-        });
-
+    dispatch( loadFollows() ).then(
+      (sauce) => {
+        console.log('STEP 2');
+        return dispatch( loadChats() );
       },
-      error: (error) => {
-        console.warn(error);
+      (error) => {
+        console.log(error);
       }
-    });
-  };
+    ).then(
+      (sauce) => {
+        console.log('STEP 3');
+        return dispatch( loadFollows() );
+      },
+      (error) => {
+        console.log(error);
+      }
+    ).then(
+      (sauce) => {
+        console.log('DONE');
+      }
+    );
 
+  }
 }
 
-/**
- * Remove(leave) chatting channel
- * @params id : user.id of target user
- **/
-export function removeChats(id) {
+export function testAsync() {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
-    // TODO disconnect socket first.
+    var currentUser = Parse.User.current();
+    // console.log('1. ', currentUser.id, currentUser.username);
 
-    return Parse.Cloud.run('chats-remove', {id}, {
-      success: (result) => {
+    return new Parse.Query(Follows)
+      .equalTo('userFrom', currentUser)
+      .include('userTo')
+      .find().then(
+        (list) => {
 
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_CHATS, result}));
-        });
+          //console.log('STEP 0');
+          //console.log(getState());
+          console.log('STEP 1');
 
-      },
-      error: (error) => {
-        console.warn(error);
-      }
-    });
+          return dispatch( loadFollows() ).then(
+            (sauce) => {
+              console.log('STEP 2');
+              return dispatch( loadChats() );
+            },
+            (error) => {
+              console.log(error);
+            }
+          ).then(
+            (sauce) => {
+              console.log('STEP 3');
+              return dispatch( loadFollows() );
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+          console.log('STEP 4');
+
+        },
+        (error) => { console.log(error); }
+      );
+    console.log('dddddone!');
+
   };
-
 }

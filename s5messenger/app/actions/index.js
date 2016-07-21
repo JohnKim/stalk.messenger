@@ -7,6 +7,7 @@ const userActions     = require('./user');
 const followsActions  = require('./follows');
 const chatsActions    = require('./chats');
 const messagesActions = require('./messages');
+const testActions     = require('./test');
 
 module.exports = {
   ...commonActions,
@@ -14,4 +15,5 @@ module.exports = {
   ...followsActions,
   ...chatsActions,
   ...messagesActions,
+  ...testActions,
 };
