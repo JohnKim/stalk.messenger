@@ -58,15 +58,15 @@ export function signin(data, callback) {
     Parse.User.logIn(data.username, data.password, {
       success: function(user) {
 
-        dispatch( loadFollows() ).then(
-          (sauce) => dispatch( loadChats() ),
-          (error) => callback(error)
+        dispatch( loadFollows() ).then( // ## Load all follows (init)
+          (success) => dispatch( loadChats() ), // ## Load all chats (init)
+          (error)   => callback(error)
         ).then(
-          (sauce) => dispatch({
+          (success) => dispatch({
             type: LOGGED_IN,
             data: user,
           }),
-          (error) => callback(error)
+          (error)   => callback(error)
         );
 
       },

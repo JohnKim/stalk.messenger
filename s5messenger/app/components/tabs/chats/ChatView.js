@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import Header from 'S5Header';
-//import { loadMessages } from 's5-action';
+import { switchTab } from 's5-action';
 import { connect } from 'react-redux';
 
 var GiftedMessenger = require('react-native-gifted-messenger');
@@ -138,6 +138,15 @@ class ChatView extends Component {
         <Header
           title="Chats"
           style={{backgroundColor: '#224488'}}
+          leftItem={{
+            icon: require('../../common/img/ic_keyboard_arrow_left_white.png'),
+            title: 'Back',
+            layout: 'icon',
+            onPress: () => {
+              switchTab('chats');
+              this.props.navigator.pop();
+            },
+          }}
         />
         <GiftedMessenger
 

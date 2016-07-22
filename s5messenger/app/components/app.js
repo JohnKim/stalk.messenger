@@ -15,7 +15,7 @@ import {
 import { loadConfig, updateInstallation } from 's5-action';
 import { VERSION } from '../../env.js';
 
-import LoginScreen from './login/LoginScreen';
+import LoginScreen from './login';
 import AppNavigator from './navigator';
 import { connect } from 'react-redux';
 

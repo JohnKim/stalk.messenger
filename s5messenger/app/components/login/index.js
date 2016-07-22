@@ -61,12 +61,7 @@ var styles = StyleSheet.create({
     // it to prefer flex: 1
     width: undefined,
     height: undefined,
-  },
-  section: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  }
 });
 
 module.exports = connect()(LoginScreen);

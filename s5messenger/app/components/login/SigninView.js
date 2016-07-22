@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  TextInput,
+  StyleSheet,
 } from 'react-native';
-
-import { connect } from 'react-redux';
-import { signin } from 's5-action';
-
-import Button from './Button';
-import styles from './styles.js';
+import S5TextInput  from 'S5TextInput';
+import S5Button     from 'S5Button';
+import { connect }  from 'react-redux';
+import { signin }   from 's5-action';
 
 class SigninView extends Component {
 
@@ -29,10 +27,7 @@ class SigninView extends Component {
     }
 
     if(!this.state.password) {
-      this.setState({
-        message: 'Password must be filled' ,
-        passwordChecked: '',
-      });
+      this.setState({ message: 'Password must be filled' });
       this.refs['password'].focus();
       return false;
     }
@@ -47,38 +42,39 @@ class SigninView extends Component {
   render(){
     return (
       <View style={styles.container}>
-        <View style={styles.body}>
+        <View>
 
-          <TextInput
+          <S5TextInput
             ref="username"
             style={styles.textinput}
-            onChangeText={(text) => this.setState({username: text.toLowerCase()})}
-            value={this.state.username}
             placeholder={"Username"}
+            value={this.state.username}
+            onChangeText={(text) => this.setState({username: text.toLowerCase()})}
           />
-          <TextInput
+
+          <S5TextInput
             ref="password"
             style={styles.textinput}
-            onChangeText={(text) => this.setState({password: text})}
+            placeholder={"Password"}
             value={this.state.password}
             secureTextEntry={true}
-            placeholder={"Password"}
+            onChangeText={(text) => this.setState({password: text})}
           />
+
           <Text>
             {this.state.message}
           </Text>
 
-          <Button
-            text="Login"
-            onpress={this.login.bind(this)}
-            button_styles={styles.primary_button}
-            button_text_styles={styles.primary_button_text} />
+          <S5Button
+            caption="Login"
+            onPress={this.login.bind(this)}
+          />
 
-          <Button
-            text="New here?"
-            onpress={() => this.props.onSwitchView('Signup')}
-            button_styles={styles.transparent_button}
-            button_text_styles={styles.transparent_button_text} />
+          <S5Button
+            type="secondary"
+            caption="New here ?"
+            onPress={() => this.props.onSwitchView('Signup')}
+          />
 
         </View>
       </View>
@@ -86,6 +82,17 @@ class SigninView extends Component {
   }
 
 }
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  textinput: {
+    margin: 10,
+  }
+});
 
 SigninView.propTypes = {
   onSwitchView: React.PropTypes.func.isRequired,

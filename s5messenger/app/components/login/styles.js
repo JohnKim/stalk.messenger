@@ -5,6 +5,9 @@ import React, {
 module.exports = StyleSheet.create({
   container: {
     flex: 1,
+
+        flexDirection: 'column',
+        justifyContent: 'center',
   },
   body: {
     flex: 9,

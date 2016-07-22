@@ -5,14 +5,12 @@ import {
   View,
   Text,
   TextInput,
+  StyleSheet,
 } from 'react-native';
-
 import { connect } from 'react-redux';
 import { signup } from 's5-action';
-
-import Button from './Button';
-import styles from './styles.js';
-
+import S5Button from 'S5Button';
+import S5TextInput  from 'S5TextInput';
 
 class SignupView extends Component {
 
@@ -71,21 +69,21 @@ class SignupView extends Component {
       <View style={styles.container}>
         <View style={styles.body}>
 
-  		    <TextInput
+  		    <S5TextInput
             ref="email"
     		    style={styles.textinput}
     		    onChangeText={(text) => this.setState({email: text.toLowerCase()})}
     		    value={this.state.email}
             placeholder={"Email Address"}
   		    />
-          <TextInput
+          <S5TextInput
             ref="username"
             style={styles.textinput}
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
             value={this.state.username}
             placeholder={"Username"}
           />
-          <TextInput
+          <S5TextInput
             ref="password"
             style={styles.textinput}
             onChangeText={(text) => this.setState({password: text})}
@@ -93,7 +91,7 @@ class SignupView extends Component {
             secureTextEntry={true}
             placeholder={"Password"}
           />
-          <TextInput
+          <S5TextInput
             style={styles.textinput}
             onChangeText={(text) => this.setState({passwordChecked: text})}
             value={this.state.passwordChecked}
@@ -103,23 +101,34 @@ class SignupView extends Component {
           <Text>
             {this.state.message}
           </Text>
-          <Button
-            text="Signup"
-            onpress={this.signup.bind(this)}
-            button_styles={styles.primary_button}
-            button_text_styles={styles.primary_button_text} />
 
-          <Button
-            text="Got an Account?"
-            onpress={() => this.props.onSwitchView('Signin')}
-            button_styles={styles.transparent_button}
-            button_text_styles={styles.transparent_button_text} />
+          <S5Button
+            caption="Sign Up"
+            onPress={this.signup.bind(this)}
+          />
+
+          <S5Button
+            type="secondary"
+            caption="Got an Account ?"
+            onPress={() => this.props.onSwitchView('Signin')}
+          />
 
         </View>
       </View>
     );
   }
 }
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  textinput: {
+    margin: 10,
+  }
+});
 
 SignupView.propTypes = {
   onSwitchView: React.PropTypes.func.isRequired,
