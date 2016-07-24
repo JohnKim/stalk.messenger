@@ -18,11 +18,12 @@ var SessionServer = exports.SessionServer = function (options, cb) {
 
   var parseArgs = {
     databaseURI: options.mongodb || 'mongodb://localhost:27017/stalk-messenger',
-    cloud: __dirname + '/cloud/main.js',
+    cloud: path.resolve(__dirname, 'cloud.js'),
     appId: options.app || 'STALK',
     appName: "stalk messenger",
     masterKey: options.master || 's3cR3T', //Add your master key here. Keep it secret!
-    serverURL: options.host+':'+options.port+'/parse'
+    // @ TODO : cloud 에서도 사용하는 URL 에는 반드시 protocal 이 명시되어야 함. 이부분 어떻게 해야 할지 확인 필요!!
+    serverURL: 'http://localhost:8080/parse' //options.host+':'+options.port+'/parse'
   };
 
   console.log(parseArgs);

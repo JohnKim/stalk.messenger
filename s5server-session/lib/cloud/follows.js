@@ -1,8 +1,12 @@
 
-var Follows = Parse.Object.extend('Follows');
+var Follows = Parse.Object.extend("Follows");
+
+Parse.Cloud.define('hello', function(req, res) {
+  res.success('Hi');
+});
 
 Parse.Cloud.define('follows', function(request, response) {
-  Parse.Cloud.useMasterKey();
+  //Parse.Cloud.useMasterKey();
 
   var user = request.user;
   if (!user) {
@@ -49,8 +53,10 @@ Parse.Cloud.define('follows-create', function(request, response) {
 });
 
 
-Parse.Cloud.define('follow-remove', function(request, response) {
-  Parse.Cloud.useMasterKey();
+Parse.Cloud.define('follows-remove', function(request, response) {
+
+  console.log(request);
+  //Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;
   if (!currentUser) {
@@ -62,6 +68,12 @@ Parse.Cloud.define('follow-remove', function(request, response) {
     return response.error({message: 'Need user id for following.'});
   }
 
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
+  }
+
   var user = new Parse.User();
   user.id = params.id;
 
@@ -71,10 +83,23 @@ Parse.Cloud.define('follow-remove', function(request, response) {
     .first()
     .then(
       (result) => {
-        result.destory();
-        response.success(result);
+
+        if(result) {
+          result.destroy().then(
+            (object)  => { response.success(object);  },
+            (error)   => { response.error(error);     }
+          );
+        } else {
+          // ParseError.OBJECT_NOT_FOUND = 101 (Error code indicating the specified object doesn't exist.)
+          response.error( {code: 101, message: "object doesn't exist."} );
+        }
+
       },
-      (error) => { response.error(error); }
+      (error) => {
+        console.log(error);
+        response.error(error);
+      }
+
     );
 
 });

@@ -19,6 +19,17 @@ function follows(state = initialState, action) {
       };
   }
 
+  if (action.type === REMOVED_FOLLOWS) {
+      console.log(action);
+      let newData = [...state.list];
+      console.log(newData);
+      newData.splice(action.row, 1);
+      return {
+        list: newData,
+        lastLoadedAt: new Date(),
+      };
+  }
+
   if (action.type === LOGGED_OUT) {
     return initialState;
   }
@@ -29,7 +40,8 @@ function follows(state = initialState, action) {
 function fromParseObject(object){
   var user = object.get('userTo');
   return {
-    id: object.id,
+    followId: object.id,
+    id: user.id,
     username: user.get('username'),
     email: user.get('email'),
     nickName: user.get('nickName'),

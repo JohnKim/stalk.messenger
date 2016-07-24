@@ -19,7 +19,7 @@ import {
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import FollowCell from './FollowCell';
 
-import { loadFollows } from 's5-action';
+import { loadFollows, removeFollow } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
@@ -40,12 +40,17 @@ class FollowsScreen extends Component {
       listViewData: this.props.follows.list
     });
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.follows.list !== this.props.follows.list) {
+      this.setState({
+        listViewData: nextProps.follows.list
+      });
+    }
+  }
 
-	deleteRow(secId, rowId, rowMap) {
+	_deleteRow(secId, rowId, rowMap) {
 		rowMap[`${secId}${rowId}`].closeRow();
-		const newData = [...this.state.listViewData];
-		newData.splice(rowId, 1);
-		this.setState({listViewData: newData});
+    this.props.removeFollow(rowId);
 	}
 
   _onRowPress(user) {
@@ -98,7 +103,7 @@ class FollowsScreen extends Component {
 								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
 									<Text style={styles.backTextWhite}>Right</Text>
 								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(secId, rowId, rowMap) }>
+								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
 									<Text style={styles.backTextWhite}>Delete</Text>
 								</TouchableOpacity>
 							</View>
@@ -208,6 +213,7 @@ function select(store) {
 function actions(dispatch) {
   return {
     loadFollows: () => dispatch(loadFollows()),
+    removeFollow: (rowId) => dispatch(removeFollow(rowId)),
   };
 }
 
