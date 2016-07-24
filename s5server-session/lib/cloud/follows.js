@@ -55,9 +55,6 @@ Parse.Cloud.define('follows-create', function(request, response) {
 
 Parse.Cloud.define('follows-remove', function(request, response) {
 
-  console.log(request);
-  //Parse.Cloud.useMasterKey();
-
   var currentUser = request.user;
   if (!currentUser) {
     return response.error({message: 'Not logged in'});
@@ -96,7 +93,6 @@ Parse.Cloud.define('follows-remove', function(request, response) {
 
       },
       (error) => {
-        console.log(error);
         response.error(error);
       }
 

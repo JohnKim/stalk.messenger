@@ -1,4 +1,4 @@
 
 require('./cloud/follows.js');
 require('./cloud/chats.js');
-//require(__dirname + '/messages.js');
+require('./cloud/messages.js');

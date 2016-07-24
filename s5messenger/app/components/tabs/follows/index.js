@@ -14,6 +14,7 @@ import {
   ListView,
 	TouchableOpacity,
 	TouchableHighlight,
+  TextInput,
 } from 'react-native';
 
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
@@ -28,6 +29,7 @@ class FollowsScreen extends Component {
 
   state = {
     listViewData: [],
+    filter: '',
   };
 
 	constructor(props) {
@@ -79,7 +81,11 @@ class FollowsScreen extends Component {
 
 	render() {
 
-    var rightItem = {
+    const filterText = this.state.filter || '';
+    const filterRegex = new RegExp(String(filterText), 'i');
+    const filter = (user) => filterRegex.test(user.nickName);
+
+    const rightItem = {
       title: 'search',
       icon: require('./img/search.png'),
       onPress: this._openSearchUserView.bind(this),
@@ -94,8 +100,22 @@ class FollowsScreen extends Component {
           rightItem={{...rightItem, layout: 'icon'}}
         />
 
+        <View style={styles.searchRow}>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            clearButtonMode="always"
+            onChangeText={text => {
+              this.setState({filter: text});
+            }}
+            placeholder="Search..."
+            style={[styles.searchTextInput]}
+            value={this.state.filter}
+          />
+        </View>
+
         <SwipeListView
-						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+						dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
 						renderRow={ (data) => this._renderRow(data) }
 						renderHiddenRow={ (data, secId, rowId, rowMap) => (
 							<View style={styles.rowBack}>
@@ -200,7 +220,19 @@ const styles = StyleSheet.create({
 		borderColor: 'black',
 		paddingVertical: 10,
 		width: 100,
-	}
+	},
+  searchRow: {
+    backgroundColor: '#eeeeee',
+    padding: 10,
+  },
+  searchTextInput: {
+    backgroundColor: 'white',
+    borderColor: '#cccccc',
+    borderRadius: 3,
+    borderWidth: 1,
+    paddingLeft: 8,
+    height: 35,
+  },
 });
 
 function select(store) {

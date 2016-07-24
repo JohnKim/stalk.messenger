@@ -13,16 +13,16 @@ function readable (object) {
 
 exports.success = function(object) {
 
-  console.info('\n>>>> SUCCESS');
+  console.info('\n------------------ SUCCESS');
   console.info(readable(object));
-  console.info('<<<< SUCCESS\n');
+  console.info('------------------ SUCCESS\n');
 
 };
 
 exports.error = function(object) {
 
-  console.info('\n>>>> ERROR');
+  console.info('\n------------------ ERROR');
   console.info(readable(object));
-  console.info('<<<< ERROR\n');
+  console.info('------------------ ERROR\n');
 
 };
