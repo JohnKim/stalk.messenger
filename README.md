@@ -51,11 +51,11 @@ $ ./s5server-channel/bin/channel-server --config ./config.local.json
 ##### 기본 기능
 - [x] 회원 가입
 - [x] 로그인
-- [ ] 로그아웃
+- [x] 로그아웃
 
 ##### 데이터 모델링
 - [x] parse object 데이터 모델링 (Relation 관계 정의)
-- [ ] samples 데이터 생성 스크립드 작성
+- [x] samples 데이터 생성 스크립드 작성
 - [x] Relational Diagram 작업
 
 ##### Follows Tab
@@ -66,7 +66,7 @@ $ ./s5server-channel/bin/channel-server --config ./config.local.json
 ##### Chats Tab
 - [x] GiftedListView Sample 코드 구현
 - [x] GiftedMessenger Sample 코드 구현
-- [ ] Chats 목록 조회 기능 구현
+- [x] Chats 목록 조회 기능 구현
 - [ ] Chat View 구현
 
 ##### Profile Tab
