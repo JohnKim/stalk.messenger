@@ -19,6 +19,7 @@ import { logOut, testAsync, testAsync2 } from 's5-action';
 
 import Header from 'S5Header';
 import S5Button from 'S5Button';
+import ProfilePicture from 'S5ProfilePicture';
 
 class SampleView extends React.Component {
 
@@ -26,6 +27,11 @@ class SampleView extends React.Component {
 
     this.props.dispatch(testAsync2());
 
+  }
+
+  selectImage(){
+    //TODO : Impl this;
+    console.log( ' impl this ' );
   }
 
   render() {
@@ -36,6 +42,18 @@ class SampleView extends React.Component {
           title="Sample"
           style={{backgroundColor: '#224488'}}
         />
+
+        <View style={styles.profile}>
+          <ProfilePicture
+            profileImageUrl={this.props.user.profileImage}
+            onPress={() => this.selectImage()}
+            size={100}
+          />
+
+          <Text style={{marginTop: 10}}>
+            {this.props.user.email}
+          </Text>
+        </View>
 
         <S5Button
           style={styles.button}
@@ -62,9 +80,16 @@ var styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
+    marginBottom: 20,
+    marginHorizontal: 20,
+    alignSelf: 'stretch',
+  },
+  profile: {
+    marginTop: 20,
     marginBottom: 10,
     marginHorizontal: 20,
     alignSelf: 'stretch',
+    alignItems: 'center',
   },
 });
 
