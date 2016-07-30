@@ -1,5 +1,5 @@
 /**
- * Follows Reducer
+ * Chat datas for Chats Tab
  */
 import { LOADED_CHATS, ADDED_CHATS, REMOVED_CHATS, LOGGED_OUT } from 's5-action';
 
@@ -15,13 +15,26 @@ function follows(state = initialState, action) {
   if (action.type === LOADED_CHATS) {
       currentUser = action.user; // to emit current user data into chat users of the channel.
       let list = action.list.map(chatsParseObject);
+
       return {
         list,
         lastLoadedAt: new Date(),
       };
-  }
 
-  if (action.type === LOGGED_OUT) {
+  } else if (action.type === ADDED_CHATS) {
+
+    currentUser = action.user;
+
+    let chat = chatsParseObject(action.chat);
+    let newData = [...state.list];
+    newData.unshift(chat);
+
+    return {
+      list: newData,
+      lastLoadedAt: new Date(),
+    };
+
+  } else if (action.type === LOGGED_OUT) {
     return initialState;
   }
 
@@ -32,11 +45,10 @@ function chatsParseObject(object){
 
   var channel = object.get("channel");
   var users = channel.get("users");
-
   var names = [];
   users.reduceRight(function(acc, user, index, object) {
 
-    console.log(user.id === currentUser.id, user.id, currentUser.id);
+    //console.log(user.id === currentUser.id, user.id, currentUser.id);
 
     if (user.id === currentUser.id) {
       object.splice(index, 1);
@@ -54,6 +66,7 @@ function chatsParseObject(object){
 
   return {
     id: object.id,
+    channelId: channel.id,
     name: names.join(", "),
     users,
   };
