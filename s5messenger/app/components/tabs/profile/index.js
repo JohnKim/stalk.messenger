@@ -15,11 +15,23 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { logOut, testAsync, testAsync2 } from 's5-action';
+import { logOut, testAsync, testAsync2, updateProfileImage } from 's5-action';
 
 import Header from 'S5Header';
 import S5Button from 'S5Button';
 import ProfilePicture from 'S5ProfilePicture';
+import Parse from 'parse/react-native';
+
+var ImagePicker = require('react-native-image-picker');
+
+var options = {
+  title: 'Select Avatar',
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    path: 'images'
+  }
+};
 
 class SampleView extends React.Component {
 
@@ -30,9 +42,37 @@ class SampleView extends React.Component {
   }
 
   selectImage(){
-    //TODO : Impl this;
-    console.log( ' impl this ' );
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        this.props.dispatch(updateProfileImage(response));
+      }
+    });
+
   }
+
+  /**
+  uploadImage(fileData, callback){
+
+    var fileStr = 'data:image/jpeg;base64,' + fileData;
+    var file = { base64: fileStr } ;
+    var fileNm = 'image.png';
+
+    var parseFile = new Parse.File(fileNm, file);
+    parseFile.save().then(function() {
+      console.log ( 'success : ' + parseFile.url() );
+    }, function(error) {
+      console.log ( 'error' );
+    });
+  }
+  */
 
   render() {
 

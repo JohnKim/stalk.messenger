@@ -8,6 +8,7 @@ import { loadChats }          from './chats';
 export const SIGNED_UP  = 'SIGNED_UP';
 export const LOGGED_IN  = 'LOGGED_IN';
 export const LOGGED_OUT = 'LOGGED_OUT';
+export const UPLOAD_PROFILE_IMAGE = 'UPLOAD_PROFILE_IMAGE';
 
 const InteractionManager  = require('InteractionManager');
 const constants           = require('./_constants');
@@ -94,6 +95,26 @@ export function logOut() {
       type: LOGGED_OUT,
     });
 
+  };
+}
+
+export async function updateProfileImage(response, callback) {
+
+
+  var base64Str = 'data:image/jpeg;base64,' + response.data;
+
+  let user = await Parse.User.currentAsync();
+  let profileFile = new Parse.File(user.get("username"), { base64: base64Str });
+  user.set('profileFile', profileFile);
+  await user.save();
+
+  await InteractionManager.runAfterInteractions();
+
+  return {
+    type: UPLOAD_PROFILE_IMAGE,
+    data: {
+      profileImage: user.get('profileFile').url()
+    },
   };
 }
 

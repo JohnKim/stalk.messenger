@@ -76,7 +76,7 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 - [ ] Read(읽음) 표시 기능 구현
 
 ##### Profile Tab
-- [ ] Profile 이미지 업로드 구현
+- [x] Profile 이미지 업로드 구현
 - [ ] Profile 관리 기능 구현
 
 ##### ** Design **
