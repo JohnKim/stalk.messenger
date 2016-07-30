@@ -62,7 +62,6 @@ class ChatsScreen extends Component {
   }
 
   _renderRow(chat) {
-
     return (
       <ChatCell
         key={chat.id}

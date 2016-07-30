@@ -20,7 +20,7 @@ import {
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import FollowCell from './FollowCell';
 
-import { loadFollows, removeFollow } from 's5-action';
+import { loadFollows, removeFollow, createChat } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
@@ -56,7 +56,7 @@ class FollowsScreen extends Component {
 	}
 
   _onRowPress(user) {
-    console.log('_onRowPress', user);
+    this.props.createChat(user.id);
   }
 
   _onProfileImagePress(user) {
@@ -145,7 +145,6 @@ FollowsScreen.propTypes = {
   navigator: React.PropTypes.object, // Navigator
   loadPost: React.PropTypes.func, // (page: number) => Array<Post>
 };
-
 
 const styles = StyleSheet.create({
 	container: {
@@ -244,8 +243,9 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    loadFollows: () => dispatch(loadFollows()),
+    loadFollows: () => dispatch(loadFollows()), // @ TODO not used !!
     removeFollow: (rowId) => dispatch(removeFollow(rowId)),
+    createChat: (id) => dispatch(createChat(id)),
   };
 }
 

@@ -75,9 +75,6 @@ export function removeFollow(row) {
 
   return (dispatch, getState) => {
 
-    console.log(getState().follows.list[row]);
-    console.log(getState().follows.list[row].id);
-
     let followId = getState().follows.list[row].id;
 
     return Parse.Cloud.run('follows-remove', {id: followId}, {
@@ -92,31 +89,7 @@ export function removeFollow(row) {
         console.warn(error);
       }
     });
-/*
-    const result = await Parse.Cloud.run('follows-remove', {id: followId});
 
-    console.log(result);
-
-    return dispatch({
-      type: REMOVED_FOLLOWS,
-      result,
-      row,
-    });
-*/
-    /*
-    return Parse.Cloud.run('follows-remove', {id}, {
-      success: (result) => {
-
-        InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_FOLLOWS, result}));
-        });
-
-      },
-      error: (error) => {
-        console.warn(error);
-      }
-    });
-    */
   };
 
 }

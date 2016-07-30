@@ -35,6 +35,12 @@ Parse.Cloud.define('chats-create', function(request, response) {
     return response.error({message: 'Need username for following.'});
   }
 
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
+  }
+
   var user = new Parse.User();
   user.id = params.id;
 
@@ -43,6 +49,7 @@ Parse.Cloud.define('chats-create', function(request, response) {
   query.first().then(
 
     (channel) => {
+
       if(!channel) {
         var channels = new Channels();
         channels.addUnique("users", currentUser);
@@ -51,37 +58,49 @@ Parse.Cloud.define('chats-create', function(request, response) {
       }else{
         return Parse.Promise.as(channel);
       }
+
     },
     (error) => {
-      response.error({message: 'Need username for following.'});
+
+      response.error(error);
+
     }
 
-  ).then(function(channel) {
+  ).then(
 
-    var queryChats = new Parse.Query(Chats);
-    queryChats.equalTo("user", currentUser);
-    queryChats.equalTo("channel", channel);
-    queryChats.first().then(
+    (channel) => {
 
-      (chat) => {
-        if(!chat){
-          var chats = new Chats();
-          chats.set("user", currentUser);
-          chats.set("channel", channel);
-          chats.save().then(
-            (value) => { response.success(value); },
-            (error) => { response.error(error); }
-          );
-        }else{
-          response.success(value); // TODO 에러 처리
+      var queryChats = new Parse.Query(Chats);
+      queryChats.equalTo("user", currentUser);
+      queryChats.equalTo("channel", channel);
+      queryChats.first().then(
+
+        (chat) => {
+          if(!chat){
+            var chats = new Chats();
+            chats.set("user", currentUser);
+            chats.set("channel", channel);
+            chats.save().then(
+              (value) => { response.success(value); },
+              (error) => { response.error(error); }
+            );
+          }else{
+            response.success(chat);
+          }
+        },
+        (error) => {
+          response.error(error);
         }
-      },
-      (error) => {
-        response.error({message: 'Need username for following.'});
-      }
-    );
+      );
 
-  });
+    },
+    (error) => {
+
+      response.error(error);
+
+    }
+
+  );
 
 });
 

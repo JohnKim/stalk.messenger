@@ -30,11 +30,11 @@ export default class FollowCell extends Component {
       return (
 
           <View style={styles.container}>
-            <TouchableHighlight onPress={this.props.onPress} >
+            <TouchableHighlight onPress={this.props.onProfilePress} >
               <Image source={{uri: this.state.user.profileImage}}
                 style={styles.image} />
             </TouchableHighlight>
-            <TouchableHighlight onPress={this.props.onProfilePress} >
+            <TouchableHighlight onPress={this.props.onPress} >
               <View style={styles.makerDetailsContainer}>
                   <Text style={styles.makerTitle}>
                     {this.state.user.nickName}

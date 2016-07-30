@@ -20,9 +20,7 @@ function follows(state = initialState, action) {
   }
 
   if (action.type === REMOVED_FOLLOWS) {
-      console.log(action);
       let newData = [...state.list];
-      console.log(newData);
       newData.splice(action.row, 1);
       return {
         list: newData,
