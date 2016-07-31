@@ -89,6 +89,14 @@ export function createChat(id) {
       success: async (result) => {
 
         var currentUser = Parse.User.current();
+
+        var isExisted = false;
+        getState().chats.list.forEach( function(obj) {
+           if( obj.id == result.id ) isExisted = true;
+        } );
+
+        if(isExisted) return;
+
         var chat = await loadChatByIdAsync(result.id);
 
         return dispatch(({

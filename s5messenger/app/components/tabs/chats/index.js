@@ -43,6 +43,14 @@ class ChatsScreen extends Component {
     console.log(this.props.chats);
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.chats.list !== this.props.chats.list) {
+      this.setState({
+        listViewData: nextProps.chats.list
+      });
+    }
+  }
+  
 	leaveChat(secId, rowId, rowMap) {
 
     console.log(secId, rowId, rowMap);
