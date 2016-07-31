@@ -11,7 +11,7 @@ import {
   Navigator,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  Image
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -21,6 +21,8 @@ import Header from 'S5Header';
 import S5Button from 'S5Button';
 import ProfilePicture from 'S5ProfilePicture';
 import Parse from 'parse/react-native';
+
+import SettingCell from './SettingCell';
 
 var ImagePicker = require('react-native-image-picker');
 
@@ -34,12 +36,6 @@ var options = {
 };
 
 class SampleView extends React.Component {
-
-  testFunc() {
-
-    this.props.dispatch(testAsync2());
-
-  }
 
   selectImage(){
     ImagePicker.showImagePicker(options, (response) => {
@@ -58,21 +54,18 @@ class SampleView extends React.Component {
 
   }
 
-  /**
-  uploadImage(fileData, callback){
-
-    var fileStr = 'data:image/jpeg;base64,' + fileData;
-    var file = { base64: fileStr } ;
-    var fileNm = 'image.png';
-
-    var parseFile = new Parse.File(fileNm, file);
-    parseFile.save().then(function() {
-      console.log ( 'success : ' + parseFile.url() );
-    }, function(error) {
-      console.log ( 'error' );
-    });
+  onPressName(){
+    console.log( '--- onPressName ---' );
   }
-  */
+
+  onPressNickName(){
+    console.log( '--- onPressNickName ---' );   
+  }
+
+  onPressStatusMessage(){
+    console.log( '--- onPressStatusMessage ---' );   
+  }
+
 
   render() {
 
@@ -83,7 +76,7 @@ class SampleView extends React.Component {
           style={{backgroundColor: '#224488'}}
         />
 
-        <View style={styles.profile}>
+        <View style={styles.profileImage}>
           <ProfilePicture
             profileImageUrl={this.props.user.profileImage}
             onPress={() => this.selectImage()}
@@ -95,16 +88,28 @@ class SampleView extends React.Component {
           </Text>
         </View>
 
+        <SettingCell
+          label="Name"
+          text={this.props.user.username}
+          onPress={() => this.onPressName()}
+        />
+
+        <SettingCell
+          label="Nickname"
+          text={this.props.user.nickName}
+          onPress={() => this.onPressNickName()}
+        />
+
+        <SettingCell
+          label="Status Message"
+          text={this.props.user.statusMessage}
+          onPress={() => this.onPressName()}
+        />
+
         <S5Button
           style={styles.button}
           caption="Log out !!"
           onPress={() => this.props.dispatch(logOut())}
-        />
-
-        <S5Button
-          type="secondary"
-          caption="Test It."
-          onPress={() => this.testFunc()}
         />
 
       </View>
@@ -124,13 +129,13 @@ var styles = StyleSheet.create({
     marginHorizontal: 20,
     alignSelf: 'stretch',
   },
-  profile: {
+  profileImage: {
     marginTop: 20,
     marginBottom: 10,
     marginHorizontal: 20,
     alignSelf: 'stretch',
     alignItems: 'center',
-  },
+  }
 });
 
 function select(store) {

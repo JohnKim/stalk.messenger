@@ -11,6 +11,7 @@ const initialState = {
   email: null,
   nickName: null,
   profileImage: null,
+  statusMessage:null
 };
 
 function user(state = initialState, action) {
@@ -25,6 +26,7 @@ function user(state = initialState, action) {
       email,
       nickName,
       profileImage,
+      statusMessage
     };
   }
 
@@ -52,7 +54,8 @@ function fromParseObject(user){
     username: user.get('username'),
     email: user.get('email'),
     nickName: user.get('nickName'),
-    profileImage: profileImage
+    profileImage: profileImage,
+    statusMessage: user.get('statusMessage'),
   };
 }
 
