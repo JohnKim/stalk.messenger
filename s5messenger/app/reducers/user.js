@@ -17,7 +17,7 @@ const initialState = {
 function user(state = initialState, action) {
 
   if (action.type === LOGGED_IN || action.type === SIGNED_UP) {
-    let {id, username, email, nickName, profileImage} = fromParseObject(action.data);
+    let {id, username, email, nickName, profileImage, statusMessage} = fromParseObject(action.data);
 
     return {
       isLoggedIn: true,
