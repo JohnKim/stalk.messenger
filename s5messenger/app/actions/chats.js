@@ -4,6 +4,8 @@
   */
 import Parse from 'parse/react-native';
 
+import { chat2Json } from '../reducers/parser';
+
 export const LOADED_CHATS   = 'LOADED_CHATS';
 export const ADDED_CHATS    = 'ADDED_CHATS';
 export const REMOVED_CHATS  = 'REMOVED_CHATS';
@@ -64,11 +66,11 @@ export function loadChats() {
 
     var list = await loadChatsAsync();
 
-    return dispatch(({
-              type: LOADED_CHATS,
-              user: currentUser,
-              list,
-            }));
+    return dispatch({
+      type: LOADED_CHATS,
+      user: currentUser,
+      list,
+    });
 
   };
 
@@ -104,10 +106,11 @@ export function createChat(id, callback) {
         }
 
         chat = await loadChatByIdAsync(result.id);
+        var chatJson = chat2Json(chat);
+//console.log(chatJson);
+        if(callback) callback( chat );
 
-        if(callback) callback(chat);
-
-        return dispatch({
+        dispatch({
           type: ADDED_CHATS,
           user: currentUser,
           chat

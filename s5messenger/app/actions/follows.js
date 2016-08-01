@@ -38,7 +38,11 @@ export function loadFollows() {
   return async (dispatch) => {
 
     var list = await loadFollowsAsync();
-    return dispatch(({type: LOADED_FOLLOWS, list}));
+
+    return dispatch(({
+      type: LOADED_FOLLOWS,
+      list,
+    }));
 
   };
 

@@ -40,7 +40,7 @@ function user(state = initialState, action) {
     var value = data['value'];
     var key = data['key'];
     state[key] = value;
-    
+
     return { ...state };
   }
 

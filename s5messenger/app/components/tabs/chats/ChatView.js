@@ -28,6 +28,8 @@ class ChatView extends Component {
 
   constructor(props) {
     super(props);
+
+    console.log('CONST', props);
     this._messages = [];
     //this._messages = this.getInitialMessages();
 
@@ -196,9 +198,11 @@ const styles = StyleSheet.create({
 });
 
 function select(store) {
+
   return {
     user: store.user,
   };
+
 }
 
 /*function actions(dispatch) {
