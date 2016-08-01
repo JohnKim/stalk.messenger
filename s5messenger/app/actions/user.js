@@ -8,6 +8,7 @@ import { loadChats }          from './chats';
 export const SIGNED_UP  = 'SIGNED_UP';
 export const LOGGED_IN  = 'LOGGED_IN';
 export const LOGGED_OUT = 'LOGGED_OUT';
+export const UPDATE_USER = 'UPDATE_USER';
 export const UPLOAD_PROFILE_IMAGE = 'UPLOAD_PROFILE_IMAGE';
 
 const InteractionManager  = require('InteractionManager');
@@ -98,23 +99,32 @@ export function logOut() {
   };
 }
 
-export async function updateProfileImage(response, callback) {
-
-
-  var base64Str = 'data:image/jpeg;base64,' + response.data;
+export async function updateUser(key, value) {
 
   let user = await Parse.User.currentAsync();
-  let profileFile = new Parse.File(user.get("username"), { base64: base64Str });
-  user.set('profileFile', profileFile);
+
+  var data = value;
+  if( key == 'profileFile' ){
+    let imgBase64 = 'data:image/jpeg;base64,' + value;
+    data = new Parse.File(user.get("username"), { base64: imgBase64 });   
+  }
+
+  user.set(key, data);
   await user.save();
 
   await InteractionManager.runAfterInteractions();
 
+  var result =''
+  if( key == 'profileFile' ){
+    key = 'profileImage';
+    result = user.get('profileFile').url();
+  } else {
+    result = user.get(key);
+  }
+
   return {
-    type: UPLOAD_PROFILE_IMAGE,
-    data: {
-      profileImage: user.get('profileFile').url()
-    },
+    type: UPDATE_USER,
+    data: {key:key, value:result}
   };
 }
 

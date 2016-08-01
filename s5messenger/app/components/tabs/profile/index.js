@@ -15,12 +15,11 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { logOut, testAsync, testAsync2, updateProfileImage } from 's5-action';
+import { logOut, testAsync, testAsync2, updateUser } from 's5-action';
 
 import Header from 'S5Header';
 import S5Button from 'S5Button';
 import ProfilePicture from 'S5ProfilePicture';
-import Parse from 'parse/react-native';
 
 import SettingCell from './SettingCell';
 
@@ -35,11 +34,14 @@ var options = {
   }
 };
 
-class SampleView extends React.Component {
+class SettingView extends React.Component {
+
+  constructor(props) {
+    super();
+  }
 
   selectImage(){
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled photo picker');
@@ -48,24 +50,19 @@ class SampleView extends React.Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        this.props.dispatch(updateProfileImage(response));
+        this.props.dispatch(updateUser('profileFile',response.data));
       }
     });
 
   }
 
-  onPressName(){
-    console.log( '--- onPressName ---' );
-  }
-
   onPressNickName(){
-    console.log( '--- onPressNickName ---' );   
+    this.props.navigator.push({settingForm: 1, field:'nickName'});  
   }
 
   onPressStatusMessage(){
-    console.log( '--- onPressStatusMessage ---' );   
+    this.props.navigator.push({settingForm: 1, field:'statusMessage'});     
   }
-
 
   render() {
 
@@ -89,12 +86,6 @@ class SampleView extends React.Component {
         </View>
 
         <SettingCell
-          label="Name"
-          text={this.props.user.username}
-          onPress={() => this.onPressName()}
-        />
-
-        <SettingCell
           label="Nickname"
           text={this.props.user.nickName}
           onPress={() => this.onPressNickName()}
@@ -103,7 +94,7 @@ class SampleView extends React.Component {
         <SettingCell
           label="Status Message"
           text={this.props.user.statusMessage}
-          onPress={() => this.onPressName()}
+          onPress={() => this.onPressStatusMessage()}
         />
 
         <S5Button
@@ -144,4 +135,4 @@ function select(store) {
   };
 }
 
-module.exports = connect(select)(SampleView);
+module.exports = connect(select)(SettingView);

@@ -2,7 +2,7 @@
  * User Reducer.
  */
 
-import { LOGGED_IN, LOGGED_OUT, SIGNED_UP, UPLOAD_PROFILE_IMAGE} from 's5-action';
+import { LOGGED_IN, LOGGED_OUT, SIGNED_UP, UPDATE_USER} from 's5-action';
 
 const initialState = {
   isLoggedIn: false,
@@ -34,9 +34,14 @@ function user(state = initialState, action) {
     return initialState;
   }
 
-  if (action.type === UPLOAD_PROFILE_IMAGE) {
-    let {profileImage} = action.data;
-    return { ...state, profileImage };
+  if (action.type === UPDATE_USER) {
+    let data = action.data;
+
+    var value = data['value'];
+    var key = data['key'];
+    state[key] = value;
+    
+    return { ...state };
   }
 
   return state;

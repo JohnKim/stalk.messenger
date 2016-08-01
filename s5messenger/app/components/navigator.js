@@ -20,6 +20,7 @@ import { switchTab } from 's5-action';
 import TabsView from './tabs/TabsView';
 import ChatView from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
+import SettingForm from './tabs/profile/SettingForm';
 
 class AppNavigator extends Component {
 
@@ -101,6 +102,8 @@ class AppNavigator extends Component {
       return <SearchUserView navigator={navigator} />;
     } else if(route.chatView) { // chatting view
       return <ChatView navigator={navigator} chat={route.chat} />;
+    } else if(route.settingForm){
+      return <SettingForm navigator={navigator} field={route.field} />;
     }
     return <TabsView navigator={navigator} />;
   }
