@@ -34,6 +34,14 @@ function follows(state = initialState, action) {
       lastLoadedAt: new Date(),
     };
 
+  } else if (action.type === REMOVED_CHATS) {
+
+      let newData = [...state.list];
+      newData.splice(action.row, 1);
+      return {
+        list: newData,
+        lastLoadedAt: new Date(),
+      };
   } else if (action.type === LOGGED_OUT) {
     return initialState;
   }

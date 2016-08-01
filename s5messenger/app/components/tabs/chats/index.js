@@ -19,7 +19,7 @@ import {
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import ChatCell from './ChatCell';
 
-import { loadChats } from 's5-action';
+import { loadChats, removeChat } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
@@ -39,8 +39,6 @@ class ChatsScreen extends Component {
     this.setState({
       listViewData: this.props.chats.list
     });
-
-    console.log(this.props.chats);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -50,24 +48,18 @@ class ChatsScreen extends Component {
       });
     }
   }
-  
-	leaveChat(secId, rowId, rowMap) {
-
-    console.log(secId, rowId, rowMap);
-
-		rowMap[`${secId}${rowId}`].closeRow();
-		const newData = [...this.state.listViewData];
-		newData.splice(rowId, 1);
-		this.setState({listViewData: newData});
-	}
 
   _onRowPress(chat) {
     this.props.navigator.push({
       chatView: true,
       chat,
     });
-    console.log('_onRowPress', chat);
   }
+
+	_deleteRow(secId, rowId, rowMap) {
+		rowMap[`${secId}${rowId}`].closeRow();
+    this.props.removeChat(rowId);
+	}
 
   _renderRow(chat) {
     return (
@@ -97,7 +89,7 @@ class ChatsScreen extends Component {
 								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
 									<Text style={styles.backTextWhite}>Mark as Read</Text>
 								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.leaveChat(secId, rowId, rowMap) }>
+								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
 									<Text style={styles.backTextWhite}>Leave</Text>
 								</TouchableOpacity>
 							</View>
@@ -204,7 +196,8 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    loadChats: () => dispatch(loadChats()),
+    loadChats: () => dispatch(loadChats()), // @ TODO not used !!
+    removeChat: (rowId) => dispatch(removeChat(rowId)),
   };
 }
 

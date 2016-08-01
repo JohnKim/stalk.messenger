@@ -81,7 +81,11 @@ export function removeFollow(row) {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_FOLLOWS, result, row}));
+          dispatch({
+            type: REMOVED_FOLLOWS,
+            result,
+            row
+          });
         });
 
       },
