@@ -106,8 +106,34 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
 Parse.Cloud.define('chats-remove', function(request, response) {
 
-  // TODO logic here
-  // remove chats and channel data (input request.params.id : channel.id)
-  response.success("TODO");
+  var currentUser = request.user;
+  if (!currentUser) {
+    return response.error({message: 'Not logged in'});
+  }
+
+  var params = request.params;
+  if (!params.id) {
+    return response.error({message: 'Need chat id for following.'});
+  }
+
+  new Parse.Query(Chats).get( params.id, {
+      success: (result) => {
+
+        if(result) {
+          result.destroy().then(
+            (object)  => { response.success(object);  },
+            (error)   => { response.error(error);     }
+          );
+        } else {
+          // ParseError.OBJECT_NOT_FOUND = 101 (Error code indicating the specified object doesn't exist.)
+          response.error( {code: 101, message: "object doesn't exist."} );
+        }
+
+      },
+      error: function(error) {
+        console.log(error);
+        response.error(error);
+      }
+    });
 
 });

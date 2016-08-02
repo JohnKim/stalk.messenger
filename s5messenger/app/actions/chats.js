@@ -4,6 +4,8 @@
   */
 import Parse from 'parse/react-native';
 
+import { chat2Json } from '../reducers/parser';
+
 export const LOADED_CHATS   = 'LOADED_CHATS';
 export const ADDED_CHATS    = 'ADDED_CHATS';
 export const REMOVED_CHATS  = 'REMOVED_CHATS';
@@ -64,11 +66,11 @@ export function loadChats() {
 
     var list = await loadChatsAsync();
 
-    return dispatch(({
-              type: LOADED_CHATS,
-              user: currentUser,
-              list,
-            }));
+    return dispatch({
+      type: LOADED_CHATS,
+      user: currentUser,
+      list,
+    });
 
   };
 
@@ -78,7 +80,7 @@ export function loadChats() {
  * create chatting channel
  * @params id : user.id of target user
  **/
-export function createChat(id) {
+export function createChat(id, callback) {
 
   return (dispatch, getState) => {
 
@@ -90,20 +92,29 @@ export function createChat(id) {
 
         var currentUser = Parse.User.current();
 
-        var isExisted = false;
+        var chat = null;
         getState().chats.list.forEach( function(obj) {
-           if( obj.id == result.id ) isExisted = true;
+           if( obj.id == result.id ) {
+             isExisted = true;
+             chat = obj;
+           }
         } );
 
-        if(isExisted) return;
+        if(chat) {
+          if(callback) callback(chat);
+          return;
+        }
 
-        var chat = await loadChatByIdAsync(result.id);
+        chat = await loadChatByIdAsync(result.id);
+        var chatJson = chat2Json(chat);
+//console.log(chatJson);
+        if(callback) callback( chat );
 
-        return dispatch(({
+        dispatch({
           type: ADDED_CHATS,
           user: currentUser,
           chat
-        }));
+        });
 
       },
       error: (error) => {
@@ -118,17 +129,22 @@ export function createChat(id) {
  * Remove(leave) chatting channel
  * @params id : user.id of target user
  **/
-export function removeChat(id) {
+export function removeChat(row, callback) {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
-    // TODO disconnect socket first.
+    let chatId = getState().chats.list[row].id;
 
-    return Parse.Cloud.run('chats-remove', {id}, {
+    return Parse.Cloud.run('chats-remove', { id: chatId }, {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_CHATS, result}));
+          dispatch({
+            type: REMOVED_CHATS,
+            result,
+            row
+          });
+          if(callback) callback(row);
         });
 
       },

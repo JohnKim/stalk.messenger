@@ -38,7 +38,11 @@ export function loadFollows() {
   return async (dispatch) => {
 
     var list = await loadFollowsAsync();
-    return dispatch(({type: LOADED_FOLLOWS, list}));
+
+    return dispatch(({
+      type: LOADED_FOLLOWS,
+      list,
+    }));
 
   };
 
@@ -81,7 +85,11 @@ export function removeFollow(row) {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: REMOVED_FOLLOWS, result, row}));
+          dispatch({
+            type: REMOVED_FOLLOWS,
+            result,
+            row
+          });
         });
 
       },

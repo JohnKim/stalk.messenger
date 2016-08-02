@@ -19,7 +19,7 @@ import {
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import ChatCell from './ChatCell';
 
-import { loadChats } from 's5-action';
+import { loadChats, removeChat } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
@@ -39,8 +39,6 @@ class ChatsScreen extends Component {
     this.setState({
       listViewData: this.props.chats.list
     });
-
-    console.log(this.props.chats);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -50,24 +48,18 @@ class ChatsScreen extends Component {
       });
     }
   }
-  
-	leaveChat(secId, rowId, rowMap) {
-
-    console.log(secId, rowId, rowMap);
-
-		rowMap[`${secId}${rowId}`].closeRow();
-		const newData = [...this.state.listViewData];
-		newData.splice(rowId, 1);
-		this.setState({listViewData: newData});
-	}
 
   _onRowPress(chat) {
     this.props.navigator.push({
       chatView: true,
       chat,
     });
-    console.log('_onRowPress', chat);
   }
+
+	_deleteRow(secId, rowId, rowMap) {
+		rowMap[`${secId}${rowId}`].closeRow();
+    this.props.removeChat(rowId);
+	}
 
   _renderRow(chat) {
     return (
@@ -79,8 +71,8 @@ class ChatsScreen extends Component {
     )
   }
 
-	render() {
-		return (
+  render() {
+	return (
       <View style={styles.container}>
 
         <Header
@@ -105,13 +97,9 @@ class ChatsScreen extends Component {
 			enableEmptySections={true}
 			rightOpenValue={-150}
 		/>
-
       </View>
-
-		);
-	}
-
-
+	);
+  }
 }
 
 ChatsScreen.propTypes = {
@@ -205,7 +193,8 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    loadChats: () => dispatch(loadChats()),
+    loadChats: () => dispatch(loadChats()), // @ TODO not used !!
+    removeChat: (rowId) => dispatch(removeChat(rowId)),
   };
 }
 

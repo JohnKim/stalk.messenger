@@ -56,7 +56,16 @@ class FollowsScreen extends Component {
 	}
 
   _onRowPress(user) {
-    this.props.createChat(user.id);
+
+    // create Chat row and open up Chat View !!
+    this.props.createChat(user.id, (chat) => {
+
+        this.props.navigator.push({
+          chatView: true,
+          chat,
+        });
+
+    });
   }
 
   _onProfileImagePress(user) {
@@ -246,7 +255,7 @@ function actions(dispatch) {
   return {
     loadFollows: () => dispatch(loadFollows()), // @ TODO not used !!
     removeFollow: (rowId) => dispatch(removeFollow(rowId)),
-    createChat: (id) => dispatch(createChat(id)),
+    createChat: (id, callback) => dispatch(createChat(id, callback)),
   };
 }
 
