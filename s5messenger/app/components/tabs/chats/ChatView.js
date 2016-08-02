@@ -42,9 +42,23 @@ class ChatView extends Component {
   }
 
   componentDidMount() {
+
+    // sample..
+
+    var msg = [{
+      text: JSON.stringify(this.props.chat, null, 1),
+      name: 'sample test',
+      image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
+      position: 'left',
+      date: new Date(2016, 0, 1, 20, 0),
+      uniqueId: Math.round(Math.random() * 10000), // simulating server-side unique id generation
+    }];
+
+    this.setMessages(msg.concat(this._messages));
   }
 
   componentWillUnmount() {
+
   }
 
   setMessages(messages) {
@@ -145,7 +159,7 @@ class ChatView extends Component {
             title: 'Back',
             layout: 'icon',
             onPress: () => {
-              switchTab('chats');
+              this.props.switchTab();
               this.props.navigator.pop();
             },
           }}
@@ -198,17 +212,15 @@ const styles = StyleSheet.create({
 });
 
 function select(store) {
-
   return {
     user: store.user,
   };
-
 }
 
-/*function actions(dispatch) {
+function actions(dispatch) {
   return {
-    loadMessages: () => dispatch(loadMessages()),
+    switchTab: () => dispatch(switchTab('chats')),
   };
-}*/
+}
 
-module.exports = connect(select/*, actions*/)(ChatView);
+module.exports = connect(select, actions)(ChatView);

@@ -136,7 +136,7 @@ export function createChat(id) {
  * Remove(leave) chatting channel
  * @params id : user.id of target user
  **/
-export function removeChat(row, callback) {
+export function removeChat(row) {
 
   return (dispatch, getState) => {
 
@@ -146,12 +146,15 @@ export function removeChat(row, callback) {
       success: (result) => {
 
         InteractionManager.runAfterInteractions(() => {
+
           dispatch({
             type: REMOVED_CHATS,
             result,
             row
           });
-          if(callback) callback(row);
+
+          return Promise.resolve(row);
+          
         });
 
       },

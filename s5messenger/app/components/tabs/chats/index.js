@@ -58,6 +58,10 @@ class ChatsScreen extends Component {
 
 	_deleteRow(secId, rowId, rowMap) {
 		rowMap[`${secId}${rowId}`].closeRow();
+    this.props.removeChat(rowId).then((row) => {
+      // TODO do something after deleting.
+    });
+
     this.props.removeChat(rowId);
 	}
 
