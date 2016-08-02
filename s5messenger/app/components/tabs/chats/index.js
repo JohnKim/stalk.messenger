@@ -89,7 +89,7 @@ class ChatsScreen extends Component {
 					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
 						<Text style={styles.backTextWhite}>Mark as Read</Text>
 					</View>
-					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.leaveChat(secId, rowId, rowMap) }>
+					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
 						<Text style={styles.backTextWhite}>Leave</Text>
 					</TouchableOpacity>
 				</View>

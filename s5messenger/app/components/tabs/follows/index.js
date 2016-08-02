@@ -58,7 +58,7 @@ class FollowsScreen extends Component {
   _onRowPress(user) {
 
     // create Chat row and open up Chat View !!
-    this.props.createChat(user.id, (chat) => {
+    this.props.createChat(user.id).then((chat) => {
 
         this.props.navigator.push({
           chatView: true,

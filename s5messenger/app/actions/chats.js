@@ -4,8 +4,6 @@
   */
 import Parse from 'parse/react-native';
 
-import { chat2Json } from '../reducers/parser';
-
 export const LOADED_CHATS   = 'LOADED_CHATS';
 export const ADDED_CHATS    = 'ADDED_CHATS';
 export const REMOVED_CHATS  = 'REMOVED_CHATS';
@@ -54,6 +52,21 @@ function loadChatByIdAsync (id) {
 
 };
 
+
+function createChatAsync (id) {
+
+  return new Promise( (resolve, reject) => {
+
+    Parse.Cloud.run('chats-create', { id }).then(
+      (result) => {
+        resolve(result);
+      },
+      (err) => { console.error(error); reject(err); }
+    );
+  });
+
+};
+
 /**
  * Load list of all chatting channels once logined
  * @params N/A
@@ -76,51 +89,45 @@ export function loadChats() {
 
 }
 
+
 /**
  * create chatting channel
  * @params id : user.id of target user
  **/
-export function createChat(id, callback) {
+export function createChat(id) {
 
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
 
-    // @ TODO check if existed.
-    // if (getState().chats.lists[].user[].id == id) then FAILED !!
+    var result = await createChatAsync(id);
 
-    return Parse.Cloud.run('chats-create', {id}, {
-      success: async (result) => {
+    var chat = null;
+    getState().chats.list.forEach( function(obj) {
+       if( obj.id == result.id ) {
+         chat = obj;
+       }
+    } );
 
-        var currentUser = Parse.User.current();
+    if(!chat) {
 
-        var chat = null;
-        getState().chats.list.forEach( function(obj) {
-           if( obj.id == result.id ) {
-             isExisted = true;
-             chat = obj;
-           }
-        } );
+      var currentUser = Parse.User.current();
+      chat = await loadChatByIdAsync(result.id);
 
-        if(chat) {
-          if(callback) callback(chat);
-          return;
-        }
+      dispatch({
+        type: ADDED_CHATS,
+        user: currentUser,
+        chat
+      });
 
-        chat = await loadChatByIdAsync(result.id);
-        var chatJson = chat2Json(chat);
-//console.log(chatJson);
-        if(callback) callback( chat );
+      getState().chats.list.forEach( function(obj) {
+         if( obj.id == chat.id ) {
+           chat = obj;
+         }
+      } );
 
-        dispatch({
-          type: ADDED_CHATS,
-          user: currentUser,
-          chat
-        });
+    }
 
-      },
-      error: (error) => {
-        console.warn(error);
-      }
-    });
+    return Promise.resolve(chat);
+
   };
 
 }
