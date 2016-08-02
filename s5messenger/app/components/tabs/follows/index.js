@@ -115,22 +115,23 @@ class FollowsScreen extends Component {
         </View>
 
         <SwipeListView
-						dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
-						renderRow={ (data) => this._renderRow(data) }
-						renderHiddenRow={ (data, secId, rowId, rowMap) => (
-							<View style={styles.rowBack}>
-								<Text>Left</Text>
-								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-									<Text style={styles.backTextWhite}>Right</Text>
-								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
-									<Text style={styles.backTextWhite}>Delete</Text>
-								</TouchableOpacity>
-							</View>
-						)}
-						leftOpenValue={75}
-						rightOpenValue={-150}
-					/>
+			dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
+			renderRow={ (data) => this._renderRow(data) }
+			renderHiddenRow={ (data, secId, rowId, rowMap) => (
+				<View style={styles.rowBack}>
+					<Text>Left</Text>
+					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+						<Text style={styles.backTextWhite}>Right</Text>
+					</View>
+					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
+						<Text style={styles.backTextWhite}>Delete</Text>
+					</TouchableOpacity>
+				</View>
+			)}
+			enableEmptySections={true}
+			leftOpenValue={75}
+			rightOpenValue={-150}
+		/>
 
       </View>
 

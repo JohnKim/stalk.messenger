@@ -40,7 +40,7 @@ export default class S5ProfilePicture extends Component {
       );
     }else{
       return (
-        <TouchableHighlight onPress={this.onPressProfileImage.bind(this)}>
+        <TouchableHighlight onPress={this.onPressProfileImage.bind(this)} underlayColor="transparent">
           <View>
             <Image
               source={{uri}}

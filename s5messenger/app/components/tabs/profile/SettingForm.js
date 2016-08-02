@@ -13,6 +13,7 @@ import {
   StatusBar,
   TextInput,
   Text,
+  Image
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -32,17 +33,44 @@ class SettingForm extends Component {
       this.state = {
         key : this.props.field,
         value : this.props.user[this.props.field],
-        title : this.props.field,
-        placeholder: this.props.field
+        title : this.props.title,
+        placeholder: 'Please input ' + this.props.title,
       }
     }
 
     this.saveSetting = this.saveSetting.bind(this);
-
+    this.renderIcon = this.renderIcon.bind(this);
+    this.onPressRemoveButton = this.onPressRemoveButton.bind(this);
   };
 
+  onPressRemoveButton(){
+    this.setState({value: ''});
+  }
+
   onChangeText(text){
+    if( this.props.validLength && text.length > this.props.validLength ){
+      return;
+    }
     this.setState({value: text});
+  }
+
+  renderIcon(){
+    return (
+      <TouchableHighlight onPress={this.onPressRemoveButton}
+        style={{marginRight:10}} underlayColor="transparent">
+        <Image source={require('../../common/img/cancel.png')} />
+      </TouchableHighlight>
+    )    
+  }
+
+  renderValidation(){
+    if( this.props.validLength && this.props.validLength > 0 ){
+      return(
+        <Text style={styles.helper}>
+        {this.state.value.length}/{this.props.validLength}
+        </Text>
+      )
+    }
   }
 
   saveSetting() {
@@ -68,11 +96,19 @@ class SettingForm extends Component {
           }}
         />
 
+        <View style={styles.wrap}>
+          <Text style={styles.label}>
+            {this.state.placeholder}
+          </Text>
+          {this.renderValidation()}
+        </View>
+
         <S5TextInput
           style={styles.textinput}
           placeholder={this.state.placeholder}
           value={this.state.value}
-          onChangeText={(text) => this.onChangeText(text)}
+          onChangeText={(text) => this.onChangeText(text) }
+          renderContainerIcon={this.renderIcon}
         />
       </View>
     )
@@ -84,8 +120,22 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
+  wrap: {
+    marginTop: 20,
+    marginHorizontal: 10,
+    flexDirection: 'row'
+  },
+  helper:{
+    position: 'absolute',
+    right:0,
+    fontSize:16,
+  },
   textinput: {
     margin: 10,
+  },
+  label:{
+    fontSize: 16,
+    color:'#3b6bb2'
   }
 });
 

@@ -216,7 +216,7 @@ class S5RefreshableListView extends Component {
         refreshableWaitingView={this._renderRefreshableWaitingView}
 
         emptyView={this.renderEmptyView}
-
+        enableEmptySections={true}
         renderSeparator={this.renderSeparatorView}
 
         //withSections={true} // enable sections

@@ -52,6 +52,12 @@ export default class S5TextInput extends Component {
       }
   }
 
+  _renderContainerIcon(){
+    if( this.props.renderContainerIcon ){
+      return this.props.renderContainerIcon();
+    }
+  }
+
   render() {
     return (
         <View style={[s.container,this.state,this.props.style]}>
@@ -66,7 +72,7 @@ export default class S5TextInput extends Component {
                        focusBorderColor={this.props.focusColor}
                        value={this.props.value}
             />
-            {this.props.onGetContainerIcon}
+            {this._renderContainerIcon()}
         </View>
     )
   }

@@ -89,21 +89,22 @@ class ChatsScreen extends Component {
         />
 
         <SwipeListView
-						dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-						renderRow={ (data) => this._renderRow(data) }
-						renderHiddenRow={ (data, secId, rowId, rowMap) => (
-							<View style={styles.rowBack}>
-								<Text>Left</Text>
-								<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-									<Text style={styles.backTextWhite}>Mark as Read</Text>
-								</View>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.leaveChat(secId, rowId, rowMap) }>
-									<Text style={styles.backTextWhite}>Leave</Text>
-								</TouchableOpacity>
-							</View>
-						) }
-						rightOpenValue={-150}
-					/>
+			dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+			renderRow={ (data) => this._renderRow(data) }
+			renderHiddenRow={ (data, secId, rowId, rowMap) => (
+				<View style={styles.rowBack}>
+					<Text>Left</Text>
+					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+						<Text style={styles.backTextWhite}>Mark as Read</Text>
+					</View>
+					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.leaveChat(secId, rowId, rowMap) }>
+						<Text style={styles.backTextWhite}>Leave</Text>
+					</TouchableOpacity>
+				</View>
+			) }
+			enableEmptySections={true}
+			rightOpenValue={-150}
+		/>
 
       </View>
 

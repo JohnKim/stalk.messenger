@@ -57,11 +57,11 @@ class SettingView extends React.Component {
   }
 
   onPressNickName(){
-    this.props.navigator.push({settingForm: 1, field:'nickName'});  
+    this.props.navigator.push({settingForm: 1, field:'nickName', title:'Nickname', validLength:20});  
   }
 
   onPressStatusMessage(){
-    this.props.navigator.push({settingForm: 1, field:'statusMessage'});     
+    this.props.navigator.push({settingForm: 1, field:'statusMessage', title:'Status message'});     
   }
 
   render() {

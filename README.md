@@ -77,7 +77,7 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 
 ##### Profile Tab
 - [x] Profile 이미지 업로드 구현
-- [ ] Profile 관리 기능 구현
+- [x] Profile 관리 기능 구현
 
 ##### ** Design **
 - [ ] 디자이너 섭외
