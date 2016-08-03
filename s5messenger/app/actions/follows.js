@@ -54,12 +54,15 @@ export function loadFollows() {
  **/
 export function createFollow(id) {
 
+  // TODO 입력 ID 가 현재 ID 가 되어서는 안됨.
+
   return (dispatch) => {
     return Parse.Cloud.run('follows-create', {id}, {
-      success: (result) => {
+      success: (follow) => {
 
         InteractionManager.runAfterInteractions(() => {
-          dispatch(({type: ADDED_FOLLOWS, result}));
+          console.log(follow);
+          dispatch(({type: ADDED_FOLLOWS, follow}));
         });
 
       },

@@ -17,18 +17,27 @@ function follows(state = initialState, action) {
         list,
         lastLoadedAt: new Date(),
       };
-  }
 
-  if (action.type === REMOVED_FOLLOWS) {
+  } else if (action.type === REMOVED_FOLLOWS) {
       let newData = [...state.list];
       newData.splice(action.row, 1);
       return {
         list: newData,
         lastLoadedAt: new Date(),
       };
-  }
 
-  if (action.type === LOGGED_OUT) {
+  } else if (action.type === ADDED_FOLLOWS) {
+
+    let follow = _parseObjToJSON(action.follow);
+    let newData = [...state.list];
+    newData.unshift(follow);
+
+    return {
+      list: newData,
+      lastLoadedAt: new Date(),
+    };
+
+  } else if (action.type === LOGGED_OUT) {
     return initialState;
   }
 

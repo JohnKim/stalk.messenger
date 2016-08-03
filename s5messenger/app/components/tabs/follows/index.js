@@ -42,6 +42,7 @@ class FollowsScreen extends Component {
       listViewData: this.props.follows.list
     });
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.follows.list !== this.props.follows.list) {
       this.setState({
@@ -56,15 +57,11 @@ class FollowsScreen extends Component {
 	}
 
   _onRowPress(user) {
-
-    // create Chat row and open up Chat View !!
     this.props.createChat(user.id).then((chat) => {
-
         this.props.navigator.push({
           chatView: true,
           chat,
         });
-
     });
   }
 
@@ -77,7 +74,6 @@ class FollowsScreen extends Component {
   }
 
   _renderRow(data) {
-
     return (
       <FollowCell
         key={data.id}
@@ -124,29 +120,28 @@ class FollowsScreen extends Component {
         </View>
 
         <SwipeListView
-			dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
-			renderRow={ (data) => this._renderRow(data) }
-			renderHiddenRow={ (data, secId, rowId, rowMap) => (
-				<View style={styles.rowBack}>
-					<Text>Left</Text>
-					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-						<Text style={styles.backTextWhite}>Right</Text>
-					</View>
-					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
-						<Text style={styles.backTextWhite}>Delete</Text>
-					</TouchableOpacity>
-				</View>
-			)}
-			enableEmptySections={true}
-			leftOpenValue={75}
-			rightOpenValue={-150}
-		/>
+          dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
+          renderRow={ (data) => this._renderRow(data) }
+          renderHiddenRow={ (data, secId, rowId, rowMap) => (
+            <View style={styles.rowBack}>
+              <Text>Left</Text>
+              <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+                <Text style={styles.backTextWhite}>Right</Text>
+              </View>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
+                <Text style={styles.backTextWhite}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          enableEmptySections={true}
+          leftOpenValue={75}
+          rightOpenValue={-150}
+        />
 
       </View>
 
 		);
 	}
-
 
 }
 

@@ -16,24 +16,24 @@ import {
   TextInput,
 } from 'react-native';
 
-import { searchUsersByPage } from 's5-action';
+import { searchUsersByPage, createFollow } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
-import RefreshableListView from 'S5RefreshableListView';
+import GiftedListView from 'react-native-gifted-listview';
 
 const PAGE_SIZE = 20;
 
 class SearchUserView extends React.Component {
 
+  state = {
+    listViewData: [],
+    filter: '',
+  };
+
   constructor(props) {
     super(props);
 
-    this.state = { };
-
-    this._onFetch       = this._onFetch.bind(this);
-    this._renderRowView = this._renderRowView.bind(this);
-    this.openPostDetail = this.openPostDetail.bind(this);
   }
 
   _onFetch(page = 1, callback, options) {
@@ -67,10 +67,19 @@ class SearchUserView extends React.Component {
 
   }
 
+  _onChangeFilterText(text) {
+    this.setState({filter: text});
+    this.refs['listView']._refresh();
+  }
+
+  _onRowPress(user) {
+    this.props.createFollow(user.id).then( () => this.props.navigator.pop() );
+  }
+
   _renderRowView(user) {
     return (
       <View key={user.id}>
-        <TouchableHighlight onPress={() => this.openPostDetail(user)}>
+        <TouchableHighlight onPress={ () => this._onRowPress(user) }>
           <View style={styles.row}>
             <Text style={styles.rowTitleText}>
               {user.username}
@@ -85,36 +94,11 @@ class SearchUserView extends React.Component {
     );
   }
 
-  _renderTextInput(): ?ReactElement<any> {
-    if (this.props.disableSearch) {
-      return null;
-    }
-    return (
-      <View style={styles.searchRow}>
-        <TextInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          clearButtonMode="always"
-          onChangeText={text => {
-            this.setState({filter: text});
-          }}
-          placeholder="Search..."
-          style={[styles.searchTextInput]}
-          testID="explorer_search"
-          value={this.state.filter}
-        />
-      </View>
-    );
-  }
-
-  openPostDetail(post) {
-    console.log(post);
-  }
-
   render() {
 
     return (
       <View style={styles.container}>
+
         <Header
           title="Search Users"
           foreground="dark"
@@ -125,10 +109,35 @@ class SearchUserView extends React.Component {
             onPress: () => this.props.navigator.pop(),
           }}
         />
-        {this._renderTextInput()}
-        <RefreshableListView
-          onFetch={this._onFetch}
-          rowView={this._renderRowView}
+
+        <View style={styles.searchRow}>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            clearButtonMode="always"
+            onChangeText={ this._onChangeFilterText.bind(this) }
+            placeholder="Search..."
+            style={[styles.searchTextInput]}
+            testID="explorer_search"
+            value={this.state.filter}
+          />
+        </View>
+
+        <GiftedListView
+          ref="listView"
+          onFetch={ this._onFetch.bind(this) }
+          rowView={ this._renderRowView.bind(this) }
+          firstLoader={true} // display a loader for the first fetching
+          pagination={true} // enable infinite scrolling using touch to load more
+          refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
+          withSections={false} // enable sections
+          customStyles={{
+            paginationView: {
+              backgroundColor: '#eee',
+            },
+          }}
+
+          refreshableTintColor="blue"
         />
 
       </View>
@@ -140,7 +149,6 @@ class SearchUserView extends React.Component {
 SearchUserView.propTypes = {
   user: React.PropTypes.object,
   navigator: React.PropTypes.object, // Navigator
-  loadPost: React.PropTypes.func, // (page: number) => Array<Post>
 };
 
 var styles = StyleSheet.create({
@@ -188,4 +196,10 @@ function select(store) {
   };
 }
 
-module.exports = connect(select)(SearchUserView);
+function actions(dispatch) {
+  return {
+    createFollow: (id) => dispatch(createFollow(id)),
+  };
+}
+
+module.exports = connect(select, actions)(SearchUserView);

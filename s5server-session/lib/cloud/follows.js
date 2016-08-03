@@ -26,7 +26,6 @@ Parse.Cloud.define('follows', function(request, response) {
 
 
 Parse.Cloud.define('follows-create', function(request, response) {
-  Parse.Cloud.useMasterKey();
 
   var currentUser = request.user;
   if (!currentUser) {
@@ -36,6 +35,12 @@ Parse.Cloud.define('follows-create', function(request, response) {
   var params = request.params;
   if (!params.id) {
     return response.error({message: 'Need user id for following.'});
+  }
+
+  if(params.id == currentUser.id) {
+    // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+    response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
+    return;
   }
 
   var user = new Parse.User();
