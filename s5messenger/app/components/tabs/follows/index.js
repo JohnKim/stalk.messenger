@@ -110,12 +110,10 @@ class FollowsScreen extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             clearButtonMode="always"
-            onChangeText={text => {
-              this.setState({filter: text});
-            }}
             placeholder="Search..."
             style={[styles.searchTextInput]}
             value={this.state.filter}
+            onChangeText={text => this.setState({filter: text})}
           />
         </View>
 
@@ -148,7 +146,6 @@ class FollowsScreen extends Component {
 FollowsScreen.propTypes = {
   user: React.PropTypes.object,
   navigator: React.PropTypes.object, // Navigator
-  loadPost: React.PropTypes.func, // (page: number) => Array<Post>
 };
 
 const styles = StyleSheet.create({

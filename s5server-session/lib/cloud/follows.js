@@ -46,13 +46,32 @@ Parse.Cloud.define('follows-create', function(request, response) {
   var user = new Parse.User();
   user.id = params.id;
 
-  var follow = new Follows();
-  follow.set("userFrom", currentUser);
-  follow.set("userTo", user);
-  follow.save()
-  .then(
-    (value) => { response.success(value); },
-    (error) => { response.error(error); }
+  new Parse.Query(Follows)
+    .equalTo('userFrom', currentUser)
+    .equalTo('userTo', user)
+    .first()
+    .then(
+      (result) => {
+
+        if(!result) {
+
+          var follow = new Follows();
+          follow.set("userFrom", currentUser);
+          follow.set("userTo", user);
+          follow.save()
+          .then(
+            (value) => { response.success(value); },
+            (error) => { response.error(error); }
+          );
+
+        }else{
+          response.success(null);
+        }
+
+    },
+    (error) => {
+      response.error(error);
+    }
   );
 
 });
