@@ -77,6 +77,7 @@ export function _parseObjToJSON(object){
   return {
     id: object.id,
     channelId: channel.id,
+    createdAt: object.createdAt,
     name: names.join(", "),
     users,
   };

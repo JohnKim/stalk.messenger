@@ -134,8 +134,6 @@ export async function updateUser(key, value) {
 // @params data = {keyword, pageNumber, pageSize}
 export function searchUsersByPage(data, callback) {
 
-  console.log(data);
-
   let limit = data.pageSize || constants.DEFAULT_PAGE_SIZE;
   let skip = ((data.pageNumber || 1) - 1) * limit;
 

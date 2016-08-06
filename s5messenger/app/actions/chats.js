@@ -154,7 +154,7 @@ export function removeChat(row) {
           });
 
           return Promise.resolve(row);
-          
+
         });
 
       },

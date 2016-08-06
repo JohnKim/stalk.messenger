@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import Header from 'S5Header';
-import { switchTab } from 's5-action';
+import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 import { connect } from 'react-redux';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 
@@ -22,11 +22,13 @@ class ChatView extends Component {
 
     super(props);
 
-console.log(props);
+    console.log(props);
+
     this.state = {
-      messages: [],
-      loadEarlier: true,
-      isTyping: null,
+      messages:     [],
+      loadEarlier:  false,
+      lastLoadedAt: null,
+      isTyping:     null,
     };
 
     this.onSend = this.onSend.bind(this);
@@ -39,26 +41,40 @@ console.log(props);
   componentWillMount() {
 
     // Load Messages from session-server
-    /*
-    this.setState(() => {
-      return {
-        messages: require('./data/messages.js'),
-      };
+    this.props.loadMessages(this.props.chat).then( (messages) => {
+
+      if(messages.length > 0) {
+        this.setState({
+          messages,
+          loadEarlier: messages.length == MESSAGE_SIZE ? true : false,
+          lastLoadedAt: messages[ messages.length + 1 ].createdAt,
+        });
+      }
+
     });
-    */
+
   }
 
   onLoadEarlier() {
+
     // Load Message earlier messages from session-server.
-    /*this.setState((previousState) => {
-      return {
-        messages: GiftedChat.prepend(previousState.messages, require('./data/old_messages.js')),
-        loadEarlier: false,
-      };
-    });*/
+    this.props.loadMessages(this.props.chat, this.state.lastLoadedAt).then( (messages) => {
+
+      if(messages.length > 0) {
+        this.setState((previousState) => {
+          return {
+            messages: GiftedChat.prepend(previousState.messages, messages),
+            loadEarlier: messages.length == MESSAGE_SIZE ? true : false,
+            lastLoadedAt: messages[ messages.length + 1 ].createdAt,
+          };
+        });
+      }
+
+    });
   }
 
   onSend(messages = []) {
+    console.log(messages);
     this.setState((previousState) => {
       return {
         messages: GiftedChat.append(previousState.messages, messages),
@@ -145,6 +161,7 @@ function select(store) {
 function actions(dispatch) {
   return {
     switchTab: () => dispatch(switchTab('chats')),
+    loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
   };
 }
 
