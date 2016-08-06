@@ -45,12 +45,17 @@ class FollowsScreen extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.follows.list !== this.props.follows.list) {
+
       this.setState({
         listViewData: nextProps.follows.list
       });
-    }
-  }
+      this.setState({ filter: '' });
+      this.refs['listView'].forceUpdate(); // TODO 이상하게도.. rener 가 정상 동작하지 않아.. ㅠㅜ
 
+    }
+
+  }
+ 
 	_deleteRow(secId, rowId, rowMap) {
 		rowMap[`${secId}${rowId}`].closeRow();
     this.props.removeFollow(rowId);
@@ -96,6 +101,8 @@ class FollowsScreen extends Component {
       onPress: this._openSearchUserView.bind(this),
     };
 
+    let datasource = this.ds.cloneWithRows(this.state.listViewData.filter(filter));
+
 		return (
       <View style={styles.container}>
 
@@ -118,7 +125,8 @@ class FollowsScreen extends Component {
         </View>
 
         <SwipeListView
-          dataSource={this.ds.cloneWithRows(this.state.listViewData.filter(filter))}
+          ref="listView"
+          dataSource={ datasource }
           renderRow={ (data) => this._renderRow(data) }
           renderHiddenRow={ (data, secId, rowId, rowMap) => (
             <View style={styles.rowBack}>

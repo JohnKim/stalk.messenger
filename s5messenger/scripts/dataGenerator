@@ -6,6 +6,7 @@ import Parse from 'parse/node';
 import User from './lib/user';
 import Follows from './lib/follows';
 import Chats from './lib/chats';
+import Messages from './lib/messages';
 
 var argv = process.argv;
 
@@ -303,6 +304,7 @@ function chatsParseObject(object){
 }
 
 switch (argv[2]) {
+
   case "user:create":
     if(!argv[3]) { User.create(); } else{ User.create(argv[3]); }
     break;
@@ -310,6 +312,7 @@ switch (argv[2]) {
     if(!argv[3]) throwError(' USAGE : dataGenerator user:search [keyword] ');
     User.search({ keyword: argv[3] });
     break;
+
   case "follows:create":
     if(!argv[3] || !argv[4]) throwError(' USAGE : dataGenerator follow:create [username] [firend\'s username]');
     Follows.create(argv[3], argv[4]);
@@ -331,6 +334,12 @@ switch (argv[2]) {
     if(!argv[3]) throwError(' USAGE : dataGenerator chat:list [username] ');
     Chats.load(argv[3]);
     break;
+
+  case "messages:create":
+    if(!argv[3]) throwError(' USAGE : dataGenerator messages:create [chatId]');
+    Messages.create(argv[3], argv[4]);
+    break;
+
   case "test":
   //foo();
   console.log(argv[3]);

@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { logOut, testAsync, testAsync2, updateUser } from 's5-action';
+import { logOut, updateUser } from 's5-action';
 
 import Header from 'S5Header';
 import S5Button from 'S5Button';
@@ -57,11 +57,11 @@ class SettingView extends React.Component {
   }
 
   onPressNickName(){
-    this.props.navigator.push({settingForm: 1, field:'nickName', title:'Nickname', validLength:20});  
+    this.props.navigator.push({settingForm: 1, field:'nickName', title:'Nickname', validLength:20});
   }
 
   onPressStatusMessage(){
-    this.props.navigator.push({settingForm: 1, field:'statusMessage', title:'Status message'});     
+    this.props.navigator.push({settingForm: 1, field:'statusMessage', title:'Status message'});
   }
 
   render() {
