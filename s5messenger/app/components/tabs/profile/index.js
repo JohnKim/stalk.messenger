@@ -77,6 +77,7 @@ class SettingView extends React.Component {
           <ProfilePicture
             profileImageUrl={this.props.user.profileImage}
             onPress={() => this.selectImage()}
+            editable={true}
             size={100}
           />
 

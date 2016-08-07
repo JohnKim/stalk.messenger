@@ -17,6 +17,36 @@ export default class S5ProfilePicture extends Component {
     return this.props.onPress && this.props.onPress();
   }
 
+  renderIcon(){
+    const {size} = this.props;
+    if(this.props.editable){
+      return (
+         <View 
+            style={{
+              width: (size / 5 )+10,
+              height: (size / 5)+10 ,
+              position: 'absolute',
+              top: size - ( size / 4 ),
+              left: size - ( size / 4 ),
+              borderRadius: (size / 5 + 10) / 2,
+              alignItems: 'center',  
+              backgroundColor:'white'
+            }}
+            >
+            <Image
+              source={require('./img/camera.png')}
+              style={{
+                width: (size / 5 ),
+                height: (size / 5),
+                opacity:0.5,
+                marginTop:5          
+              }}
+            />
+          </View>
+      )
+    }
+  }
+
   render() {
     const {size} = this.props;
     const scaledSize = size * PixelRatio.get();
@@ -28,15 +58,17 @@ export default class S5ProfilePicture extends Component {
 
     if(this.props.onPress === undefined){
       return (
-        <Image
-          source={{uri}}
-          defaultSource={require('./img/face.png')}
-          style={{
-            width: size,
-            height: size,
-            borderRadius: size / 2,
-          }}
-        />
+        <View>
+          <Image
+            source={{uri}}
+            defaultSource={require('./img/face.png')}
+            style={[{
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+            },this.props.style]}
+          />
+        </View>
       );
     }else{
       return (
@@ -45,35 +77,13 @@ export default class S5ProfilePicture extends Component {
             <Image
               source={{uri}}
               defaultSource={require('./img/face.png')}
-              style={{
+              style={[{
                 width: size,
                 height: size,
                 borderRadius: size / 2,
-              }}
+              },this.props.style]}
             />
-
-            <View 
-              style={{
-                width: (size / 5 )+10,
-                height: (size / 5)+10 ,
-                position: 'absolute',
-                top: size - ( size / 4 ),
-                left: size - ( size / 4 ),
-                borderRadius: (size / 5 + 10) / 2,
-                alignItems: 'center',  
-                backgroundColor:'white'
-              }}
-              >
-              <Image
-                source={require('./img/camera.png')}
-                style={{
-                  width: (size / 5 ),
-                  height: (size / 5),
-                  opacity:0.5,
-                  marginTop:5          
-                }}
-              />
-            </View>
+            {this.renderIcon()}
           </View>
         </TouchableHighlight>
       );

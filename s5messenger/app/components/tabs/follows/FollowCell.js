@@ -14,6 +14,8 @@ import {
   PixelRatio,
 } from 'react-native';
 
+import ProfilePicture from 'S5ProfilePicture';
+
 export default class FollowCell extends Component {
 
   constructor(props) {
@@ -30,17 +32,19 @@ export default class FollowCell extends Component {
       return (
 
           <View style={styles.container}>
-            <TouchableHighlight onPress={this.props.onProfilePress} >
-              <Image source={{uri: this.state.user.profileImage}}
-                style={styles.image} />
-            </TouchableHighlight>
+            <ProfilePicture
+              profileImageUrl={this.state.user.profileImage}
+              onPress={() => this.props.onProfilePress()}
+              size={48}
+              style={styles.image}
+            />
             <TouchableHighlight onPress={this.props.onPress} >
               <View style={styles.makerDetailsContainer}>
                   <Text style={styles.makerTitle}>
                     {this.state.user.nickName}
                   </Text>
                 <Text style={styles.makerDetails}>
-                  {this.state.user.username}
+                  {this.state.user.statusMessage}
                 </Text>
               </View>
             </TouchableHighlight>
@@ -80,13 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFD',
   },
   image: {
-    height: 48,
-    width: 48,
-    borderRadius: 25,
-    marginTop: 10,
-    marginRight: 15,
-    marginLeft: 15,
-    marginBottom:15,
+    margin:10
   },
   makerDetailsContainer: {
     flex: 1,
