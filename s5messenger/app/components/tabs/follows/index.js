@@ -24,6 +24,7 @@ import { loadFollows, removeFollow, createChat } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
+import S5SwipeListView from 'S5SwipeListView'
 
 class FollowsScreen extends Component {
 
@@ -45,13 +46,15 @@ class FollowsScreen extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.follows.list !== this.props.follows.list) {
-
+      var self = this;
       this.setState({
         listViewData: nextProps.follows.list
       });
       this.setState({ filter: '' });
       this.refs['listView'].forceUpdate(); // TODO 이상하게도.. rener 가 정상 동작하지 않아.. ㅠㅜ
-
+      setTimeout(function(){
+        self.refs['listView']._listView.scrollTo({y:0});
+      }, 100 );
     }
 
   }
@@ -124,7 +127,7 @@ class FollowsScreen extends Component {
           />
         </View>
 
-        <SwipeListView
+        <S5SwipeListView
           ref="listView"
           dataSource={ datasource }
           renderRow={ (data) => this._renderRow(data) }
