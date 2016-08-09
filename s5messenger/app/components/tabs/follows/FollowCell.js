@@ -41,7 +41,7 @@ export default class FollowCell extends Component {
             <TouchableHighlight onPress={this.props.onPress} >
               <View style={styles.makerDetailsContainer}>
                   <Text style={styles.makerTitle}>
-                    {this.state.user.nickName}
+                    {this.state.user.username}
                   </Text>
                 <Text style={styles.makerDetails}>
                   {this.state.user.statusMessage}

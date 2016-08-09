@@ -39,8 +39,21 @@ class FollowsScreen extends Component {
 	}
 
   componentDidMount(){
+
+    /** TEST CODE for Section*/
+    var sectionData = {};
+    for( var inx = 0 ;inx<this.props.follows.list.length;inx++){
+
+      var firstCh = this.props.follows.list[inx].username.substring(0,1).toUpperCase();
+      if( !sectionData[firstCh] ){
+        sectionData[firstCh] = [];
+      }
+      sectionData[firstCh].push( this.props.follows.list[inx] );
+    }
+
     this.setState({
-      listViewData: this.props.follows.list
+      listViewData: this.props.follows.list,
+      sectionData: sectionData
     });
   }
 
@@ -51,7 +64,7 @@ class FollowsScreen extends Component {
         listViewData: nextProps.follows.list
       });
       this.setState({ filter: '' });
-      this.refs['listView'].forceUpdate(); // TODO 이상하게도.. rener 가 정상 동작하지 않아.. ㅠㅜ
+      this.refs['listView']._listView.forceUpdate();
       setTimeout(function(){
         self.refs['listView']._listView.scrollTo({y:0});
       }, 100 );
@@ -88,7 +101,7 @@ class FollowsScreen extends Component {
         user={data}
         onPress={() => this._onRowPress(data)}
         onProfilePress={() => this._onProfileImagePress(data)}
-        />
+      />
     )
   }
 
@@ -104,7 +117,13 @@ class FollowsScreen extends Component {
       onPress: this._openSearchUserView.bind(this),
     };
 
-    let datasource = this.ds.cloneWithRows(this.state.listViewData.filter(filter));
+    let datasource;
+    if( Array.isArray(this.state.listViewData) ){
+      datasource = this.ds.cloneWithRows(this.state.listViewData.filter(filter));
+    } else{
+      // TODO : Need more test
+      datasource = this.ds.cloneWithRowsAndSections(this.state.listViewData);
+    }
 
 		return (
       <View style={styles.container}>
@@ -143,6 +162,8 @@ class FollowsScreen extends Component {
             </View>
           )}
           enableEmptySections={true}
+          sectionData={this.state.sectionData}
+          cellHeight={68} // TODO dynamic
           leftOpenValue={75}
           rightOpenValue={-150}
         />

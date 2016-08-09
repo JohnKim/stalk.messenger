@@ -7,15 +7,17 @@
 
 import React, {
   Component,
-  PropTypes,
+  PropTypes
 } from 'react';
 import {
   ListView,
   Text,
   View,
+  StyleSheet
 } from 'react-native';
 
 import S5SwipeRow from './S5SwipeRow';
+import S5SectionList from './S5SectionList';
 
 /**
  * f that renders SwipeRows.
@@ -26,6 +28,10 @@ export default class S5SwipeListView extends Component {
     super(props);
     this._rows = {};
     this.openCellId = null;
+
+
+    this.cellTagMap = {};
+    this.scrollToSection = this.scrollToSection.bind(this);
   }
 
   setScrollEnabled(enable) {
@@ -109,18 +115,75 @@ export default class S5SwipeListView extends Component {
     }
   }
 
+  updateTagInCellMap(tag, section) {
+    // TODO impl this
+    this.cellTagMap[section] = tag;
+  }
+
+  scrollToSection(section) {
+    var y = 0;
+    var headerHeight = this.props.headerHeight || 0;
+    y += headerHeight;
+
+    var cellHeight = this.props.cellHeight;
+    var sectionHeaderHeight = this.props.sectionHeaderHeight || 0;
+    var keys = Object.keys(this.props.sectionData);
+    var index = keys.indexOf(section);
+
+    var numcells = 0;
+    for (var i = 0; i < index; i++) {
+      numcells += this.props.sectionData[keys[i]].length;
+    }
+
+    sectionHeaderHeight = index * sectionHeaderHeight;
+    y += numcells * cellHeight + sectionHeaderHeight;
+    var maxY = this.totalHeight - this.containerHeight + headerHeight;
+    y = y > maxY ? maxY : y;
+
+    this._listView.scrollTo({ x:0, y, animated: true });
+  }
+
   render() {
+    var sectionList;
+
+    if ( this.props.sectionData ){
+      sectionList = !this.props.hideSectionList ?
+        <S5SectionList
+          style={this.props.sectionListStyle}
+          onSectionSelect={this.scrollToSection}
+          sections={Object.keys(this.props.sectionData)}
+          data={this.props.sectionData}
+          getSectionListTitle={this.props.getSectionListTitle}
+          component={this.props.sectionListItem}
+        /> :
+        null;
+    }
+
     return (
-      <ListView
-        {...this.props}
-        ref={ c => this.setRefs(c) }
-        onScroll={ e => this.onScroll(e) }
-        renderRow={(rowData, secId, rowId) => this.renderRow(rowData, secId, rowId, this._rows)}
-      />
+      <View ref="view" style={[styles.container, this.props.style]}>
+        <ListView
+          {...this.props}
+          ref={ c => this.setRefs(c) }
+          onScroll={ e => this.onScroll(e) }
+          renderRow={(rowData, secId, rowId) => this.renderRow(rowData, secId, rowId, this._rows)}
+        />
+        {sectionList}
+      </View>
     )
   }
 
 }
+
+var styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
+
+var stylesheetProp = PropTypes.oneOfType([
+  PropTypes.number,
+  PropTypes.object,
+]);
 
 S5SwipeListView.propTypes = {
   /**
@@ -182,7 +245,17 @@ S5SwipeListView.propTypes = {
    * Called when the ListView ref is set and passes a ref to the ListView
    * e.g. listViewRef={ ref => this._swipeListViewRef = ref }
    */
-  listViewRef: PropTypes.func
+  listViewRef: PropTypes.func,
+
+  /**
+   * Styles to pass to the container
+   */
+  style: stylesheetProp,
+
+  /**
+   * Styles to pass to the section list container
+   */
+  sectionListStyle: stylesheetProp
 }
 
 S5SwipeListView.defaultProps = {
