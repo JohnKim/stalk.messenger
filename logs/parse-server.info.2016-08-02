@@ -1,1 +1,0 @@
-{"error":{"code":202,"message":"Account already exists for this username."},"level":"error","message":"Error generating response. ParseError {\n  code: 202,\n  message: 'Account already exists for this username.' }","timestamp":"2016-08-02T11:05:11.048Z"}
