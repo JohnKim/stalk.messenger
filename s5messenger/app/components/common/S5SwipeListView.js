@@ -9,14 +9,16 @@ import React, {
   Component,
   PropTypes
 } from 'react';
-import {
+
+import ReactNative, {
   ListView,
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  NativeModules
 } from 'react-native';
 
-var merge = require('merge');
+var UIManager = NativeModules.UIManager;
 
 import S5SwipeRow from './S5SwipeRow';
 import S5SectionList from './S5SectionList';
@@ -39,11 +41,40 @@ export default class S5SwipeListView extends Component {
       })
     };
 
-    this.cellTagMap = {};
     this.scrollToSection = this.scrollToSection.bind(this);
 
     this.onScroll = this.onScroll.bind(this);
     this.onScrollAnimationEnd = this.onScrollAnimationEnd.bind(this);
+    this.calculateScrollToY = this.calculateScrollToY.bind(this);
+    this.calculateTotalHeight = this.calculateTotalHeight.bind(this);
+  }
+
+  componentDidMount() {
+    var self = this;
+    // push measuring into the next tick
+    setTimeout(() => {
+      UIManager.measure(ReactNative.findNodeHandle(this.refs.view), (x,y,w,h) => {
+        this.containerHeight = h;
+      });
+
+      if( this.sectionData && Object.keys(this.sectionData).length > 0 ){
+        var firstSection = Object.keys(this.sectionData)[0];
+        var tag = ReactNative.findNodeHandle(this._rows[firstSection+'0']);
+
+        if( tag && tag > 0 ){
+          UIManager.measure(tag, (x, y, w, h) => {
+            self.cellHeight = h;
+            self.calculateTotalHeight();
+          });
+        }
+      }
+    }, 0);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data && nextProps.data !== this.props.data) {
+      this.calculateTotalHeight(nextProps.data);
+    }
   }
 
   setScrollEnabled(enable) {
@@ -145,17 +176,39 @@ export default class S5SwipeListView extends Component {
     }
   }
 
-  updateTagInCellMap(tag, section) {
-    this.cellTagMap[section] = tag;
+  scrollToSection(section) {
+    var y = 0;
+    this.safeCloseOpenRow();
+
+    if (!this.props.useDynamicHeights) {
+      y = this.calculateScrollToY(section);
+      if( y > 0 ){
+        this._listView.scrollTo({ x:0, y, animated: true });
+      }
+    } else {
+      var tag = ReactNative.findNodeHandle(this._rows[section+'0']);
+
+      if( tag && tag > 0 ){
+        UIManager.measure(tag, (x, y, w, h) => {
+          if( y > 0 ){
+            this._listView.scrollTo({ x:0, y, animated: true });
+          }
+        });
+      } else {
+        y =  this.calculateScrollToY(section);
+        if( y > 0 ){
+          this._listView.scrollTo({ x:0, y, animated: true });
+        }
+      }
+    }
   }
 
-  scrollToSection(section) {
-    this.safeCloseOpenRow();
+  calculateScrollToY(section){
     var y = 0;
     var headerHeight = this.props.headerHeight || 0;
     y += headerHeight;
 
-    var cellHeight = this.props.cellHeight;
+    var cellHeight = this.props.cellHeight || this.cellHeight;
     var sectionHeaderHeight = this.props.sectionHeaderHeight || 0;
     var keys = Object.keys(this.sectionData);
     var index = keys.indexOf(section);
@@ -168,9 +221,33 @@ export default class S5SwipeListView extends Component {
     sectionHeaderHeight = index * sectionHeaderHeight;
     y += numcells * cellHeight + sectionHeaderHeight;
     var maxY = this.totalHeight - this.containerHeight + headerHeight;
-    y = y > maxY ? maxY : y;
 
-    this._listView.scrollTo({ x:0, y, animated: true });
+    if( this.totalHeight < this.containerHeight ){
+      y = -1;
+    } else if ( y > maxY ) {
+      y = maxY;
+    }
+
+    return y;
+  }
+
+  calculateTotalHeight() {
+    var data = this.sectionData || this.props.data;
+    if ( Array.isArray(data) ) {
+      return;
+    }
+
+    var cellHeight =  this.props.cellHeight || this.cellHeight;
+    this.sectionItemCount = {};
+    this.totalHeight = Object.keys(data)
+      .reduce((carry, key) => {
+        var itemCount = data[key].length;
+        carry += itemCount * cellHeight;
+        carry += (this.props.sectionHeaderHeight || 0);
+
+        this.sectionItemCount[key] = itemCount;
+        return carry;
+      }, 0);
   }
 
   render() {
@@ -188,6 +265,7 @@ export default class S5SwipeListView extends Component {
         }
         sectionData[firstCh].push( data[inx] );
       }
+
       data = sectionData;
       this.sectionData = sectionData;
     }

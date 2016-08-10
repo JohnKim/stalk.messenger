@@ -74,6 +74,7 @@ class SignupView extends Component {
     		    style={styles.textinput}
     		    onChangeText={(text) => this.setState({email: text.toLowerCase()})}
     		    value={this.state.email}
+            autoCapitalize="none"
             placeholder={"Email Address"}
   		    />
           <S5TextInput
@@ -81,6 +82,7 @@ class SignupView extends Component {
             style={styles.textinput}
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
             value={this.state.username}
+            autoCapitalize="none"
             placeholder={"Username"}
           />
           <S5TextInput

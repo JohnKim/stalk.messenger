@@ -136,7 +136,6 @@ class FollowsScreen extends Component {
           enableEmptySections={true}
           sectionKey="username"
           autoSection={true}
-          cellHeight={68} // TODO dynamic
           leftOpenValue={75}
           rightOpenValue={-150}
         />

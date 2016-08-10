@@ -49,6 +49,7 @@ class SigninView extends Component {
             style={styles.textinput}
             placeholder={"Username"}
             value={this.state.username}
+            autoCapitalize="none"
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
           />
 
