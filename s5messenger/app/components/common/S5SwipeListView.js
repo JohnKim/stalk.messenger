@@ -16,6 +16,8 @@ import {
   StyleSheet
 } from 'react-native';
 
+var merge = require('merge');
+
 import S5SwipeRow from './S5SwipeRow';
 import S5SectionList from './S5SectionList';
 
@@ -28,10 +30,20 @@ export default class S5SwipeListView extends Component {
     super(props);
     this._rows = {};
     this.openCellId = null;
+    this.sectionData = {};
 
+    this.state = {
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+        sectionHeaderHasChanged: (prev, next) => prev !== next
+      })
+    };
 
     this.cellTagMap = {};
     this.scrollToSection = this.scrollToSection.bind(this);
+
+    this.onScroll = this.onScroll.bind(this);
+    this.onScrollAnimationEnd = this.onScrollAnimationEnd.bind(this);
   }
 
   setScrollEnabled(enable) {
@@ -64,6 +76,14 @@ export default class S5SwipeListView extends Component {
   }
 
   onScroll(e) {
+
+    var offsetY = e.nativeEvent.contentOffset.y;
+    if (this.props.updateScrollState) {
+      this.setState({
+        offsetY
+      });
+    }
+
     if (this.openCellId) {
       if (this.props.closeOnScroll) {
         this.safeCloseOpenRow();
@@ -71,6 +91,15 @@ export default class S5SwipeListView extends Component {
       }
     }
     this.props.onScroll && this.props.onScroll(e);
+  }
+
+  onScrollAnimationEnd(e) {
+
+    if (this.props.updateScrollState) {
+      this.setState({
+        offsetY: e.nativeEvent.contentOffset.y
+      });
+    }
   }
 
   setRefs(ref) {
@@ -93,6 +122,7 @@ export default class S5SwipeListView extends Component {
         }
       );
     } else {
+
       return (
         <S5SwipeRow
           ref={row => this._rows[`${secId}${rowId}`] = row}
@@ -116,23 +146,23 @@ export default class S5SwipeListView extends Component {
   }
 
   updateTagInCellMap(tag, section) {
-    // TODO impl this
     this.cellTagMap[section] = tag;
   }
 
   scrollToSection(section) {
+    this.safeCloseOpenRow();
     var y = 0;
     var headerHeight = this.props.headerHeight || 0;
     y += headerHeight;
 
     var cellHeight = this.props.cellHeight;
     var sectionHeaderHeight = this.props.sectionHeaderHeight || 0;
-    var keys = Object.keys(this.props.sectionData);
+    var keys = Object.keys(this.sectionData);
     var index = keys.indexOf(section);
 
     var numcells = 0;
     for (var i = 0; i < index; i++) {
-      numcells += this.props.sectionData[keys[i]].length;
+      numcells += this.sectionData[keys[i]].length;
     }
 
     sectionHeaderHeight = index * sectionHeaderHeight;
@@ -144,27 +174,49 @@ export default class S5SwipeListView extends Component {
   }
 
   render() {
+    var data = this.props.data;
     var sectionList;
+    var dataSource;
 
-    if ( this.props.sectionData ){
+    if( Array.isArray(data) && this.props.autoSection && this.props.sectionKey ){
+      var sectionData = {};
+      for( var inx = 0 ;inx<data.length;inx++){
+
+        var firstCh = data[inx][this.props.sectionKey].substring(0,1).toUpperCase();
+        if( !sectionData[firstCh] ){
+          sectionData[firstCh] = [];
+        }
+        sectionData[firstCh].push( data[inx] );
+      }
+      data = sectionData;
+      this.sectionData = sectionData;
+    }
+
+    if (Array.isArray(data)) {
+      dataSource = this.state.dataSource.cloneWithRows(data);
+    } else {
       sectionList = !this.props.hideSectionList ?
         <S5SectionList
           style={this.props.sectionListStyle}
           onSectionSelect={this.scrollToSection}
-          sections={Object.keys(this.props.sectionData)}
-          data={this.props.sectionData}
+          sections={Object.keys(data)}
+          data={data}
           getSectionListTitle={this.props.getSectionListTitle}
           component={this.props.sectionListItem}
         /> :
         null;
+
+      dataSource = this.state.dataSource.cloneWithRowsAndSections(data);
     }
 
     return (
       <View ref="view" style={[styles.container, this.props.style]}>
         <ListView
           {...this.props}
+          dataSource={dataSource}
           ref={ c => this.setRefs(c) }
           onScroll={ e => this.onScroll(e) }
+          onScrollAnimationEnd={ e => this.onScrollAnimationEnd(e) }
           renderRow={(rowData, secId, rowId) => this.renderRow(rowData, secId, rowId, this._rows)}
         />
         {sectionList}

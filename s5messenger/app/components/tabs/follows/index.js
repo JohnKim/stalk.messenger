@@ -29,33 +29,13 @@ import S5SwipeListView from 'S5SwipeListView'
 class FollowsScreen extends Component {
 
   state = {
-    listViewData: [],
+    listViewData: this.props.follows.list,
     filter: '',
   };
 
 	constructor(props) {
 		super(props);
-		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 	}
-
-  componentDidMount(){
-
-    /** TEST CODE for Section*/
-    var sectionData = {};
-    for( var inx = 0 ;inx<this.props.follows.list.length;inx++){
-
-      var firstCh = this.props.follows.list[inx].username.substring(0,1).toUpperCase();
-      if( !sectionData[firstCh] ){
-        sectionData[firstCh] = [];
-      }
-      sectionData[firstCh].push( this.props.follows.list[inx] );
-    }
-
-    this.setState({
-      listViewData: this.props.follows.list,
-      sectionData: sectionData
-    });
-  }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.follows.list !== this.props.follows.list) {
@@ -117,14 +97,6 @@ class FollowsScreen extends Component {
       onPress: this._openSearchUserView.bind(this),
     };
 
-    let datasource;
-    if( Array.isArray(this.state.listViewData) ){
-      datasource = this.ds.cloneWithRows(this.state.listViewData.filter(filter));
-    } else{
-      // TODO : Need more test
-      datasource = this.ds.cloneWithRowsAndSections(this.state.listViewData);
-    }
-
 		return (
       <View style={styles.container}>
 
@@ -148,7 +120,7 @@ class FollowsScreen extends Component {
 
         <S5SwipeListView
           ref="listView"
-          dataSource={ datasource }
+          data={ this.state.listViewData.filter(filter) }
           renderRow={ (data) => this._renderRow(data) }
           renderHiddenRow={ (data, secId, rowId, rowMap) => (
             <View style={styles.rowBack}>
@@ -162,7 +134,8 @@ class FollowsScreen extends Component {
             </View>
           )}
           enableEmptySections={true}
-          sectionData={this.state.sectionData}
+          sectionKey="username"
+          autoSection={true}
           cellHeight={68} // TODO dynamic
           leftOpenValue={75}
           rightOpenValue={-150}
