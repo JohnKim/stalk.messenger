@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import Header from 'S5Header';
+import S5Alert from 'S5Alert';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 import { connect } from 'react-redux';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -30,6 +31,7 @@ class ChatView extends Component {
       lastLoadedAt: null,
       isTyping:     null,
       status: 'Not connected',
+      node: {},
     };
 
     this.onSend = this.onSend.bind(this);
@@ -42,7 +44,8 @@ class ChatView extends Component {
   componentWillMount() {
 
     // Load Messages from session-server
-    this.props.loadMessages(this.props.chat).then( (result) => {
+    this.props.loadMessages(this.props.chat).then(
+      (result) => {
 
       if(result.messages.length > 0) {
         this.setState({
@@ -51,6 +54,8 @@ class ChatView extends Component {
           lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
         });
       }
+
+      this.setState({ node: result.node });
 
       var socketConfig = {
         nps: '/channel',
@@ -64,14 +69,23 @@ class ChatView extends Component {
         });
 
         console.log('CONNECTED');
-        // TODO 이후 개발 필요.
 
       });
 
+      // @ TODO 아래 부터는 개발해야 함 !! (메시지 송수신 !!)
+      this.socket.on('message'), (data) => {
+        console.log('[MESASGE]', data);
+      }
+
       this.socket.connect();
 
+    },
+    (error) => {
+      console.log(error);
+      this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
 
-    });
+    }
+  );
 
   }
 
@@ -132,6 +146,10 @@ class ChatView extends Component {
     return null;
   }
 
+  onCloseAlert() {
+
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -162,6 +180,8 @@ class ChatView extends Component {
           renderBubble={this.renderBubble}
           renderFooter={this.renderFooter}
         />
+
+        <S5Alert ref={'alert'} />
 
       </View>
     );

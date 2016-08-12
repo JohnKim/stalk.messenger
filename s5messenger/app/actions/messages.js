@@ -77,7 +77,7 @@ export  function loadMessages(chat, datetime) {
     });
 
     var [messages, node] = await Promise.all([promiseLoadMessages, promiseChannelNode]);
-
+console.log(messages, node);
     return {
       messages,
       node,
