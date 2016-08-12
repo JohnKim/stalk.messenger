@@ -14,7 +14,7 @@ import Header from 'S5Header';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 import { connect } from 'react-redux';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-
+import SocketIO from 'react-native-socketio';
 
 class ChatView extends Component {
 
@@ -29,6 +29,7 @@ class ChatView extends Component {
       loadEarlier:  false,
       lastLoadedAt: null,
       isTyping:     null,
+      status: 'Not connected',
     };
 
     this.onSend = this.onSend.bind(this);
@@ -51,8 +52,30 @@ class ChatView extends Component {
         });
       }
 
+      var socketConfig = {
+        nps: '/channel'
+      };
+
+      // @ TODO 아래부터 수정해야 함 !!
+      // 아래 부터 에러나서 실행이 안됨.
+      // TypeError: Cannot read property 'initialize' of undefined
+      var socket = new SocketIO(result.node.url, socketConfig);
+
+      this.socket.on('connect', () => {
+        this.setState({
+          status: 'Connected'
+        });
+
+      });
+      this.socket.connect();
+
+
     });
 
+  }
+
+  componentDidMount () {
+    // Do something ...
   }
 
   onLoadEarlier() {

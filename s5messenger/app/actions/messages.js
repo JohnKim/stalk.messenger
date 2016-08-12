@@ -46,18 +46,32 @@ export  function loadMessages(chat, datetime) {
     });
 
     var promiseChannelNode = new Promise( (resolve, reject) => {
+
       if(isFistLoading){
-        resolve({});
-      } else {
+
         fetch(SERVER_URL+'/node/'+APP_ID+'/'+chat.channelId)
           .then((response) => response.json())
           .then((responseJson) => {
-            resolve(responseJson);
+            if( responseJson.status == 'ok' ) {
+              resolve({
+                name: responseJson.result.server.name,
+                url: responseJson.result.server.url
+              });
+            }else{
+              console.log(responseJson);
+              reject(responseJson);
+            }
+
           })
           .catch((error) => {
             console.error(error);
             reject(error);
           });
+
+      } else {
+
+        resolve({});
+
       }
 
     });

@@ -44,6 +44,7 @@ class FollowsScreen extends Component {
       });
       this.setState({ filter: '' });
       this.refs['listView']._listView.forceUpdate();
+
       setTimeout(function(){
         self.refs['listView']._listView.scrollTo({y:0});
       }, 100 );

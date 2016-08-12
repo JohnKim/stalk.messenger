@@ -27,12 +27,11 @@ import S5SwipeListView from 'S5SwipeListView';
 class ChatsScreen extends Component {
 
   state = {
-    listViewData: [],
+    listViewData: this.props.chats.list
   };
 
 	constructor(props) {
 		super(props);
-		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 	}
 
   componentDidMount(){
@@ -85,11 +84,11 @@ class ChatsScreen extends Component {
         />
 
         <S5SwipeListView
-    			dataSource={this.ds.cloneWithRows(this.state.listViewData)}
+          ref="listView"
+    			data={this.state.listViewData}
     			renderRow={ (data) => this._renderRow(data) }
     			renderHiddenRow={ (data, secId, rowId, rowMap) => (
     				<View style={styles.rowBack}>
-    					<Text>Left</Text>
     					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
     						<Text style={styles.backTextWhite}>Mark as Read</Text>
     					</View>
