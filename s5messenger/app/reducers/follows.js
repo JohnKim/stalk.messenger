@@ -49,13 +49,19 @@ function follows(state = initialState, action) {
 
 export function _parseObjToJSON(object){
   var user = object.get('userTo');
+  var profileImage = "";
+  if( user && user.get('profileFile') != null && user.get('profileFile') != undefined ){
+    profileImage = user.get('profileFile').url();
+  }
+
   return {
     followId: object.id,
     id: user.id,
     username: user.get('username'),
     email: user.get('email'),
     nickName: user.get('nickName'),
-    profileImage: user.get('profileImage')
+    statusMessage: user.get('statusMessage'),
+    profileImage: profileImage,
   };
 }
 
