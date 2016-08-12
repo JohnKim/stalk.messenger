@@ -53,20 +53,21 @@ class ChatView extends Component {
       }
 
       var socketConfig = {
-        nps: '/channel'
+        nps: '/channel',
+        forceWebsockets: true,
       };
-
-      // @ TODO 아래부터 수정해야 함 !!
-      // 아래 부터 에러나서 실행이 안됨.
-      // TypeError: Cannot read property 'initialize' of undefined
-      var socket = new SocketIO(result.node.url, socketConfig);
+      this.socket = new SocketIO(result.node.url, socketConfig);
 
       this.socket.on('connect', () => {
         this.setState({
-          status: 'Connected'
+          status: 'Connected',
         });
 
+        console.log('CONNECTED');
+        // TODO 이후 개발 필요.
+
       });
+
       this.socket.connect();
 
 
