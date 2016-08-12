@@ -80,4 +80,4 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 - [x] Profile 관리 기능 구현
 
 ##### ** Design **
-- [ ] 디자이너 섭외
+- [x] 디자이너 섭외

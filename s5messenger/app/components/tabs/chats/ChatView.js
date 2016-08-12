@@ -41,13 +41,13 @@ class ChatView extends Component {
   componentWillMount() {
 
     // Load Messages from session-server
-    this.props.loadMessages(this.props.chat).then( (messages) => {
+    this.props.loadMessages(this.props.chat).then( (result) => {
 
-      if(messages.length > 0) {
+      if(result.messages.length > 0) {
         this.setState({
           messages,
-          loadEarlier: messages.length == MESSAGE_SIZE ? true : false,
-          lastLoadedAt: messages[ messages.length + 1 ].createdAt,
+          loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
+          lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
         });
       }
 
