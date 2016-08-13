@@ -14,15 +14,15 @@ import Header from 'S5Header';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 import { connect } from 'react-redux';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import Drawer from 'S5Drawer'
 
+import ControlPanel from './ControlPanel'
 
 class ChatView extends Component {
 
   constructor(props) {
 
     super(props);
-
-    console.log(props);
 
     this.state = {
       messages:     [],
@@ -35,8 +35,18 @@ class ChatView extends Component {
     this.renderBubble = this.renderBubble.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onLoadEarlier = this.onLoadEarlier.bind(this);
+    this.openControlPanel = this.openControlPanel.bind(this);
+    this.closeControlPanel = this.closeControlPanel.bind(this);
 
   }
+
+  closeControlPanel() {
+    this._drawer.close()
+  };
+
+  openControlPanel() {
+    this._drawer.open()
+  };
 
   componentWillMount() {
 
@@ -109,36 +119,58 @@ class ChatView extends Component {
   }
 
   render() {
+
+    const rightItem = {
+      title: 'search',
+      icon: require('./img/icon.png'),
+      onPress: this.openControlPanel.bind(this),
+    };
+
     return (
       <View style={styles.container}>
-        <Header
-          title="Chats"
-          style={{backgroundColor: '#224488'}}
-          leftItem={{
-            icon: require('../../common/img/ic_keyboard_arrow_left_white.png'),
-            title: 'Back',
-            layout: 'icon',
-            onPress: () => {
-              this.props.switchTab();
-              this.props.navigator.pop();
-            },
-          }}
-        />
+        <Drawer
+          type="overlay"
+          content={<ControlPanel closeDrawer={this.closeControlPanel}/>}
+          ref={(ref) => this._drawer = ref}
+          tapToClose={true}
+          openDrawerOffset={0.2} // 20% gap on the right side of drawer
+          side="right"
+          panCloseMask={0.2}
+          closedDrawerOffset={-3}
+          styles={{main: {shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15}}}
+          tweenHandler={(ratio) => ({
+            main: { opacity:(2-ratio)/2 }
+          })}
+          >
+          <Header
+            title="Chats"
+            style={{backgroundColor: '#224488'}}
+            leftItem={{
+              icon: require('../../common/img/ic_keyboard_arrow_left_white.png'),
+              title: 'Back',
+              layout: 'icon',
+              onPress: () => {
+                this.props.switchTab();
+                this.props.navigator.pop();
+              },
+            }}
+            rightItem={{...rightItem, layout: 'icon'}}
+          />
 
-        <GiftedChat
-          messages={this.state.messages}
-          onSend={this.onSend}
-          loadEarlier={this.state.loadEarlier}
-          onLoadEarlier={this.onLoadEarlier}
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={this.onSend}
+            loadEarlier={this.state.loadEarlier}
+            onLoadEarlier={this.onLoadEarlier}
 
-          user={{
-            _id: this.props.user.id, // sent messages should have same user._id
-          }}
+            user={{
+              _id: this.props.user.id, // sent messages should have same user._id
+            }}
 
-          renderBubble={this.renderBubble}
-          renderFooter={this.renderFooter}
-        />
-
+            renderBubble={this.renderBubble}
+            renderFooter={this.renderFooter}
+          />
+        </Drawer>
       </View>
     );
   }
@@ -149,7 +181,7 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
 		flex: 1
-	},
+	}
 });
 
 function select(store) {
