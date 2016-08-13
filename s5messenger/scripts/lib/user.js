@@ -3,28 +3,37 @@ import Parse  from 'parse/node';
 import faker  from 'faker';
 import Common from './_common';
 
-exports.create = function (username, password, email, nickName, profileImage) {
+var createUser = function (username, password, email, nickName, profileImage) {
+  return new Promise( (resolve, reject) => {
 
-  var user = new Parse.User();
+    var user = new Parse.User();
 
-  // Essential values
-  user.set("username",    Common.notNullValue(username, faker.internet.userName())); // username
-  user.set("password",    Common.notNullValue(password, "password")); // password
+    // Essential values
+    user.set("username",    Common.notNullValue(username, faker.internet.userName())); // username
+    user.set("password",    Common.notNullValue(password, "password")); // password
 
-  // Additional values
-  user.set("email",       Common.notNullValue(email, faker.internet.email()));    // email
-  user.set("nickName",    Common.notNullValue(nickName, faker.name.findName()));     // nickName
-  user.set("profileImage",Common.notNullValue(profileImage, faker.internet.avatar()));   // profileImage
+    // Additional values
+    user.set("email",       Common.notNullValue(email, faker.internet.email()));    // email
+    user.set("nickName",    Common.notNullValue(nickName, faker.name.findName()));     // nickName
+    user.set("profileImage",Common.notNullValue(profileImage, faker.internet.avatar()));   // profileImage
 
-  user.signUp(null, {
-    success: function(user) {
-      console.log(JSON.stringify(user, null, '\t'));
-    },
-    error: function(user, error) {
-      console.log("Error: " + error.code + " " + error.message);
-    }
+    user.signUp(null, {
+      success: function(user) {
+        console.log(JSON.stringify(user, null, '\t'));
+        resolve(user);
+      },
+      error: function(user, error) {
+        console.log("Error: " + error.code + " " + error.message);
+        reject(error);
+      }
+    });
+
   });
+};
 
+
+exports.create = async function (username, password, email, nickName, profileImage) {
+  return await createUser(username, password, email, nickName, profileImage);
 };
 
 // data = {keyword, pageNumber, pageSize}

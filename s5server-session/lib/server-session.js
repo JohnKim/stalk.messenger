@@ -5,7 +5,6 @@ var ParseServer = require('parse-server').ParseServer;
 var bodyParser  = require('body-parser');
 var cors = require('cors');
 
-
 /**
  *
  * options : {host, port, logo, home, zookeeper, redis, mongodb, app}
@@ -20,13 +19,11 @@ var SessionServer = exports.SessionServer = function (options, cb) {
     databaseURI: options.mongodb || 'mongodb://localhost:27017/stalk-messenger',
     cloud: path.resolve(__dirname, 'cloud.js'),
     appId: options.app || 'STALK',
-    appName: "stalk messenger",
+    appName: "S5Messenger",
     masterKey: options.master || 's3cR3T', //Add your master key here. Keep it secret!
     // @ TODO : cloud 에서도 사용하는 URL 에는 반드시 protocal 이 명시되어야 함. 이부분 어떻게 해야 할지 확인 필요!!
     serverURL: 'http://localhost:8080/parse' //options.host+':'+options.port+'/parse'
   };
-
-  console.log(parseArgs);
 
   var api = new ParseServer(parseArgs);
 

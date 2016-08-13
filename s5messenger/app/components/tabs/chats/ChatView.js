@@ -59,11 +59,13 @@ class ChatView extends Component {
       (result) => {
 
         if(result.messages.length > 0) {
+
           this.setState({
-            messages,
+            messages: result.messages,
             loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
-            lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
+            lastLoadedAt: result.messages[ result.messages.length - 1 ].createdAt,
           });
+
         }
 
         this.setState({ node: result.node });
@@ -97,24 +99,24 @@ class ChatView extends Component {
           console.log('[_EVENT]', data);
         });
 
-        this.socket.on('message', (messages) => { // MESSAGED RECEIVED
+        this.socket.on('message', (message) => { // MESSAGED RECEIVED
+          console.log('------ 받음 - ', message);
+          this.setState((previousState) => {
+            return {
+              messages: GiftedChat.append(previousState.messages, message),
+            };
+          });
+        });
 
-          console.log('[MESSAGE]  ', messages);
-          for (x in messages) {
-            this.setState((previousState) => {
-              return {
-                messages: GiftedChat.append(previousState.messages, messages[x]),
-              };
-            });
-          }
-
+        this.socket.on('sent', (data) => { // after sent a messeage.
+          console.log('[SENT]', data);
         });
 
         this.socket.connect();
 
       },
       (error) => {
-        console.log(error);
+        console.warn(error);
         this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
       }
     );
@@ -148,15 +150,9 @@ class ChatView extends Component {
   }
 
   onSend(messages = []) {
-    console.log(messages);
-    if(messages.length > 0) {
-      this.socket.emit('send', {NM:'message', DT: messages});
-      /*
-      this.setState((previousState) => {
-        return {
-          messages: GiftedChat.append(previousState.messages, messages),
-        };
-      });*/
+    for (x in messages) {
+      console.log('------ 보냄 - ', messages[x]);
+      this.socket.emit('send', {NM:'message', DT: messages[x]});
     }
   }
 

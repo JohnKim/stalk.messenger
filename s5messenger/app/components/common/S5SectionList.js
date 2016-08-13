@@ -66,6 +66,7 @@ class S5SectionList extends Component {
     const sectionItem = this.refs.sectionItem0;
 
     this.measureTimer = setTimeout(() => {
+      if(sectionItem) {
       sectionItem.measure((x, y, width, height, pageX, pageY) => {
         //console.log([x, y, width, height, pageX, pageY]);
         this.measure = {
@@ -73,6 +74,7 @@ class S5SectionList extends Component {
           height
         };
       })
+    }
     }, 0);
 
     //console.log(sectionItem);

@@ -6,11 +6,13 @@ import Parse from 'parse/react-native';
 import { SERVER_URL, APP_ID } from '../../env.js';
 
 export const MESSAGE_SIZE     = 50;
-export const LOADED_MESSAGES  = 'LOADED_MESSAGES';
 
 const InteractionManager = require('InteractionManager');
 
 const Messages = Parse.Object.extend('Messages');
+const Channels = Parse.Object.extend('Channels');
+
+/**************************** DO NOT TRIGGERED ********************************/
 
 /**
 * Load messages into this channel
@@ -27,10 +29,13 @@ export  function loadMessages(chat, datetime) {
       var lastedLoadedDate = new Date();
       if(datetime) lastedLoadedDate = datetime;
 
+      var channel = new Channels();
+      channel.id = chat.channelId;
+
       new Parse.Query(Messages)
-        .equalTo("channel", chat.channelId)
-        .lessThanOrEqualTo("createdAt", lastedLoadedDate)
-        .greaterThan("createdAt", chat.createdAt)
+        .equalTo("channel", channel)
+        //.lessThanOrEqualTo("createdAt", lastedLoadedDate)
+        //.greaterThan("createdAt", chat.createdAt)
         .limit(MESSAGE_SIZE)
         .descending("createdAt")
         .find()
@@ -77,8 +82,10 @@ export  function loadMessages(chat, datetime) {
 
     });
 
-    var [messages, node] = await Promise.all([promiseLoadMessages, promiseChannelNode]);
-console.log(messages, node);
+    var [messagesObj, node] = await Promise.all([promiseLoadMessages, promiseChannelNode]);
+
+    var messages = messagesObj.map(fromParseObject);
+
     return {
       messages,
       node,
@@ -87,3 +94,15 @@ console.log(messages, node);
   };
 
 };
+
+function fromParseObject(obj){
+
+  return {
+    _id: obj.id,
+    text: obj.get("message"),
+    createdAt: obj.createdAt,
+    user: {
+      _id: obj.get("user").id
+    }
+  };
+}
