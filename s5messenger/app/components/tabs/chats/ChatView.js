@@ -47,50 +47,75 @@ class ChatView extends Component {
     this.props.loadMessages(this.props.chat).then(
       (result) => {
 
-      if(result.messages.length > 0) {
-        this.setState({
-          messages,
-          loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
-          lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
+        if(result.messages.length > 0) {
+          this.setState({
+            messages,
+            loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
+            lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
+          });
+        }
+
+        this.setState({ node: result.node });
+
+        /** @ TODO : HAVE TO BE SEPERATED !!!! **/
+
+        var socketConfig = {
+          nsp: '/channel',
+          forceWebsockets: true,
+          connectParams: {
+            A: result.node.app,
+            S: result.node.name,
+            C: this.props.chat.channelId,
+            U: this.props.user.id,
+            // D: Device ID !! ???
+          }
+        };
+
+        this.socket = new SocketIO(result.node.url, socketConfig);
+
+        this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
+          this.setState({
+            status: 'Connected',
+          });
         });
-      }
 
-      this.setState({ node: result.node });
-
-      var socketConfig = {
-        nps: '/channel',
-        forceWebsockets: true,
-      };
-      this.socket = new SocketIO(result.node.url, socketConfig);
-
-      this.socket.on('connect', () => {
-        this.setState({
-          status: 'Connected',
+        this.socket.on('connect_error', (err) => { // XPUSH CONNECT ERROR EVENT
+          console.warn(err);
+        });
+        this.socket.on('_event', (data) => { // XPUSH EVENT
+          console.log('[_EVENT]', data);
         });
 
-        console.log('CONNECTED');
+        this.socket.on('message', (messages) => { // MESSAGED RECEIVED
 
-      });
+          console.log('[MESSAGE]  ', messages);
+          for (x in messages) {
+            this.setState((previousState) => {
+              return {
+                messages: GiftedChat.append(previousState.messages, messages[x]),
+              };
+            });
+          }
 
-      // @ TODO 아래 부터는 개발해야 함 !! (메시지 송수신 !!)
-      this.socket.on('message'), (data) => {
-        console.log('[MESASGE]', data);
+        });
+
+        this.socket.connect();
+
+      },
+      (error) => {
+        console.log(error);
+        this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
       }
-
-      this.socket.connect();
-
-    },
-    (error) => {
-      console.log(error);
-      this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
-
-    }
-  );
+    );
 
   }
 
   componentDidMount () {
-    // Do something ...
+    // Do something ? ...
+  }
+
+  componentWillUnmount() {
+    if(this.socket) this.socket.disconnect();
   }
 
   onLoadEarlier() {
@@ -113,11 +138,15 @@ class ChatView extends Component {
 
   onSend(messages = []) {
     console.log(messages);
-    this.setState((previousState) => {
-      return {
-        messages: GiftedChat.append(previousState.messages, messages),
-      };
-    });
+    if(messages.length > 0) {
+      this.socket.emit('send', {NM:'message', DT: messages});
+      /*
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, messages),
+        };
+      });*/
+    }
   }
 
   renderBubble(props) {
@@ -153,6 +182,7 @@ class ChatView extends Component {
   render() {
     return (
       <View style={styles.container}>
+
         <Header
           title="Chats"
           style={{backgroundColor: '#224488'}}
@@ -187,7 +217,6 @@ class ChatView extends Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
 	container: {

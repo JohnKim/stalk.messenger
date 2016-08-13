@@ -39,7 +39,7 @@ export  function loadMessages(chat, datetime) {
             resolve(list);
           },
           (error) => {
-            console.error(error);
+            console.warn(error);
             reject(error);
           }
         );
@@ -49,22 +49,23 @@ export  function loadMessages(chat, datetime) {
 
       if(isFistLoading){
 
-        fetch(SERVER_URL+'/node/'+APP_ID+'/'+chat.channelId)
+        fetch( SERVER_URL + '/node/' + APP_ID + '/' + chat.channelId )
           .then((response) => response.json())
           .then((responseJson) => {
             if( responseJson.status == 'ok' ) {
               resolve({
+                app: APP_ID,
                 name: responseJson.result.server.name,
                 url: responseJson.result.server.url
               });
             }else{
-              console.log(responseJson);
+              console.warn(responseJson);
               reject(responseJson);
             }
 
           })
           .catch((error) => {
-            console.error(error);
+            console.warn(error);
             reject(error);
           });
 

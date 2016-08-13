@@ -203,8 +203,8 @@ Header.height = HEADER_HEIGHT;
 
 Header.propTypes = {
   title: React.PropTypes.string,
-  leftItem: React.PropTypes.instanceOf(Item),
-  rightItem: React.PropTypes.instanceOf(Item),
+  //leftItem: React.PropTypes.instanceof(Item),
+  //rightItem: React.PropTypes.instanceof(Item),
   extraItems: React.PropTypes.arrayOf(Item),
   foreground: React.PropTypes.oneOf(['light', 'dark']),
   style: View.propTypes.style,
