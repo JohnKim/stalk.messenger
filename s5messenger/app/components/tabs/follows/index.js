@@ -17,7 +17,6 @@ import {
   TextInput,
 } from 'react-native';
 
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import FollowCell from './FollowCell';
 
 import { loadFollows, removeFollow, createChat } from 's5-action';
@@ -45,13 +44,14 @@ class FollowsScreen extends Component {
       });
       this.setState({ filter: '' });
       this.refs['listView']._listView.forceUpdate();
+
       setTimeout(function(){
         self.refs['listView']._listView.scrollTo({y:0});
       }, 100 );
     }
 
   }
- 
+
 	_deleteRow(secId, rowId, rowMap) {
 		rowMap[`${secId}${rowId}`].closeRow();
     this.props.removeFollow(rowId);

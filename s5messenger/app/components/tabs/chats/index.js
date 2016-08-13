@@ -16,23 +16,22 @@ import {
 	TouchableHighlight,
 } from 'react-native';
 
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import ChatCell from './ChatCell';
 
 import { loadChats, removeChat } from 's5-action';
 import { connect } from 'react-redux';
 
 import Header from 'S5Header';
+import S5SwipeListView from 'S5SwipeListView';
 
 class ChatsScreen extends Component {
 
   state = {
-    listViewData: [],
+    listViewData: this.props.chats.list
   };
 
 	constructor(props) {
 		super(props);
-		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 	}
 
   componentDidMount(){
@@ -84,23 +83,23 @@ class ChatsScreen extends Component {
           style={{backgroundColor: '#224488'}}
         />
 
-        <SwipeListView
-			dataSource={this.ds.cloneWithRows(this.state.listViewData)}
-			renderRow={ (data) => this._renderRow(data) }
-			renderHiddenRow={ (data, secId, rowId, rowMap) => (
-				<View style={styles.rowBack}>
-					<Text>Left</Text>
-					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-						<Text style={styles.backTextWhite}>Mark as Read</Text>
-					</View>
-					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
-						<Text style={styles.backTextWhite}>Leave</Text>
-					</TouchableOpacity>
-				</View>
-			) }
-			enableEmptySections={true}
-			rightOpenValue={-150}
-		/>
+        <S5SwipeListView
+          ref="listView"
+    			data={this.state.listViewData}
+    			renderRow={ (data) => this._renderRow(data) }
+    			renderHiddenRow={ (data, secId, rowId, rowMap) => (
+    				<View style={styles.rowBack}>
+    					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+    						<Text style={styles.backTextWhite}>Mark as Read</Text>
+    					</View>
+    					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
+    						<Text style={styles.backTextWhite}>Leave</Text>
+    					</TouchableOpacity>
+    				</View>
+    			) }
+    			enableEmptySections={true}
+    			rightOpenValue={-150}
+    		/>
       </View>
 	);
   }

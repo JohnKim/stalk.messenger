@@ -11,12 +11,14 @@ import {
 } from 'react-native';
 
 import Header from 'S5Header';
+import S5Alert from 'S5Alert';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 import { connect } from 'react-redux';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import Drawer from 'S5Drawer'
 
 import ControlPanel from './ControlPanel'
+import SocketIO from 'react-native-socketio';
 
 class ChatView extends Component {
 
@@ -29,6 +31,8 @@ class ChatView extends Component {
       loadEarlier:  false,
       lastLoadedAt: null,
       isTyping:     null,
+      status: 'Not connected',
+      node: {},
     };
 
     this.onSend = this.onSend.bind(this);
@@ -51,18 +55,78 @@ class ChatView extends Component {
   componentWillMount() {
 
     // Load Messages from session-server
-    this.props.loadMessages(this.props.chat).then( (messages) => {
+    this.props.loadMessages(this.props.chat).then(
+      (result) => {
 
-      if(messages.length > 0) {
-        this.setState({
-          messages,
-          loadEarlier: messages.length == MESSAGE_SIZE ? true : false,
-          lastLoadedAt: messages[ messages.length + 1 ].createdAt,
+        if(result.messages.length > 0) {
+          this.setState({
+            messages,
+            loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
+            lastLoadedAt: messages[ result.messages.length + 1 ].createdAt,
+          });
+        }
+
+        this.setState({ node: result.node });
+
+        /** @ TODO : HAVE TO BE SEPERATED !!!! **/
+
+        var socketConfig = {
+          nsp: '/channel',
+          forceWebsockets: true,
+          connectParams: {
+            A: result.node.app,
+            S: result.node.name,
+            C: this.props.chat.channelId,
+            U: this.props.user.id,
+            // D: Device ID !! ???
+          }
+        };
+
+        this.socket = new SocketIO(result.node.url, socketConfig);
+
+        this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
+          this.setState({
+            status: 'Connected',
+          });
         });
+
+        this.socket.on('connect_error', (err) => { // XPUSH CONNECT ERROR EVENT
+          console.warn(err);
+        });
+        this.socket.on('_event', (data) => { // XPUSH EVENT
+          console.log('[_EVENT]', data);
+        });
+
+        this.socket.on('message', (messages) => { // MESSAGED RECEIVED
+
+          console.log('[MESSAGE]  ', messages);
+          for (x in messages) {
+            this.setState((previousState) => {
+              return {
+                messages: GiftedChat.append(previousState.messages, messages[x]),
+              };
+            });
+          }
+
+        });
+
+        this.socket.connect();
+
+      },
+      (error) => {
+        console.log(error);
+        this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
       }
+    );
 
-    });
+  }
 
+  componentDidMount () {
+    // Do something ? ...
+  }
+
+  componentWillUnmount() {
+    if(this.socket) this.socket.disconnect();
   }
 
   onLoadEarlier() {
@@ -85,11 +149,15 @@ class ChatView extends Component {
 
   onSend(messages = []) {
     console.log(messages);
-    this.setState((previousState) => {
-      return {
-        messages: GiftedChat.append(previousState.messages, messages),
-      };
-    });
+    if(messages.length > 0) {
+      this.socket.emit('send', {NM:'message', DT: messages});
+      /*
+      this.setState((previousState) => {
+        return {
+          messages: GiftedChat.append(previousState.messages, messages),
+        };
+      });*/
+    }
   }
 
   renderBubble(props) {
@@ -116,6 +184,10 @@ class ChatView extends Component {
       );
     }
     return null;
+  }
+
+  onCloseAlert() {
+
   }
 
   render() {
@@ -171,11 +243,11 @@ class ChatView extends Component {
             renderFooter={this.renderFooter}
           />
         </Drawer>
+        <S5Alert ref={'alert'} />
       </View>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
 	container: {
