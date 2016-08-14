@@ -52,12 +52,12 @@ class ChatView extends Component {
     this._drawer.open()
   };
 
-  componentWillMount() {
+
+  componentWillMount() {  // or componentDidMount ?
 
     // Load Messages from session-server
     this.props.loadMessages(this.props.chat).then(
       (result) => {
-
         if(result.messages.length > 0) {
 
           this.setState({
@@ -74,7 +74,7 @@ class ChatView extends Component {
 
         var socketConfig = {
           nsp: '/channel',
-          forceWebsockets: true,
+          //forceWebsockets: true,
           connectParams: {
             A: result.node.app,
             S: result.node.name,
@@ -84,6 +84,8 @@ class ChatView extends Component {
           }
         };
 
+
+        if(this.socket) { this.socket = null; }
         this.socket = new SocketIO(result.node.url, socketConfig);
 
         this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
@@ -123,12 +125,10 @@ class ChatView extends Component {
 
   }
 
-  componentDidMount () {
-    // Do something ? ...
-  }
-
   componentWillUnmount() {
-    if(this.socket) this.socket.disconnect();
+    if(this.socket) {
+      this.socket.disconnect();
+    }
   }
 
   onLoadEarlier() {

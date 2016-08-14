@@ -34,8 +34,8 @@ export  function loadMessages(chat, datetime) {
 
       new Parse.Query(Messages)
         .equalTo("channel", channel)
-        //.lessThanOrEqualTo("createdAt", lastedLoadedDate)
-        //.greaterThan("createdAt", chat.createdAt)
+        .lessThanOrEqualTo("createdAt", lastedLoadedDate)
+        .greaterThan("createdAt", chat.createdAt)
         .limit(MESSAGE_SIZE)
         .descending("createdAt")
         .find()

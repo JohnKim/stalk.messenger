@@ -77,7 +77,7 @@ export function _parseObjToJSON(object){
   return {
     id: object.id,
     channelId: channel.id,
-    createdAt: object.createdAt,
+    createdAt: object.get("createdAt"), // because of using javascript date objects instead of parse object 'object.createdAt',
     name: names.join(", "),
     users,
   };
