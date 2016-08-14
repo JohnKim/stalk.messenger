@@ -42,10 +42,9 @@ class FollowsScreen extends Component {
       this.setState({
         listViewData: nextProps.follows.list
       });
-      this.setState({ filter: '' });
-      this.refs['listView']._listView.forceUpdate();
 
       setTimeout(function(){
+        self.setState({ filter: '' });
         self.refs['listView']._listView.scrollTo({y:0});
       }, 100 );
     }

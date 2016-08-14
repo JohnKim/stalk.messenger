@@ -10,14 +10,15 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { connect } from 'react-redux';
+import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
+
 import Header from 'S5Header';
 import S5Alert from 'S5Alert';
-import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
-import { connect } from 'react-redux';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import Drawer from 'S5Drawer'
+import Drawer from 'S5Drawer';
+import ControlPanel from './ControlPanel';
 
-import ControlPanel from './ControlPanel'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import SocketIO from 'react-native-socketio';
 
 class ChatView extends Component {
@@ -31,16 +32,16 @@ class ChatView extends Component {
       loadEarlier:  false,
       lastLoadedAt: null,
       isTyping:     null,
-      status: 'Not connected',
-      node: {},
+      status:       'Not connected',
+      node:         {},
     };
 
-    this.onSend = this.onSend.bind(this);
-    this.renderBubble = this.renderBubble.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
-    this.onLoadEarlier = this.onLoadEarlier.bind(this);
-    this.openControlPanel = this.openControlPanel.bind(this);
-    this.closeControlPanel = this.closeControlPanel.bind(this);
+    this.onSend             = this.onSend.bind(this);
+    this.renderBubble       = this.renderBubble.bind(this);
+    this.renderFooter       = this.renderFooter.bind(this);
+    this.onLoadEarlier      = this.onLoadEarlier.bind(this);
+    this.openControlPanel   = this.openControlPanel.bind(this);
+    this.closeControlPanel  = this.closeControlPanel.bind(this);
 
   }
 
@@ -52,12 +53,12 @@ class ChatView extends Component {
     this._drawer.open()
   };
 
-
   componentWillMount() {  // or componentDidMount ?
 
     // Load Messages from session-server
     this.props.loadMessages(this.props.chat).then(
       (result) => {
+
         if(result.messages.length > 0) {
 
           this.setState({
@@ -74,7 +75,7 @@ class ChatView extends Component {
 
         var socketConfig = {
           nsp: '/channel',
-          //forceWebsockets: true,
+          forceWebsockets: true,
           connectParams: {
             A: result.node.app,
             S: result.node.name,
@@ -83,7 +84,6 @@ class ChatView extends Component {
             // D: Device ID !! ???
           }
         };
-
 
         if(this.socket) { this.socket = null; }
         this.socket = new SocketIO(result.node.url, socketConfig);
@@ -134,14 +134,15 @@ class ChatView extends Component {
   onLoadEarlier() {
 
     // Load Message earlier messages from session-server.
-    this.props.loadMessages(this.props.chat, this.state.lastLoadedAt).then( (messages) => {
+    this.props.loadMessages(this.props.chat, this.state.lastLoadedAt).then( (result) => {
 
-      if(messages.length > 0) {
+      if(result.messages.length > 0) {
         this.setState((previousState) => {
+
           return {
-            messages: GiftedChat.prepend(previousState.messages, messages),
-            loadEarlier: messages.length == MESSAGE_SIZE ? true : false,
-            lastLoadedAt: messages[ messages.length + 1 ].createdAt,
+            messages: GiftedChat.prepend(previousState.messages, result.messages),
+            loadEarlier: result.messages.length == MESSAGE_SIZE ? true : false,
+            lastLoadedAt: result.messages[ result.messages.length - 1 ].createdAt,
           };
         });
       }
