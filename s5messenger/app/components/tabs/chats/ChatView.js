@@ -13,12 +13,12 @@ import {
 import { connect } from 'react-redux';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
 
-import Header from 'S5Header';
-import S5Alert from 'S5Alert';
-import Drawer from 'S5Drawer';
+import Header       from 'S5Header';
+import S5Alert      from 'S5Alert';
+import Drawer       from 'S5Drawer';
 import ControlPanel from './ControlPanel';
 
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
 import SocketIO from 'react-native-socketio';
 
 class ChatView extends Component {
@@ -32,13 +32,14 @@ class ChatView extends Component {
       loadEarlier:  false,
       lastLoadedAt: null,
       isTyping:     null,
-      status:       'Not connected',
+      connected:    false,
       node:         {},
     };
 
     this.onSend             = this.onSend.bind(this);
     this.renderBubble       = this.renderBubble.bind(this);
     this.renderFooter       = this.renderFooter.bind(this);
+    this.renderSend         = this.renderSend.bind(this);
     this.onLoadEarlier      = this.onLoadEarlier.bind(this);
     this.openControlPanel   = this.openControlPanel.bind(this);
     this.closeControlPanel  = this.closeControlPanel.bind(this);
@@ -89,9 +90,11 @@ class ChatView extends Component {
         this.socket = new SocketIO(result.node.url, socketConfig);
 
         this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
-          this.setState({
-            status: 'Connected',
-          });
+          this.setState({ connected: true });
+        });
+
+        this.socket.on('error', () => { // SOCKET CONNECTION EVENT
+          this.setState({ connected: false });
         });
 
         this.socket.on('connect_error', (err) => { // XPUSH CONNECT ERROR EVENT
@@ -104,10 +107,12 @@ class ChatView extends Component {
         this.socket.on('message', (message) => { // MESSAGED RECEIVED
           console.log('------ 받음 - ', message);
           this.setState((previousState) => {
-            return {
-              messages: GiftedChat.append(previousState.messages, message),
-            };
+            return { messages: GiftedChat.append(previousState.messages, message) };
           });
+        });
+
+        this.socket.onAny((event) => {
+          console.log('[LOGGING]', event);
         });
 
         this.socket.on('sent', (data) => { // after sent a messeage.
@@ -151,9 +156,12 @@ class ChatView extends Component {
   }
 
   onSend(messages = []) {
-    for (x in messages) {
-      console.log('------ 보냄 - ', messages[x]);
-      this.socket.emit('send', {NM:'message', DT: messages[x]});
+
+    if( this.state.connected ) {
+      for (x in messages) {
+        console.log('------ 보냄 - ', messages[x]);
+        this.socket.emit('send', {NM:'message', DT: messages[x]});
+      }
     }
   }
 
@@ -171,13 +179,22 @@ class ChatView extends Component {
   }
 
   renderFooter(props) {
-    if (this.state.isTyping) {
+    if (this.socket.isConnected && !this.state.connected) {
       return (
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>
-            {this.state.isTyping}
+            Connection was failed. Reconnecting...
           </Text>
         </View>
+      );
+    }
+    return null;
+  }
+
+  renderSend(props) {
+    if (this.state.connected) {
+      return (
+        <Send {...props}/>
       );
     }
     return null;
@@ -238,9 +255,16 @@ class ChatView extends Component {
 
             renderBubble={this.renderBubble}
             renderFooter={this.renderFooter}
+            renderSend={this.renderSend}
+
+            textInputProps={{
+              editable: this.state.connected,
+            }}
           />
         </Drawer>
+
         <S5Alert ref={'alert'} />
+
       </View>
     );
   }
@@ -250,7 +274,17 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
 		flex: 1
-	}
+	},
+  footerContainer: {
+    marginTop: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  footerText: {
+    fontSize: 14,
+    color: '#aaa',
+  },
 });
 
 function select(store) {
