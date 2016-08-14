@@ -5,13 +5,13 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.15.1",
+    "body-parser": "^1.15.2",
     "cors": "^2.7.1",
     "express": "^4.14.0",
     "optimist": "^0.6.1",
-    "parse": "^1.8.5",
-    "parse-dashboard": "^1.0.14",
-    "parse-server": "^2.2.14",
+    "parse": "^1.9.1",
+    "parse-dashboard": "^1.0.15",
+    "parse-server": "^2.2.17",
     "xpush": "https://github.com/xpush/node-xpush.git"
   },
   "scripts": {

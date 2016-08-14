@@ -179,7 +179,7 @@ class ChatView extends Component {
   }
 
   renderFooter(props) {
-    if (this.socket.isConnected && !this.state.connected) {
+    if (this.socket && this.socket.isConnected && !this.state.connected) {
       return (
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>
