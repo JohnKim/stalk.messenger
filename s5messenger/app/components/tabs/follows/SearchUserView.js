@@ -68,8 +68,17 @@ class SearchUserView extends React.Component {
   }
 
   _onChangeFilterText(text) {
-    this.setState({filter: text});
-    this.refs['listView']._refresh();
+    this.setState(
+      (previousState, currentProps) => {
+        return {filter: text};
+      },
+      () => {
+        if( this.timeout ) clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          this.refs['listView']._refresh();
+        }, 300 );
+      }
+    )
   }
 
   _onRowPress(user) {
