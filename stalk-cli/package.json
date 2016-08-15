@@ -1,0 +1,42 @@
+{
+  "name": "stalk-cli",
+  "version": "0.0.1",
+  "description": "Just a CLI manager (for stalk messenger servers)",
+  "author": "S5Platform",
+  "homepage": "http://stalk.io",
+  "keywords": [
+    "S5Platform",
+    "stalk",
+    "cli"
+  ],
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/S5Platform/stalk-cli/"
+  },
+  "bugs": "https://github.com/S5Platform/stalk-cli/issues",
+  "contributors": "https://github.com/S5Platform/stalk-cli/graphs/contributors",
+  "license": "MIT",
+  "main": "lib/cli.js",
+  "bin": {
+    "stalk": "./bin/stalk"
+  },
+  "engines": {
+    "node": ">=4.3"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "update-notifier": "^1.0.2"
+  },
+  "devDependencies": {},
+  "greenkeeper": {
+    "ignore": [
+      "npm"
+    ]
+  }
+}

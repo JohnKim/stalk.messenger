@@ -1,5 +1,5 @@
 {
-  "name": "stalk.messenger.server.session",
+  "name": "stalk-session-server",
   "version": "1.4.0",
   "description": "Stalk Messenger Session server using the parse-server module",
   "main": "index.js",

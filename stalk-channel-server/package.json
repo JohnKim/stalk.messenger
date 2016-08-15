@@ -1,7 +1,7 @@
 {
-  "name": "stalk.messenger.server.channel",
+  "name": "stalk-channel-server",
   "version": "1.4.0",
-  "description": "An stalk messenger Parse API server using the parse-server module",
+  "description": "Channel Server for Stalk Messenger",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
