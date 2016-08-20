@@ -19,7 +19,10 @@ import Drawer       from 'S5Drawer';
 import ControlPanel from './ControlPanel';
 
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
-import SocketIO from 'react-native-socketio';
+
+var XPush = require( 'react-native-xpush-client' );
+
+import { SERVER_URL, APP_ID } from '../../../../env.js';
 
 class ChatView extends Component {
 
@@ -44,6 +47,7 @@ class ChatView extends Component {
     this.openControlPanel   = this.openControlPanel.bind(this);
     this.closeControlPanel  = this.closeControlPanel.bind(this);
 
+    XPush.init( SERVER_URL, APP_ID, this.props.user.id, 'web' );
   }
 
   closeControlPanel() {
@@ -85,42 +89,24 @@ class ChatView extends Component {
             // D: Device ID !! ???
           }
         };
+        
+        var self = this;
 
-        if(this.socket) { this.socket = null; }
-        this.socket = new SocketIO(result.node.url, socketConfig);
+        XPush.connect( this.props.chat.channelId, function(err, data){
 
-        this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
-          this.setState({ connected: true });
-        });
+          if( err ){
+            self.setState({ connected: false });
+          } else {
+            self.setState({ connected: true });
+          }
 
-        this.socket.on('error', () => { // SOCKET CONNECTION EVENT
-          this.setState({ connected: false });
-        });
-
-        this.socket.on('connect_error', (err) => { // XPUSH CONNECT ERROR EVENT
-          console.warn(err);
-        });
-        this.socket.on('_event', (data) => { // XPUSH EVENT
-          console.log('[_EVENT]', data);
-        });
-
-        this.socket.on('message', (message) => { // MESSAGED RECEIVED
-          console.log('------ 받음 - ', message);
-          this.setState((previousState) => {
-            return { messages: GiftedChat.append(previousState.messages, message) };
+          XPush.onMessage( function(message){
+            console.log('------ 받음 - ', message);
+            self.setState((previousState) => {
+              return { messages: GiftedChat.append(previousState.messages, message) };
+            });
           });
         });
-
-        this.socket.onAny((event) => {
-          console.log('[LOGGING]', event);
-        });
-
-        this.socket.on('sent', (data) => { // after sent a messeage.
-          console.log('[SENT]', data);
-        });
-
-        this.socket.connect();
-
       },
       (error) => {
         console.warn(error);
@@ -160,7 +146,7 @@ class ChatView extends Component {
     if( this.state.connected ) {
       for (x in messages) {
         console.log('------ 보냄 - ', messages[x]);
-        this.socket.emit('send', {NM:'message', DT: messages[x]});
+        XPush.send( messages[x] );
       }
     }
   }
