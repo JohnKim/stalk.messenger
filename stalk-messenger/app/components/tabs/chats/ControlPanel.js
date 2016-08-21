@@ -9,7 +9,7 @@ import {
   ListView
 } from 'react-native'
 
-import ProfilePicture from 'S5ProfilePicture';
+import { S5ProfilePicture } from 's5-components';
 
 export default class ControlPanel extends Component {
   static propTypes = {
@@ -33,7 +33,7 @@ export default class ControlPanel extends Component {
           <View style={styles.itemList}>
             {this.props.chat.users.map(user => (
               <View style={styles.item}>
-                <ProfilePicture
+                <S5ProfilePicture
                   profileImageUrl={user.profileImage}
                   size={40}
                   style={styles.image}
