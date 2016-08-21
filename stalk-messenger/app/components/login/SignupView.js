@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
 } from 'react-native';
 
@@ -13,6 +12,10 @@ import { signup } from 's5-action';
 import { S5TextInput, S5Button } from 's5-components';
 
 class SignupView extends Component {
+
+  static propTypes = {
+    signup: React.PropTypes.func.isRequired,
+  };
 
   state = {
     email: '',
@@ -69,14 +72,15 @@ class SignupView extends Component {
       <View style={styles.container}>
         <View style={styles.body}>
 
-  		    <S5TextInput
+          <S5TextInput
             ref="email"
-    		    style={styles.textinput}
-    		    onChangeText={(text) => this.setState({email: text.toLowerCase()})}
-    		    value={this.state.email}
+            style={styles.textinput}
+            onChangeText={(text) => this.setState({email: text.toLowerCase()})}
+            value={this.state.email}
             autoCapitalize="none"
             placeholder={"Email Address"}
-  		    />
+            />
+
           <S5TextInput
             ref="username"
             style={styles.textinput}
@@ -85,6 +89,7 @@ class SignupView extends Component {
             autoCapitalize="none"
             placeholder={"Username"}
           />
+
           <S5TextInput
             ref="password"
             style={styles.textinput}
@@ -93,6 +98,7 @@ class SignupView extends Component {
             secureTextEntry={true}
             placeholder={"Password"}
           />
+
           <S5TextInput
             style={styles.textinput}
             onChangeText={(text) => this.setState({passwordChecked: text})}

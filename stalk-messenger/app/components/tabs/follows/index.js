@@ -8,12 +8,9 @@
 import React, { Component } from 'react';
 import {
   View,
-  Navigator,
   StyleSheet,
   Text,
-  ListView,
 	TouchableOpacity,
-	TouchableHighlight,
   TextInput,
 } from 'react-native';
 
@@ -24,6 +21,13 @@ import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
 
 class FollowsScreen extends Component {
+
+  static propTypes = {
+    navigator: React.PropTypes.object.isRequired,
+    follows:  React.PropTypes.object.isRequired,
+    removeFollow: React.PropTypes.func.isRequired,
+    createChat: React.PropTypes.func.isRequired,
+  };
 
   state = {
     listViewData: this.props.follows.list,
@@ -37,6 +41,8 @@ class FollowsScreen extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.follows.list !== this.props.follows.list) {
       var self = this;
+
+      // TODO : reder가 안되는 경우가 있는데, 이건 SwipeListView 의 문제인 것 같아요..
       this.setState({
         listViewData: nextProps.follows.list
       });
@@ -119,13 +125,13 @@ class FollowsScreen extends Component {
           ref="listView"
           data={ this.state.listViewData.filter(filter) }
           renderRow={ (data) => this._renderRow(data) }
-          renderHiddenRow={ (data, secId, rowId, rowMap) => (
+          renderHiddenRow={ (/*data, secId, rowId, rowMap*/) => (
             <View style={styles.rowBack}>
               <Text>Left</Text>
               <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
                 <Text style={styles.backTextWhite}>Right</Text>
               </View>
-              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ (secId, rowId, rowMap) => this._deleteRow(secId, rowId, rowMap) }>
                 <Text style={styles.backTextWhite}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -143,11 +149,6 @@ class FollowsScreen extends Component {
 	}
 
 }
-
-FollowsScreen.propTypes = {
-  user: React.PropTypes.object,
-  navigator: React.PropTypes.object, // Navigator
-};
 
 const styles = StyleSheet.create({
 	container: {
@@ -239,7 +240,6 @@ const styles = StyleSheet.create({
 
 function select(store) {
   return {
-    user: store.user,
     follows: store.follows,
   };
 }

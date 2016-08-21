@@ -1,9 +1,22 @@
 'use strict';
 
 import React, { Component } from 'React';
-import { View, Image, Text, TouchableHighlight, StyleSheet } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  TouchableHighlight,
+  StyleSheet
+} from 'react-native';
 
 export default class SettingCell extends Component {
+
+  static propTypes = {
+    onPress: React.PropTypes.func.isRequired,
+    label: React.PropTypes.string.isRequired,
+    text: React.PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
   }
@@ -33,10 +46,10 @@ var styles = StyleSheet.create({
   container: {
     marginTop: 20,
     marginHorizontal: 20,
-    alignSelf: 'stretch',    
+    alignSelf: 'stretch',
   },
   wrap: {
-    flexDirection: 'column',   
+    flexDirection: 'column',
   },
   label: {
     fontSize: 16

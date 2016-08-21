@@ -5,13 +5,9 @@
 
 import React, { Component } from 'react';
 import {
-  ScrollView,
   StyleSheet,
   View,
   TouchableHighlight,
-  Platform,
-  StatusBar,
-  TextInput,
   Text,
   Image
 } from 'react-native';
@@ -21,6 +17,15 @@ import { S5Header, S5TextInput } from 's5-components';
 import { updateUser } from 's5-action';
 
 class SettingForm extends Component {
+
+  static propTypes = {
+    navigator: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    user: React.PropTypes.object.isRequired,
+    field: React.PropTypes.string,
+    title: React.PropTypes.string,
+    validLength: React.PropTypes.number,
+  };
 
   constructor(props) {
     super(props);
@@ -39,7 +44,7 @@ class SettingForm extends Component {
     this.saveSetting = this.saveSetting.bind(this);
     this.renderIcon = this.renderIcon.bind(this);
     this.onPressRemoveButton = this.onPressRemoveButton.bind(this);
-  };
+  }
 
   onPressRemoveButton(){
     this.setState({value: ''});

@@ -6,7 +6,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  ActivityIndicatorIOS,
+  ActivityIndicator,
   ProgressBarAndroid,
   Platform,
 } from 'react-native';
@@ -26,7 +26,7 @@ export default class GiftedSpinner extends Component {
       );
     } else {
       return (
-        <ActivityIndicatorIOS
+        <ActivityIndicator
           animating={true}
           size="small"
           {...this.props}

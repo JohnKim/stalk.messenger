@@ -26,6 +26,11 @@ class AppNavigator extends Component {
 
   _handlers = [];//:
 
+  static propTypes = {
+    tab: React.PropTypes.string.isRequired,
+    switchTab: React.PropTypes.func.isRequired,
+  };
+
   static childContextTypes = {
     addBackButtonListener: React.PropTypes.func,
     removeBackButtonListener: React.PropTypes.func,
@@ -68,7 +73,7 @@ class AppNavigator extends Component {
     }
 
     if (this.props.tab !== 'chats') {
-      this.props.dispatch(switchTab('chats'));
+      this.props.switchTab('chats');
       return true;
     }
     return false;
@@ -123,4 +128,10 @@ function select(store) {
   };
 }
 
-module.exports = connect(select)(AppNavigator);
+function actions(dispatch) {
+  return {
+    switchTab: (tab) => dispatch(switchTab(tab)),
+  };
+}
+
+module.exports = connect(select, actions)(AppNavigator);

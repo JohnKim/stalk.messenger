@@ -1,19 +1,20 @@
 {
-
+  "parser": "babel-eslint",
+  "env": {
+      "browser": true,
+      "node": true
+  },
   "plugins": [
-    "react",
-    "react-native"
+      "react",
+      "react-native"
   ],
-
-  "ecmaFeatures": {
+    "ecmaFeatures": {
     "jsx": true
   },
-
+  "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+  ],
   "rules": {
-    "react-native/no-unused-styles": 2,
-    "react-native/split-platform-components": 2,
-    "react-native/no-inline-styles": 2,
-    "react-native/no-color-literals": 2,
   }
-
 }

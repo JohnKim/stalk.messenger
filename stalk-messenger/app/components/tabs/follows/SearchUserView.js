@@ -9,7 +9,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  Navigator,
   Text,
   StyleSheet,
   TouchableHighlight,
@@ -24,7 +23,12 @@ import GiftedListView from 'react-native-gifted-listview';
 
 const PAGE_SIZE = 20;
 
-class SearchUserView extends React.Component {
+class SearchUserView extends Component {
+
+  static propTypes = {
+    navigator: React.PropTypes.object.isRequired,
+    createFollow: React.PropTypes.func.isRequired,
+  };
 
   state = {
     listViewData: [],
@@ -36,7 +40,7 @@ class SearchUserView extends React.Component {
 
   }
 
-  _onFetch(page = 1, callback, options) {
+  _onFetch(page = 1, callback /*, options*/) {
 
     searchUsersByPage(
       {
@@ -68,11 +72,7 @@ class SearchUserView extends React.Component {
   }
 
   _onChangeFilterText(text) {
-    this.setState(
-      (previousState, currentProps) => {
-        return {filter: text};
-      },
-      () => {
+    this.setState( {filter: text}, () => {
         if( this.timeout ) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
           this.refs['listView']._refresh();
@@ -155,12 +155,7 @@ class SearchUserView extends React.Component {
 
 }
 
-SearchUserView.propTypes = {
-  user: React.PropTypes.object,
-  navigator: React.PropTypes.object, // Navigator
-};
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
@@ -199,16 +194,10 @@ var styles = StyleSheet.create({
   },
 });
 
-function select(store) {
-  return {
-    user: store.user,
-  };
-}
-
 function actions(dispatch) {
   return {
     createFollow: (id) => dispatch(createFollow(id)),
   };
 }
 
-module.exports = connect(select, actions)(SearchUserView);
+module.exports = connect(null, actions)(SearchUserView);

@@ -21,12 +21,17 @@ import { connect } from 'react-redux';
 
 class App extends Component {
 
+  static propTypes = {
+    isLoggedIn: React.PropTypes.bool.isRequired,
+    loadConfig: React.PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
 
     // TODO: Make this list smaller, we basically download the whole internet
     // TODO: 초기화 때 서버로 부터 가져와야 할 것들 필요 함.
-    this.props.dispatch(loadConfig());
+    this.props.loadConfig();
 
     updateInstallation({VERSION});
   }
@@ -72,5 +77,10 @@ function select(store) {
   };
 }
 
+function actions(dispatch) {
+  return {
+    loadConfig: () => dispatch(loadConfig()),
+  };
+}
 
-module.exports = connect(select)(App);
+module.exports = connect(select, actions)(App);

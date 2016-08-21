@@ -18,11 +18,14 @@ import { S5ProfilePicture } from 's5-components';
 
 export default class FollowCell extends Component {
 
+  static propTypes = {
+    user: React.PropTypes.object.isRequired,
+    onProfilePress: React.PropTypes.func,
+    onPress: React.PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      user: this.props.user,
-    };
   }
 
   render() {
@@ -33,7 +36,7 @@ export default class FollowCell extends Component {
 
           <View style={styles.container}>
             <S5ProfilePicture
-              profileImageUrl={this.state.user.profileImage}
+              profileImageUrl={this.props.user.profileImage}
               onPress={() => this.props.onProfilePress()}
               size={48}
               style={styles.image}
@@ -41,10 +44,10 @@ export default class FollowCell extends Component {
             <TouchableHighlight onPress={this.props.onPress} >
               <View style={styles.makerDetailsContainer}>
                   <Text style={styles.makerTitle}>
-                    {this.state.user.username}
+                    {this.props.user.username}
                   </Text>
                 <Text style={styles.makerDetails}>
-                  {this.state.user.statusMessage}
+                  {this.props.user.statusMessage}
                 </Text>
               </View>
             </TouchableHighlight>
@@ -57,14 +60,14 @@ export default class FollowCell extends Component {
       return (
         <TouchableHighlight onPress={this.props.onPress} >
           <View style={styles.container}>
-              <Image source={{uri: this.state.user.profileImage}}
+              <Image source={{uri: this.props.user.profileImage}}
                 style={styles.image} />
             <View style={styles.makerDetailsContainer}>
                 <Text style={styles.makerTitle}>
-                  {this.state.user.nickName}
+                  {this.props.user.nickName}
                 </Text>
               <Text style={styles.makerDetails}>
-                {this.state.user.username}
+                {this.props.user.username}
               </Text>
             </View>
           </View>

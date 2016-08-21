@@ -12,6 +12,10 @@ import { S5TextInput, S5Button } from 's5-components';
 
 class SigninView extends Component {
 
+  static propTypes = {
+    signin: React.PropTypes.func.isRequired,
+  };
+
   state = {
     username: '',
     password: '',

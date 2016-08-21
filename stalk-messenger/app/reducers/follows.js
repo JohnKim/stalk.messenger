@@ -29,7 +29,6 @@ function follows(state = initialState, action) {
   } else if (action.type === ADDED_FOLLOWS) {
 
     let follow = _parseObjToJSON(action.follow);
-    console.log(follow);
     let newData = [...state.list];
     newData.unshift(follow);
 

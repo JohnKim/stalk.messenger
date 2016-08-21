@@ -8,10 +8,8 @@
 import React, { Component } from 'react';
 import {
   View,
-  Navigator,
   StyleSheet,
-  Text,
-  Image
+  Text
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -32,10 +30,16 @@ var options = {
   }
 };
 
-class SettingView extends React.Component {
+class SettingView extends Component {
+
+  static propTypes = {
+    navigator: React.PropTypes.object.isRequired,
+    dispatch: React.PropTypes.func.isRequired,
+    user: React.PropTypes.object.isRequired,
+  };
 
   constructor(props) {
-    super();
+    super(props);
   }
 
   selectImage(){

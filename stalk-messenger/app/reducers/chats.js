@@ -68,7 +68,7 @@ export function _parseObjToJSON(object){
       if( user && user.get('profileFile') != null && user.get('profileFile') != undefined ){
         profileImage = user.get('profileFile').url();
       }
-      
+
       object[index] = {
         id: user.id,
         username: user.get('username'),
@@ -88,6 +88,6 @@ export function _parseObjToJSON(object){
     users,
   };
 
-};
+}
 
 module.exports = follows;
