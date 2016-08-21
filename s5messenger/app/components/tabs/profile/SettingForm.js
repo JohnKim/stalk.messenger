@@ -17,9 +17,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-
-import Header from 'S5Header';
-import S5TextInput from 'S5TextInput';
+import { S5Header, S5TextInput } from 's5-components';
 import { updateUser } from 's5-action';
 
 class SettingForm extends Component {
@@ -60,7 +58,7 @@ class SettingForm extends Component {
         style={{marginRight:10}} underlayColor="transparent">
         <Image source={require('../../common/img/cancel.png')} />
       </TouchableHighlight>
-    )    
+    )
   }
 
   renderValidation(){
@@ -81,7 +79,7 @@ class SettingForm extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header
+        <S5Header
           title={this.state.title}
           style={{backgroundColor: '#224488'}}
           leftItem={{

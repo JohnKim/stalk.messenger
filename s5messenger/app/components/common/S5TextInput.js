@@ -1,7 +1,6 @@
 /*
  * https://github.com/mortik/react-native-floating-label-text-input/blob/master/index.js
  * @flow
- * @providesModule S5TextInput
 */
 'use strict';
 

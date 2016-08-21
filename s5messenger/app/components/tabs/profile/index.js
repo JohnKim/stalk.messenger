@@ -17,9 +17,7 @@ import {
 import { connect } from 'react-redux';
 import { logOut, updateUser } from 's5-action';
 
-import Header from 'S5Header';
-import S5Button from 'S5Button';
-import ProfilePicture from 'S5ProfilePicture';
+import { S5Header, S5Button, S5ProfilePicture } from 's5-components';
 
 import SettingCell from './SettingCell';
 
@@ -68,13 +66,13 @@ class SettingView extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Header
+        <S5Header
           title="Sample"
           style={{backgroundColor: '#224488'}}
         />
 
         <View style={styles.profileImage}>
-          <ProfilePicture
+          <S5ProfilePicture
             profileImageUrl={this.props.user.profileImage}
             onPress={() => this.selectImage()}
             editable={true}

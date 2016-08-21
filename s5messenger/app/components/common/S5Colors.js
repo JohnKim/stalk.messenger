@@ -1,7 +1,6 @@
 /**
  * TODO 색상은 여기에 기록할 것!
  *
- * @providesModule S5Colors
  * @flow
  */
 

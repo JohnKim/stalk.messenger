@@ -5,10 +5,10 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import S5TextInput  from 'S5TextInput';
-import S5Button     from 'S5Button';
+
 import { connect }  from 'react-redux';
 import { signin }   from 's5-action';
+import { S5TextInput, S5Button } from 's5-components';
 
 class SigninView extends Component {
 

@@ -1,6 +1,5 @@
 /*
  * @flow
- * @providesModule S5Spinner
 */
 'use strict'
 

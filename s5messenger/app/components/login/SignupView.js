@@ -7,10 +7,10 @@ import {
   TextInput,
   StyleSheet,
 } from 'react-native';
+
 import { connect } from 'react-redux';
 import { signup } from 's5-action';
-import S5Button from 'S5Button';
-import S5TextInput  from 'S5TextInput';
+import { S5TextInput, S5Button } from 's5-components';
 
 class SignupView extends Component {
 

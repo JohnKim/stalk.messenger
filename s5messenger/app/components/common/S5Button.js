@@ -1,6 +1,5 @@
 /**
  *
- * @providesModule S5Button
  * @flow
  */
 

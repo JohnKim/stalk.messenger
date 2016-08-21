@@ -12,14 +12,11 @@ import {
 
 import { connect } from 'react-redux';
 import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
+import { S5Header, S5Alert, S5Drawer } from 's5-components';
 
-import Header       from 'S5Header';
-import S5Alert      from 'S5Alert';
-import Drawer       from 'S5Drawer';
 import ControlPanel from './ControlPanel';
 
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
-
 var XPush = require( 'react-native-xpush-client' );
 
 import { SERVER_URL, APP_ID } from '../../../../env.js';
@@ -89,7 +86,7 @@ class ChatView extends Component {
             // D: Device ID !! ???
           }
         };
-        
+
         var self = this;
 
         XPush.connect( this.props.chat.channelId, function(err, data){
@@ -200,7 +197,7 @@ class ChatView extends Component {
 
     return (
       <View style={styles.container}>
-        <Drawer
+        <S5Drawer
           type="overlay"
           content={<ControlPanel closeDrawer={this.closeControlPanel}/>}
           ref={(ref) => this._drawer = ref}
@@ -214,7 +211,7 @@ class ChatView extends Component {
             main: { opacity:(2-ratio)/2 }
           })}
           >
-          <Header
+          <S5Header
             title="Chats"
             style={{backgroundColor: '#224488'}}
             leftItem={{
@@ -247,7 +244,7 @@ class ChatView extends Component {
               editable: this.state.connected,
             }}
           />
-        </Drawer>
+        </S5Drawer>
 
         <S5Alert ref={'alert'} />
 

@@ -1,7 +1,6 @@
 /**
  *
  * @flow
- * @providesModule S5ProfilePicture
  */
 'use strict';
 
@@ -21,7 +20,7 @@ export default class S5ProfilePicture extends Component {
     const {size} = this.props;
     if(this.props.editable){
       return (
-         <View 
+         <View
             style={{
               width: (size / 5 )+10,
               height: (size / 5)+10 ,
@@ -29,7 +28,7 @@ export default class S5ProfilePicture extends Component {
               top: size - ( size / 4 ),
               left: size - ( size / 4 ),
               borderRadius: (size / 5 + 10) / 2,
-              alignItems: 'center',  
+              alignItems: 'center',
               backgroundColor:'white'
             }}
             >
@@ -39,7 +38,7 @@ export default class S5ProfilePicture extends Component {
                 width: (size / 5 ),
                 height: (size / 5),
                 opacity:0.5,
-                marginTop:5          
+                marginTop:5
               }}
             />
           </View>

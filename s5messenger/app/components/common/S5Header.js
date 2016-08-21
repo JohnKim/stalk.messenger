@@ -1,6 +1,5 @@
 /**
  *
- * @providesModule S5Header
  * @flow
  */
 
@@ -16,7 +15,7 @@ import {
   Image,
   ToolbarAndroid,
 } from 'react-native';
-import S5Colors from 'S5Colors';
+import S5Colors from './S5Colors';
 
 export const Item = {
   title: React.PropTypes.string,

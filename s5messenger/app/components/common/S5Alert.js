@@ -1,6 +1,5 @@
 /**
  *
- * @providesModule S5Alert
  * @flow
  */
 
@@ -24,6 +23,7 @@ const DEFAULT_IMAGE_DIMENSIONS = 36
 const WINDOW = Dimensions.get('window')
 
 export default class S5Alert extends Component {
+
   static propTypes = {
     onClose: React.PropTypes.func,
     closeInterval: React.PropTypes.number,
@@ -38,6 +38,7 @@ export default class S5Alert extends Component {
     titleNumOfLines: React.PropTypes.number,
     messageNumOfLines: React.PropTypes.number,
   }
+
   static defaultProps =  {
     onClose: null,
     closeInterval: 4000,
@@ -73,6 +74,7 @@ export default class S5Alert extends Component {
       backgroundColor: 'dimgray'
     }
   }
+
   constructor(props) {
     super(props)
     this.state = {

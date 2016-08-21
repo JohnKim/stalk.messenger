@@ -1,5 +1,4 @@
 /*
- * @providesModule S5Drawer
  * @flow
  */
 
@@ -501,7 +500,7 @@ export default class S5Drawer extends Component {
   getHeight() {
     return this.state.viewport.height;
   }
-  getMainWidth() { 
+  getMainWidth() {
     return this.state.viewport.width - this._offsetClosed;
   }
   getDrawerWidth() {

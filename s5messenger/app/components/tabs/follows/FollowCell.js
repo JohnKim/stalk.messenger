@@ -14,7 +14,7 @@ import {
   PixelRatio,
 } from 'react-native';
 
-import ProfilePicture from 'S5ProfilePicture';
+import { S5ProfilePicture } from 's5-components';
 
 export default class FollowCell extends Component {
 
@@ -32,7 +32,7 @@ export default class FollowCell extends Component {
       return (
 
           <View style={styles.container}>
-            <ProfilePicture
+            <S5ProfilePicture
               profileImageUrl={this.state.user.profileImage}
               onPress={() => this.props.onProfilePress()}
               size={48}

@@ -16,10 +16,10 @@ import {
   TextInput,
 } from 'react-native';
 
-import { searchUsersByPage, createFollow } from 's5-action';
 import { connect } from 'react-redux';
+import { searchUsersByPage, createFollow } from 's5-action';
+import { S5Header } from 's5-components';
 
-import Header from 'S5Header';
 import GiftedListView from 'react-native-gifted-listview';
 
 const PAGE_SIZE = 20;
@@ -108,7 +108,7 @@ class SearchUserView extends React.Component {
     return (
       <View style={styles.container}>
 
-        <Header
+        <S5Header
           title="Search Users"
           foreground="dark"
           leftItem={{

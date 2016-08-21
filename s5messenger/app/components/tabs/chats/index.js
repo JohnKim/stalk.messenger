@@ -19,10 +19,8 @@ import {
 import ChatCell from './ChatCell';
 
 import { loadChats, removeChat } from 's5-action';
+import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
-
-import Header from 'S5Header';
-import S5SwipeListView from 'S5SwipeListView';
 
 class ChatsScreen extends Component {
 
@@ -78,7 +76,7 @@ class ChatsScreen extends Component {
 	return (
       <View style={styles.container}>
 
-        <Header
+        <S5Header
           title="Chats"
           style={{backgroundColor: '#224488'}}
         />

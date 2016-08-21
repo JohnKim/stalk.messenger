@@ -6,14 +6,16 @@
 
 import React, { Component } from 'react';
 import {
-  TabBarIOS,
+  Image,
   Navigator,
   Text,
 } from 'react-native';
 
-import S5Colors from 'S5Colors';
+import { S5Colors } from 's5-components';
 import { switchTab } from 's5-action';
+
 import { connect } from 'react-redux';
+import TabNavigator from 'react-native-tab-navigator';
 
 import FollowsView from './follows';
 import ChatsView from './chats';
@@ -33,32 +35,37 @@ class TabsView extends Component {
   render() {
 
     return (
-      <TabBarIOS tintColor={S5Colors.darkText}>
-        <TabBarIOS.Item
+      <TabNavigator>
+
+        <TabNavigator.Item
           title="Follows"
           selected={this.props.tab === 'follows'}
-          onPress={this.onTabSelect.bind(this, 'follows')}
-          icon={require('./follows/img/icon.png')}
-          selectedIcon={require('./follows/img/icon-active.png')}>
+          renderIcon={() => <Image source={require('./follows/img/icon.png')} />}
+          renderSelectedIcon={() => <Image source={require('./follows/img/icon-active.png')} />}
+          onPress={() => this.onTabSelect('follows')}>
           <FollowsView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </TabNavigator.Item>
+
+        <TabNavigator.Item
           title="Chats"
           selected={this.props.tab === 'chats'}
-          onPress={this.onTabSelect.bind(this, 'chats')}
-          icon={require('./chats/img/icon.png')}
-          selectedIcon={require('./chats/img/icon-active.png')}>
+          renderIcon={() => <Image source={require('./chats/img/icon.png')} />}
+          renderSelectedIcon={() => <Image source={require('./chats/img/icon-active.png')} />}
+          badgeText="1" // TODO implements !!
+          onPress={() => this.onTabSelect('chats')}>
           <ChatsView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
+        </TabNavigator.Item>
+
+        <TabNavigator.Item
           title="Profile"
           selected={this.props.tab === 'profile'}
-          onPress={this.onTabSelect.bind(this, 'profile')}
-          icon={require('./profile/img/icon.png')}
-          selectedIcon={require('./profile/img/icon-active.png')}>
+          renderIcon={() => <Image source={require('./profile/img/icon.png')} />}
+          renderSelectedIcon={() => <Image source={require('./profile/img/icon-active.png')} />}
+          onPress={() => this.onTabSelect('profile')}>
           <ProfileView navigator={this.props.navigator} />
-        </TabBarIOS.Item>
-      </TabBarIOS>
+        </TabNavigator.Item>
+
+      </TabNavigator>
     );
   }
 

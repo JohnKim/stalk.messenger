@@ -20,10 +20,8 @@ import {
 import FollowCell from './FollowCell';
 
 import { loadFollows, removeFollow, createChat } from 's5-action';
+import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
-
-import Header from 'S5Header';
-import S5SwipeListView from 'S5SwipeListView'
 
 class FollowsScreen extends Component {
 
@@ -99,7 +97,7 @@ class FollowsScreen extends Component {
 		return (
       <View style={styles.container}>
 
-        <Header
+        <S5Header
           title="Follows"
           style={{backgroundColor: '#224488'}}
           rightItem={{...rightItem, layout: 'icon'}}

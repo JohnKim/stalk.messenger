@@ -1,7 +1,6 @@
 /**
  *
  * @flow
- * @providesModule S5SwipeListView
  */
 'use strict';
 
