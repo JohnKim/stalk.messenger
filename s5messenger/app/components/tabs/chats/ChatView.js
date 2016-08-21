@@ -58,7 +58,9 @@ class ChatView extends Component {
     this._drawer.open()
   };
 
-  componentWillMount() {  // or componentDidMount ?
+  componentDidMount() {
+
+    console.log( this.props.chat );
 
     // Load Messages from session-server
     this.props.loadMessages(this.props.chat).then(
@@ -202,7 +204,7 @@ class ChatView extends Component {
       <View style={styles.container}>
         <Drawer
           type="overlay"
-          content={<ControlPanel closeDrawer={this.closeControlPanel}/>}
+          content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.props.chat}/>}
           ref={(ref) => this._drawer = ref}
           tapToClose={true}
           openDrawerOffset={0.2} // 20% gap on the right side of drawer

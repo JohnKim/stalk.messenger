@@ -63,12 +63,18 @@ export function _parseObjToJSON(object){
     if (user.id === currentUser.id) {
       object.splice(index, 1);
     } else {
+
+      var profileImage = "";
+      if( user && user.get('profileFile') != null && user.get('profileFile') != undefined ){
+        profileImage = user.get('profileFile').url();
+      }
+      
       object[index] = {
         id: user.id,
         username: user.get('username'),
         email: user.get('email'),
         nickName: user.get('nickName'),
-        profileImage: user.get('profileImage')
+        profileImage: profileImage
       }
       names.push(user.get('username'));
     }
