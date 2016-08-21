@@ -8,12 +8,9 @@
 import React, { Component } from 'react';
 import {
   View,
-  Navigator,
   StyleSheet,
   Text,
-  ListView,
 	TouchableOpacity,
-	TouchableHighlight,
 } from 'react-native';
 
 import ChatCell from './ChatCell';
@@ -25,7 +22,7 @@ import { connect } from 'react-redux';
 class ChatsScreen extends Component {
 
   state = {
-    listViewData: this.props.chats.list
+    listViewData: []
   };
 
 	constructor(props) {

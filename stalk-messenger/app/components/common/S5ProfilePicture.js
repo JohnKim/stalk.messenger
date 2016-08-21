@@ -11,7 +11,7 @@ export default class S5ProfilePicture extends Component {
 
   onPressProfileImage() {
 
-    if(this.props.onPress === undefined) return nulll;
+    if(this.props.onPress === undefined) return null;
 
     return this.props.onPress && this.props.onPress();
   }

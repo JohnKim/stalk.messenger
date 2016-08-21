@@ -12,6 +12,8 @@ import S5SectionList from './S5SectionList';
 import S5Spinner from './S5Spinner';
 import S5SwipeListView from './S5SwipeListView';
 import S5SwipeRow from './S5SwipeRow';
+import S5EmptyRow from './S5EmptyRow';
+import S5Paragraph from './S5Paragraph';
 import S5TextInput from './S5TextInput';
 
 export {
@@ -25,5 +27,7 @@ export {
   S5Spinner,
   S5SwipeListView,
   S5SwipeRow,
+  S5EmptyRow,
+  S5Paragraph,
   S5TextInput,
 };

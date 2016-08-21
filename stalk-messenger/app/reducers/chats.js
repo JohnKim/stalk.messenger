@@ -6,11 +6,12 @@ import { LOADED_CHATS, ADDED_CHATS, REMOVED_CHATS, LOGGED_OUT } from 's5-action'
 const initialState = {
   list: [],
   lastLoadedAt: null,
+  ids: '',
 };
 
 let currentUser = null; // to emit current user data into chat users of the channel.
 
-function follows(state = initialState, action) {
+function chats(state = initialState, action) {
 
   if (action.type === LOADED_CHATS) {
       currentUser = action.user; // to emit current user data into chat users of the channel.
@@ -51,8 +52,7 @@ function follows(state = initialState, action) {
   return state;
 }
 
-
-export function _parseObjToJSON(object){
+function _parseObjToJSON(object){
 
   var channel = object.get("channel");
   var users = channel.get("users");
@@ -90,4 +90,4 @@ export function _parseObjToJSON(object){
 
 }
 
-module.exports = follows;
+module.exports = chats;

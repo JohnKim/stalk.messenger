@@ -16,28 +16,38 @@ import {
 
 export default class ChatCell extends Component {
 
+  static propTypes = {
+    chat: React.PropTypes.object.isRequired,
+    onPress: React.PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      chat: this.props.chat,
-    };
+    console.log(props.chat);
   }
 
   render() {
-    // this.state.chat.name : the name of this channel (defined from chats reducer).
-    // this.state.chat.users.length : count for users in this chat channel.
-    
+    // this.props.chat.name : the name of this channel (defined from chats reducer).
+    // this.props.chat.users.length : count for users in this chat channel.
+
+    let names = [];
+    this.props.chat.users.forEach( (user) => {
+      names.push(user.nickName);
+    });
+
+    const userCount = this.props.chat.users.length > 1 ?
+      (<Text style={styles.userCount}>{this.props.chat.users.length}</Text>) : null;
+
     return (
       <TouchableHighlight onPress={this.props.onPress} >
         <View style={styles.container}>
-            <Image source={{uri: this.state.chat.profileImage}}
+            <Image source={{uri: this.props.chat.profileImage}}
               style={styles.image} />
           <View style={styles.makerDetailsContainer}>
-              <Text style={styles.makerTitle}>
-                {this.state.chat.name}
+              <Text style={styles.nickName}>
+                {names.join(", ")} {userCount}
               </Text>
             <Text style={styles.makerDetails}>
-               ({this.state.chat.users.length})
             </Text>
           </View>
         </View>
@@ -66,9 +76,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
   },
-  makerTitle: {
+  nickName: {
     fontSize: 15,
     marginTop: 10,
+    marginBottom: 5,
+    color: '#000000'
+  },
+  userCount: {
+    fontSize: 12,
     marginBottom: 5,
     color: '#DA552F'
   },

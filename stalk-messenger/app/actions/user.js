@@ -142,7 +142,7 @@ export function searchUsersByPage(data, callback) {
     usernameQuery.startsWith("username", data.keyword);
 
     let emailQuery = new Parse.Query(Parse.User);
-    emailQuery.startsWith("email", data.keyword);
+    emailQuery.startsWith("nickName", data.keyword);
 
     let query = Parse.Query.or(usernameQuery, emailQuery); // TODO check new ??
 

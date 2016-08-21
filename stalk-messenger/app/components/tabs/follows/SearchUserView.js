@@ -17,9 +17,10 @@ import {
 
 import { connect } from 'react-redux';
 import { searchUsersByPage, createFollow } from 's5-action';
-import { S5Header } from 's5-components';
+import { S5Header, S5EmptyRow } from 's5-components';
 
 import GiftedListView from 'react-native-gifted-listview';
+import FollowCell from './FollowCell';
 
 const PAGE_SIZE = 20;
 
@@ -73,10 +74,12 @@ class SearchUserView extends Component {
 
   _onChangeFilterText(text) {
     this.setState( {filter: text}, () => {
+
         if( this.timeout ) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
           this.refs['listView']._refresh();
         }, 300 );
+
       }
     )
   }
@@ -87,20 +90,20 @@ class SearchUserView extends Component {
 
   _renderRowView(user) {
     return (
-      <View key={user.id}>
-        <TouchableHighlight onPress={ () => this._onRowPress(user) }>
-          <View style={styles.row}>
-            <Text style={styles.rowTitleText}>
-              {user.username}
-            </Text>
-            <Text style={styles.rowDetailText}>
-              {user.email}
-            </Text>
-          </View>
-        </TouchableHighlight>
-        <View style={styles.separator} />
-      </View>
-    );
+      <FollowCell
+        key={user.id}
+        user={user}
+        onPress={() => this._onRowPress(user)}
+      />
+    )
+  }
+
+  _renderEmptyRow() {
+    return (
+      <S5EmptyRow
+        text='Insert keywords for searching.'
+      />
+    )
   }
 
   render() {
@@ -136,16 +139,12 @@ class SearchUserView extends Component {
           ref="listView"
           onFetch={ this._onFetch.bind(this) }
           rowView={ this._renderRowView.bind(this) }
-          firstLoader={true} // display a loader for the first fetching
-          pagination={true} // enable infinite scrolling using touch to load more
-          refreshable={true} // enable pull-to-refresh for iOS and touch-to-refresh for Android
-          withSections={false} // enable sections
-          customStyles={{
-            paginationView: {
-              backgroundColor: '#eee',
-            },
-          }}
-
+          firstLoader={false}   // display a loader for the first fetching
+          pagination={true}     // enable infinite scrolling using touch to load more
+          refreshable={false}   // enable pull-to-refresh for iOS and touch-to-refresh for Android
+          withSections={false}  // enable sections
+          enableEmptySections={true}
+          emptyView={ this._renderEmptyRow.bind(this) }
           refreshableTintColor="blue"
         />
 

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { switchTab, loadMessages, MESSAGE_SIZE } from 's5-action';
+import { switchTab, loadMessages, latestMessage, MESSAGE_SIZE } from 's5-action';
 import { S5Header, S5Alert, S5Drawer } from 's5-components';
 
 import ControlPanel from './ControlPanel';
@@ -282,6 +282,7 @@ function actions(dispatch) {
   return {
     switchTab: () => dispatch(switchTab('chats')),
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
+    latestMessage: (message) =>  dispatch(latestMessage(message)),
   };
 }
 

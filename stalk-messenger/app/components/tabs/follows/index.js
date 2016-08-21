@@ -85,7 +85,7 @@ class FollowsScreen extends Component {
         onPress={() => this._onRowPress(data)}
         onProfilePress={() => this._onProfileImagePress(data)}
       />
-    )
+    );
   }
 
 	render() {

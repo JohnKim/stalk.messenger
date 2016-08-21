@@ -6,6 +6,7 @@ import Parse from 'parse/react-native';
 import { SERVER_URL, APP_ID } from '../../env.js';
 
 export const MESSAGE_SIZE     = 30;
+export const LATEST_MESSAGE   = "LATEST_MESSAGE";
 
 const InteractionManager = require('InteractionManager');
 
@@ -92,7 +93,18 @@ export  function loadMessages(chat, datetime) {
 
   };
 
-};
+}
+
+export function latestMessage(message) {
+  return (dispatch) => {
+    
+    return dispatch({
+      type: LATEST_MESSAGE,
+      data: message,
+    });
+
+  };
+}
 
 function fromParseObject(obj){
 

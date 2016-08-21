@@ -30,6 +30,8 @@ export default class FollowCell extends Component {
 
   render() {
 
+
+
     if(this.props.onProfilePress) {
 
       return (
@@ -43,10 +45,10 @@ export default class FollowCell extends Component {
             />
             <TouchableHighlight onPress={this.props.onPress} >
               <View style={styles.makerDetailsContainer}>
-                  <Text style={styles.makerTitle}>
-                    {this.props.user.username}
+                  <Text style={styles.nickName}>
+                    {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
                   </Text>
-                <Text style={styles.makerDetails}>
+                <Text style={styles.statusMessage}>
                   {this.props.user.statusMessage}
                 </Text>
               </View>
@@ -60,14 +62,17 @@ export default class FollowCell extends Component {
       return (
         <TouchableHighlight onPress={this.props.onPress} >
           <View style={styles.container}>
-              <Image source={{uri: this.props.user.profileImage}}
-                style={styles.image} />
+            <S5ProfilePicture
+              profileImageUrl={this.props.user.profileImage}
+              size={48}
+              style={styles.image}
+            />
             <View style={styles.makerDetailsContainer}>
-                <Text style={styles.makerTitle}>
-                  {this.props.user.nickName}
+                <Text style={styles.nickName}>
+                  {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
                 </Text>
-              <Text style={styles.makerDetails}>
-                {this.props.user.username}
+              <Text style={styles.statusMessage}>
+                {this.props.user.statusMessage}
               </Text>
             </View>
           </View>
@@ -75,7 +80,6 @@ export default class FollowCell extends Component {
       );
 
     }
-
 
   }
 }
@@ -93,16 +97,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
   },
-  makerTitle: {
+  nickName: {
     fontSize: 15,
     marginTop: 10,
     marginBottom: 5,
-    color: '#DA552F'
+    color: '#000000'
   },
-  makerDetails: {
+  statusMessage: {
     fontSize: 12,
     marginBottom: 5,
     color: 'gray'
+  },
+  username: {
+    fontSize: 12,
+    marginBottom: 5,
+    color: '#DA552F'
   },
   line:{
     marginLeft: 12,
