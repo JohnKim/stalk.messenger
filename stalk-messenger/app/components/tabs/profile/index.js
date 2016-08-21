@@ -78,7 +78,7 @@ class SettingView extends Component {
         <View style={styles.profileImage}>
           <S5ProfilePicture
             name={this.props.user.nickName}
-            profileImageUrl={this.props.user.profileImage}
+            profileFileUrl={this.props.user.profileFileUrl}
             onPress={() => this.selectImage()}
             editable={true}
             size={100}

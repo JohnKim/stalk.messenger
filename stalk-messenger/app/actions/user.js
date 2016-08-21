@@ -106,7 +106,7 @@ export async function updateUser(key, value) {
   var data = value;
   if( key == 'profileFile' ){
     let imgBase64 = 'data:image/jpeg;base64,' + value;
-    data = new Parse.File(user.get("username"), { base64: imgBase64 });
+    data = new Parse.File(user.id, { base64: imgBase64 });
   }
 
   user.set(key, data);
@@ -116,7 +116,7 @@ export async function updateUser(key, value) {
 
   var result =''
   if( key == 'profileFile' ){
-    key = 'profileImage';
+    key = 'profileFileUrl';
     result = user.get('profileFile').url();
   } else {
     result = user.get(key);

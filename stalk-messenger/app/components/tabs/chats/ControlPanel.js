@@ -13,7 +13,8 @@ import { S5ProfilePicture } from 's5-components';
 
 export default class ControlPanel extends Component {
   static propTypes = {
-    closeDrawer: PropTypes.func.isRequired
+    closeDrawer: PropTypes.func.isRequired,
+    chat: PropTypes.any.isRequired
   };
 
    constructor(props){
@@ -35,7 +36,7 @@ export default class ControlPanel extends Component {
               <View style={styles.item}>
                 <S5ProfilePicture
                   name={user.nickName}
-                  profileImageUrl={user.profileImage}
+                  profileFileUrl={user.profileFileUrl}
                   size={40}
                   style={styles.image}
                 />

@@ -9,9 +9,7 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  TouchableHighlight,
   TextInput,
 } from 'react-native';
 
@@ -57,7 +55,7 @@ class SearchUserView extends Component {
             username: user.get('username'),
             email: user.get('email'),
             nickName: user.get('nickName'),
-            profileImage: user.get('profileImage')
+            profileFileUrl: user.get('profileFileUrl')
           };
         });
 

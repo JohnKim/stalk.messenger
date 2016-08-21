@@ -19,7 +19,7 @@ export default class S5ProfilePicture extends Component {
     name: React.PropTypes.any, // string of array
     size: React.PropTypes.number,
     onPress: React.PropTypes.func,
-    profileImageUrl: React.PropTypes.string,
+    profileFileUrl: React.PropTypes.string,
     editable: React.PropTypes.bool,
     style: React.PropTypes.any,
   };
@@ -69,8 +69,8 @@ export default class S5ProfilePicture extends Component {
     const {size} = this.props;
 
     let uri = "";
-    if( this.props.profileImageUrl && this.props.profileImageUrl != null ) {
-      uri = this.props.profileImageUrl;
+    if( this.props.profileFileUrl && this.props.profileFileUrl != null ) {
+      uri = this.props.profileFileUrl;
     }
 
     if( uri ){

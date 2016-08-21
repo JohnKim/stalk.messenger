@@ -3,7 +3,8 @@ import Parse  from 'parse/node';
 import faker  from 'faker';
 import Common from './_common';
 
-var createUser = function (username, password, email, nickName, profileImage) {
+// TODO profileFile is required !
+var createUser = function (username, password, email, nickName, statusMessage) {
   return new Promise( (resolve, reject) => {
 
     var user = new Parse.User();
@@ -15,7 +16,7 @@ var createUser = function (username, password, email, nickName, profileImage) {
     // Additional values
     user.set("email",       Common.notNullValue(email, faker.internet.email()));    // email
     user.set("nickName",    Common.notNullValue(nickName, faker.name.findName()));     // nickName
-    user.set("profileImage",Common.notNullValue(profileImage, faker.internet.avatar()));   // profileImage
+    user.set("statusMessage",Common.notNullValue(statusMessage, faker.lorem.sentence()));   // statusMessage
 
     user.signUp(null, {
       success: function(user) {
@@ -32,8 +33,8 @@ var createUser = function (username, password, email, nickName, profileImage) {
 };
 
 
-exports.create = async function (username, password, email, nickName, profileImage) {
-  return await createUser(username, password, email, nickName, profileImage);
+exports.create = async function (username, password, email, nickName, statusMessage) {
+  return await createUser(username, password, email, nickName, statusMessage);
 };
 
 // data = {keyword, pageNumber, pageSize}

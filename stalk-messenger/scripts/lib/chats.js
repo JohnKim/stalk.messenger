@@ -105,7 +105,6 @@ exports.load = async function (username) {
     .find().then(
       (list) => {
         list.map(chatsParseObject);
-        console.log('ABCDE');
       },
       (error) => { console.log(error); }
     );
@@ -128,7 +127,8 @@ function chatsParseObject(object){
         username: item.get('username'),
         email: item.get('email'),
         nickName: item.get('nickName'),
-        profileImage: item.get('profileImage')
+        statusMessage: item.get('statusMessage'),
+        profileFileUrl: item.get('profileFile') ? item.get('profileFile').url() : null,
       }
       names.push(item.get('username'));
     }

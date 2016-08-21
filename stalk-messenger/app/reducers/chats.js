@@ -64,9 +64,9 @@ function _parseObjToJSON(object){
       object.splice(index, 1);
     } else {
 
-      var profileImage = "";
+      var profileFileUrl = "";
       if( user && user.get('profileFile') != null && user.get('profileFile') != undefined ){
-        profileImage = user.get('profileFile').url();
+        profileFileUrl = user.get('profileFile').url();
       }
 
       object[index] = {
@@ -74,7 +74,8 @@ function _parseObjToJSON(object){
         username: user.get('username'),
         email: user.get('email'),
         nickName: user.get('nickName'),
-        profileImage: profileImage
+        statusMessage: user.get('statusMessage'),
+        profileFileUrl: profileFileUrl,
       }
       names.push(user.get('username'));
     }

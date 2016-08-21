@@ -1,5 +1,11 @@
 # stalk messenger - session server
 
+### Run stalk-session-server
+
+```
+export VERBOSE=1  # logging verbose
+./bin/session-server --config ./config.local.json
+```
 
 ### Run parse-dashboard
 

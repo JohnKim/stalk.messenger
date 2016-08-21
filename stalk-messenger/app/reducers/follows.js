@@ -48,9 +48,9 @@ function follows(state = initialState, action) {
 
 export function _parseObjToJSON(object){
   var user = object.get('userTo');
-  var profileImage = "";
+  var profileFileUrl = "";
   if( user && user.get('profileFile') != null && user.get('profileFile') != undefined ){
-    profileImage = user.get('profileFile').url();
+    profileFileUrl = user.get('profileFile').url();
   }
 
   return {
@@ -60,7 +60,7 @@ export function _parseObjToJSON(object){
     email: user.get('email'),
     nickName: user.get('nickName'),
     statusMessage: user.get('statusMessage'),
-    profileImage: profileImage,
+    profileFileUrl: profileFileUrl,
   };
 }
 

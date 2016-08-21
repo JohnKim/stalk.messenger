@@ -37,7 +37,7 @@ export default class FollowCell extends Component {
           <View style={styles.container}>
             <S5ProfilePicture
               name={this.props.user.nickName}
-              profileImageUrl={this.props.user.profileImage}
+              profileFileUrl={this.props.user.profileFileUrl}
               onPress={() => this.props.onProfilePress()}
               size={48}
               style={styles.image}
@@ -63,7 +63,7 @@ export default class FollowCell extends Component {
           <View style={styles.container}>
             <S5ProfilePicture
               name={this.props.user.nickName}
-              profileImageUrl={this.props.user.profileImage}
+              profileFileUrl={this.props.user.profileFileUrl}
               size={48}
               style={styles.image}
             />

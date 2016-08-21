@@ -37,7 +37,7 @@ export default class ChatCell extends Component {
         <S5ProfilePicture
           key={key}
           name={user.nickName}
-          profileImageUrl={user.profileImage}
+          profileFileUrl={user.profileFileUrl}
           size={48}
           style={{
             margin:10,

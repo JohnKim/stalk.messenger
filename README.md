@@ -30,9 +30,6 @@ Mongodb, redis, zookeeper 가 사전에 실행해야 함.
 ## 서버 실행하기.
 $ export VERBOSE=1  # 로깅 verbose
 $ ./s5server-session/bin/session-server --config ./config.local.json
-
-## parse-dashboard 실행하기. ( 실행 후 `http://[host]:4040/dashboard` 로 접속)
-$ ./s5server-session/bin/parse-dashboard --config ./s5server-session/config.local.json
 ```
 
 ### 3. s5server-channel
@@ -83,5 +80,4 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 - [x] 아티스트 섭외
 - [ ] 브랜드 디자인
 - [ ] 모바일 앱 디자인
-- [ ] UI 개발 가이드 
-
+- [ ] UI 개발 가이드
