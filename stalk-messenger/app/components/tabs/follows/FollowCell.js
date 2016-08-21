@@ -30,14 +30,13 @@ export default class FollowCell extends Component {
 
   render() {
 
-
-
     if(this.props.onProfilePress) {
 
       return (
 
           <View style={styles.container}>
             <S5ProfilePicture
+              name={this.props.user.nickName}
               profileImageUrl={this.props.user.profileImage}
               onPress={() => this.props.onProfilePress()}
               size={48}
@@ -63,6 +62,7 @@ export default class FollowCell extends Component {
         <TouchableHighlight onPress={this.props.onPress} >
           <View style={styles.container}>
             <S5ProfilePicture
+              name={this.props.user.nickName}
               profileImageUrl={this.props.user.profileImage}
               size={48}
               style={styles.image}
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFD',
   },
   image: {
-    margin:10
+    margin:10,
   },
   makerDetailsContainer: {
     flex: 1,

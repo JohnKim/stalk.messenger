@@ -6,8 +6,10 @@
 
 'use strict';
 
-function colorForTopic(count: number, index: number): string {
-  const hue = Math.round(360 * index / (count + 1));
+function colorForProfile(str, count = 1) {
+
+  let index = str.charCodeAt(0);
+  const hue = Math.round(460 * index / (count+10));
   return `hsl(${hue}, 74%, 65%)`;
 }
 
@@ -18,5 +20,5 @@ module.exports = {
   lightText: '#7F91A7',
   cellBorder: '#EEEEEE',
   darkBackground: '#183E63',
-  colorForTopic,
+  colorForProfile,
 };

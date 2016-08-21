@@ -5,9 +5,28 @@
 'use strict';
 
 import React, { Component } from 'React';
-import { View, Image, PixelRatio, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableHighlight,
+} from 'react-native';
+import S5Colors from './S5Colors';
 
 export default class S5ProfilePicture extends Component {
+
+  static propTypes = {
+    name: React.PropTypes.any, // string of array
+    size: React.PropTypes.number,
+    onPress: React.PropTypes.func,
+    profileImageUrl: React.PropTypes.string,
+    editable: React.PropTypes.bool,
+    style: React.PropTypes.any,
+  };
+
+  constructor(props) {
+    super(props);
+  }
 
   onPressProfileImage() {
 
@@ -30,8 +49,7 @@ export default class S5ProfilePicture extends Component {
               borderRadius: (size / 5 + 10) / 2,
               alignItems: 'center',
               backgroundColor:'white'
-            }}
-            >
+            }} >
             <Image
               source={require('./img/camera.png')}
               style={{
@@ -46,42 +64,64 @@ export default class S5ProfilePicture extends Component {
     }
   }
 
-  render() {
-    const {size} = this.props;
-    const scaledSize = size * PixelRatio.get();
-    let uri = "";
+  renderProfileCircle(){
 
+    const {size} = this.props;
+
+    let uri = "";
     if( this.props.profileImageUrl && this.props.profileImageUrl != null ) {
       uri = this.props.profileImageUrl;
     }
 
+    if( uri ){
+      return (
+        <Image
+          source={{uri}}
+          defaultSource={require('./img/face.png')}
+          style={[{
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+          },this.props.style]}
+        />
+      );
+
+    }else{
+
+      let name = '';
+      if(this.props.name) name = this.props.name.substring(0, 1);
+
+      return (
+        <View
+          style={[{
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            opacity:0.8,
+            backgroundColor: S5Colors.colorForProfile(name)
+          },this.props.style]}>
+          {/* <Text
+            style={{
+              color: '#000000'
+            }}>{name}</Text> */}
+        </View>
+      );
+    }
+
+  }
+
+  render() {
     if(this.props.onPress === undefined){
       return (
         <View>
-          <Image
-            source={{uri}}
-            defaultSource={require('./img/face.png')}
-            style={[{
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-            },this.props.style]}
-          />
+          {this.renderProfileCircle()}
         </View>
       );
     }else{
       return (
         <TouchableHighlight onPress={this.onPressProfileImage.bind(this)} underlayColor="transparent">
           <View>
-            <Image
-              source={{uri}}
-              defaultSource={require('./img/face.png')}
-              style={[{
-                width: size,
-                height: size,
-                borderRadius: size / 2,
-              },this.props.style]}
-            />
+            {this.renderProfileCircle()}
             {this.renderIcon()}
           </View>
         </TouchableHighlight>
@@ -89,9 +129,3 @@ export default class S5ProfilePicture extends Component {
     }
   }
 }
-
-S5ProfilePicture.propTypes = {
-  size: React.PropTypes.number,
-  onPress: React.PropTypes.func.isRequired,
-  profileImageUrl: React.PropTypes.string,
-};

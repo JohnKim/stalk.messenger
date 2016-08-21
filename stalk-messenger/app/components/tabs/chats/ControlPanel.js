@@ -34,15 +34,16 @@ export default class ControlPanel extends Component {
             {this.props.chat.users.map(user => (
               <View style={styles.item}>
                 <S5ProfilePicture
+                  name={user.nickName}
                   profileImageUrl={user.profileImage}
                   size={40}
                   style={styles.image}
-                />              
+                />
                 <Text style={styles.itemText}>
-                  {user.username}
+                  {user.nickName}
                 </Text>
               </View>
-            ))}            
+            ))}
           </View>
         </ScrollView>
         <TouchableOpacity style={styles.button} onPress={closeDrawer}>

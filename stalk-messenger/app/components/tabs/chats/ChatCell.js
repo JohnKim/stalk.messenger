@@ -8,11 +8,12 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  Image,
   TouchableHighlight,
   StyleSheet,
   PixelRatio,
 } from 'react-native';
+
+import { S5ProfilePicture } from 's5-components';
 
 export default class ChatCell extends Component {
 
@@ -23,7 +24,31 @@ export default class ChatCell extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props.chat);
+  }
+
+  renderProfilePictures(){
+
+    let profiles = [];
+
+    // TODO 그룹체팅의 경우, profile 이미지를 여러개 보여 줄 수 있도록 여기를 수정해야 함 !!
+    this.props.chat.users.forEach( (user) => {
+      let key = `${this.props.chat.channelId}_${user.id}`;
+      profiles.push((
+        <S5ProfilePicture
+          key={key}
+          name={user.nickName}
+          profileImageUrl={user.profileImage}
+          size={48}
+          style={{
+            margin:10,
+            borderWidth: 1.5,
+            borderColor: '#FFFFFF',
+          }}
+        />
+      ));
+    });
+
+    return profiles;
   }
 
   render() {
@@ -41,13 +66,12 @@ export default class ChatCell extends Component {
     return (
       <TouchableHighlight onPress={this.props.onPress} >
         <View style={styles.container}>
-            <Image source={{uri: this.props.chat.profileImage}}
-              style={styles.image} />
+          {this.renderProfilePictures()}
           <View style={styles.makerDetailsContainer}>
               <Text style={styles.nickName}>
                 {names.join(", ")} {userCount}
               </Text>
-            <Text style={styles.makerDetails}>
+            <Text style={styles.messages}>
             </Text>
           </View>
         </View>
@@ -62,15 +86,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFD',
-  },
-  image: {
-    height: 48,
-    width: 48,
-    borderRadius: 25,
-    marginTop: 10,
-    marginRight: 15,
-    marginLeft: 15,
-    marginBottom:15,
   },
   makerDetailsContainer: {
     flex: 1,
@@ -87,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#DA552F'
   },
-  makerDetails: {
+  messages: {
     fontSize: 12,
     marginBottom: 5,
     color: 'gray'

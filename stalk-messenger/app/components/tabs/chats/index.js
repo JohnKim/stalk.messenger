@@ -80,21 +80,21 @@ class ChatsScreen extends Component {
 
         <S5SwipeListView
           ref="listView"
-    			data={this.state.listViewData}
-    			renderRow={ (data) => this._renderRow(data) }
-    			renderHiddenRow={ (data, secId, rowId, rowMap) => (
-    				<View style={styles.rowBack}>
-    					<View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
-    						<Text style={styles.backTextWhite}>Mark as Read</Text>
-    					</View>
-    					<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this._deleteRow(secId, rowId, rowMap) }>
-    						<Text style={styles.backTextWhite}>Leave</Text>
-    					</TouchableOpacity>
-    				</View>
-    			) }
-    			enableEmptySections={true}
-    			rightOpenValue={-150}
-    		/>
+          data={this.state.listViewData}
+          renderRow={ (data) => this._renderRow(data) }
+          renderHiddenRow={ (/*data, secId, rowId, rowMap*/) => (
+            <View style={styles.rowBack}>
+              <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
+                <Text style={styles.backTextWhite}>Mark as Read</Text>
+              </View>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ (secId, rowId, rowMap) => this._deleteRow(secId, rowId, rowMap) }>
+                <Text style={styles.backTextWhite}>Leave</Text>
+              </TouchableOpacity>
+            </View>
+          ) }
+          enableEmptySections={true}
+          rightOpenValue={-150}
+          />
       </View>
 	);
   }
