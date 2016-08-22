@@ -31,8 +31,8 @@ class SettingForm extends Component {
     super(props);
 
     this.state = {};
-    if( this.props.field ){
 
+    if( this.props.field ){
       this.state = {
         key : this.props.field,
         value : this.props.user[this.props.field],

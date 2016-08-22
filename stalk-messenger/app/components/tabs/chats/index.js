@@ -21,6 +21,13 @@ import { connect } from 'react-redux';
 
 class ChatsScreen extends Component {
 
+  static propTypes = {
+    chats: React.PropTypes.object.isRequired,
+    user: React.PropTypes.object,
+    navigator: React.PropTypes.object.isRequired,
+    removeChat: React.PropTypes.func.isRequired,
+  };
+
   state = {
     listViewData: []
   };
@@ -51,6 +58,9 @@ class ChatsScreen extends Component {
   }
 
 	_deleteRow(secId, rowId, rowMap) {
+
+    console.log(secId, rowId, rowMap);
+
 		rowMap[`${secId}${rowId}`].closeRow();
     this.props.removeChat(rowId).then((row) => {
       // TODO do something after deleting.
@@ -82,12 +92,12 @@ class ChatsScreen extends Component {
           ref="listView"
           data={this.state.listViewData}
           renderRow={ (data) => this._renderRow(data) }
-          renderHiddenRow={ (/*data, secId, rowId, rowMap*/) => (
+          renderHiddenRow={ (data, secId, rowId, rowMap) => (
             <View style={styles.rowBack}>
               <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
                 <Text style={styles.backTextWhite}>Mark as Read</Text>
               </View>
-              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ (secId, rowId, rowMap) => this._deleteRow(secId, rowId, rowMap) }>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ () => this._deleteRow(secId, rowId, rowMap) }>
                 <Text style={styles.backTextWhite}>Leave</Text>
               </TouchableOpacity>
             </View>
@@ -99,12 +109,6 @@ class ChatsScreen extends Component {
 	);
   }
 }
-
-ChatsScreen.propTypes = {
-  user: React.PropTypes.object,
-  navigator: React.PropTypes.object, // Navigator
-  loadPost: React.PropTypes.func, // (page: number) => Array<Post>
-};
 
 const styles = StyleSheet.create({
 	container: {

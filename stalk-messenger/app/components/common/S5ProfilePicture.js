@@ -16,7 +16,7 @@ import S5Colors from './S5Colors';
 export default class S5ProfilePicture extends Component {
 
   static propTypes = {
-    name: React.PropTypes.any, // string of array
+    name: React.PropTypes.string,
     size: React.PropTypes.number,
     onPress: React.PropTypes.func,
     profileFileUrl: React.PropTypes.string,
@@ -36,30 +36,31 @@ export default class S5ProfilePicture extends Component {
   }
 
   renderIcon(){
+
     const {size} = this.props;
+
     if(this.props.editable){
       return (
-         <View
+        <View
+          style={{
+            width: (size / 5 )+10,
+            height: (size / 5)+10 ,
+            position: 'absolute',
+            top: size - ( size / 4 ),
+            left: size - ( size / 4 ),
+            borderRadius: (size / 5 + 10) / 2,
+            alignItems: 'center',
+            backgroundColor:'white'
+          }} >
+          <Image
+            source={require('./img/camera.png')}
             style={{
-              width: (size / 5 )+10,
-              height: (size / 5)+10 ,
-              position: 'absolute',
-              top: size - ( size / 4 ),
-              left: size - ( size / 4 ),
-              borderRadius: (size / 5 + 10) / 2,
-              alignItems: 'center',
-              backgroundColor:'white'
-            }} >
-            <Image
-              source={require('./img/camera.png')}
-              style={{
-                width: (size / 5 ),
-                height: (size / 5),
-                opacity:0.5,
-                marginTop:5
-              }}
-            />
-          </View>
+              width: (size / 5 ),
+              height: (size / 5),
+              opacity:0.5,
+              marginTop:5
+            }} />
+        </View>
       )
     }
   }
@@ -98,12 +99,17 @@ export default class S5ProfilePicture extends Component {
             height: size,
             borderRadius: size / 2,
             opacity:0.8,
-            backgroundColor: S5Colors.colorForProfile(name)
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: S5Colors.colorForProfile(name),
           },this.props.style]}>
-          {/* <Text
+          <Text
             style={{
-              color: '#000000'
-            }}>{name}</Text> */}
+              color: '#FFFFFF',
+              fontWeight: 'bold',
+              fontSize: (size * 0.6),
+              backgroundColor: 'rgba(0,0,0,0)',
+            }}>{name}</Text>
         </View>
       );
     }

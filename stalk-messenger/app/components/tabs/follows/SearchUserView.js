@@ -55,7 +55,7 @@ class SearchUserView extends Component {
             username: user.get('username'),
             email: user.get('email'),
             nickName: user.get('nickName'),
-            profileFileUrl: user.get('profileFileUrl')
+            profileFileUrl: user.get('profileFile') ? user.get('profileFile').url() : '',
           };
         });
 
@@ -168,26 +168,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     height: 35,
-  },
-  row: {
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-  },
-  separator: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: '#bbbbbb',
-    marginLeft: 15,
-  },
-  rowTitleText: {
-    fontSize: 17,
-    fontWeight: '500',
-  },
-  rowDetailText: {
-    fontSize: 15,
-    color: '#888888',
-    lineHeight: 20,
   },
 });
 

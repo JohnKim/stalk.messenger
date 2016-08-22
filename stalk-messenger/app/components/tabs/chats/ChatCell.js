@@ -67,7 +67,7 @@ export default class ChatCell extends Component {
       <TouchableHighlight onPress={this.props.onPress} >
         <View style={styles.container}>
           {this.renderProfilePictures()}
-          <View style={styles.makerDetailsContainer}>
+          <View style={styles.detailContainer}>
               <Text style={styles.nickName}>
                 {names.join(", ")} {userCount}
               </Text>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFD',
   },
-  makerDetailsContainer: {
+  detailContainer: {
     flex: 1,
     marginRight: 10,
   },

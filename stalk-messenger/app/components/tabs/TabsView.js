@@ -7,21 +7,23 @@
 import React, { Component } from 'react';
 import {
   Image,
-  Navigator,
-  Text,
 } from 'react-native';
 
-import { S5Colors } from 's5-components';
-import { switchTab } from 's5-action';
+import { connect }    from 'react-redux';
+import { switchTab }  from 's5-action';
+import TabNavigator   from 'react-native-tab-navigator';
 
-import { connect } from 'react-redux';
-import TabNavigator from 'react-native-tab-navigator';
-
-import FollowsView from './follows';
-import ChatsView from './chats';
-import ProfileView from './profile';
+import FollowsView    from './follows';
+import ChatsView      from './chats';
+import ProfileView    from './profile';
 
 class TabsView extends Component {
+
+  static propTypes = {
+    tab:  React.PropTypes.string,
+    onTabSelect: React.PropTypes.func.isRequired,
+    navigator: React.PropTypes.object.isRequired,
+  };
 
   componentDidMount() {
   }
@@ -70,12 +72,6 @@ class TabsView extends Component {
   }
 
 }
-
-TabsView.propTypes = {
-  tab:  React.PropTypes.string, // Tab
-  onTabSelect: React.PropTypes.func, // (tab: Tab) => void
-  navigator: React.PropTypes.object, // Navigator
-};
 
 function select(store) {
   return {

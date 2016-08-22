@@ -11,7 +11,6 @@ export const REMOVED_CHATS  = 'REMOVED_CHATS';
 const InteractionManager = require('InteractionManager');
 
 const Chats = Parse.Object.extend('Chats');
-const Channels = Parse.Object.extend('Channels');
 
 function loadChatsAsync () {
 

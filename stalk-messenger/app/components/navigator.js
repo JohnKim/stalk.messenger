@@ -14,13 +14,13 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import { connect } from 'react-redux';
-import { switchTab } from 's5-action';
+import { connect }    from 'react-redux';
+import { switchTab }  from 's5-action';
 
-import TabsView from './tabs/TabsView';
-import ChatView from './tabs/chats/ChatView';
+import TabsView       from './tabs/TabsView';
+import ChatView       from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
-import SettingForm from './tabs/profile/SettingForm';
+import SettingForm    from './tabs/profile/SettingForm';
 
 class AppNavigator extends Component {
 

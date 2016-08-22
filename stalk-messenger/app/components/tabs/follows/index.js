@@ -96,7 +96,7 @@ class FollowsScreen extends Component {
 
     const rightItem = {
       title: 'search',
-      icon: require('./img/search.png'),
+      icon: require('./img/ic_search_white.png'),
       onPress: this._openSearchUserView.bind(this),
     };
 
@@ -125,13 +125,13 @@ class FollowsScreen extends Component {
           ref="listView"
           data={ this.state.listViewData.filter(filter) }
           renderRow={ (data) => this._renderRow(data) }
-          renderHiddenRow={ (/*data, secId, rowId, rowMap*/) => (
+          renderHiddenRow={ (data, secId, rowId, rowMap) => (
             <View style={styles.rowBack}>
               <Text>Left</Text>
               <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
                 <Text style={styles.backTextWhite}>Right</Text>
               </View>
-              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ (secId, rowId, rowMap) => this._deleteRow(secId, rowId, rowMap) }>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ () => this._deleteRow(secId, rowId, rowMap) }>
                 <Text style={styles.backTextWhite}>Delete</Text>
               </TouchableOpacity>
             </View>
@@ -155,34 +155,8 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		flex: 1
 	},
-	standalone: {
-		marginTop: 30,
-		marginBottom: 30,
-	},
-	standaloneRowFront: {
-		alignItems: 'center',
-		backgroundColor: '#CCC',
-		justifyContent: 'center',
-		height: 50,
-	},
-	standaloneRowBack: {
-		alignItems: 'center',
-		backgroundColor: '#8BC645',
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		padding: 15
-	},
 	backTextWhite: {
 		color: '#FFF'
-	},
-	rowFront: {
-		alignItems: 'center',
-		backgroundColor: '#CCC',
-		borderBottomColor: 'black',
-		borderBottomWidth: 1,
-		justifyContent: 'center',
-		height: 50,
 	},
 	rowBack: {
 		alignItems: 'center',
@@ -207,22 +181,6 @@ const styles = StyleSheet.create({
 	backRightBtnRight: {
 		backgroundColor: 'red',
 		right: 0
-	},
-	controls: {
-		alignItems: 'center',
-		marginBottom: 30
-	},
-	switchContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		marginBottom: 5
-	},
-	switch: {
-		alignItems: 'center',
-		borderWidth: 1,
-		borderColor: 'black',
-		paddingVertical: 10,
-		width: 100,
 	},
   searchRow: {
     backgroundColor: '#eeeeee',

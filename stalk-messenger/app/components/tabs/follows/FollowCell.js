@@ -8,7 +8,6 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  Image,
   TouchableHighlight,
   StyleSheet,
   PixelRatio,
@@ -112,10 +111,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     color: '#DA552F'
-  },
-  line:{
-    marginLeft: 12,
-    backgroundColor: '#cccccc',
-    height:1 / PixelRatio.get(),
   }
 })
