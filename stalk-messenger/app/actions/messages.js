@@ -13,12 +13,31 @@ const InteractionManager = require('InteractionManager');
 const Messages = Parse.Object.extend('Messages');
 const Channels = Parse.Object.extend('Channels');
 
+/*
+ * add latest message
+ * @params channelId
+ * @params message
+ */
+export function setLatestMessage(channelId, text) {
+  return (dispatch) => {
+
+    return dispatch({
+      type: LATEST_MESSAGE,
+      message: {
+        channelId,
+        text
+      }
+    });
+
+  };
+}
+
 /**************************** DO NOT TRIGGERED ********************************/
 
-/**
-* Load messages into this channel
-* @params chat (Chat Object)
-**/
+/*
+ * Load messages into this channel
+ * @params chat (Chat Object)
+ */
 export  function loadMessages(chat, datetime) {
 
   var isFirstLoading = datetime ? false : true;
@@ -93,17 +112,6 @@ export  function loadMessages(chat, datetime) {
 
   };
 
-}
-
-export function latestMessage(message) {
-  return (dispatch) => {
-    
-    return dispatch({
-      type: LATEST_MESSAGE,
-      data: message,
-    });
-
-  };
 }
 
 function fromParseObject(obj){

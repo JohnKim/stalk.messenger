@@ -10,4 +10,5 @@ module.exports = combineReducers({
   user:       require('./user'),
   follows:    require('./follows'),  // all follows list on follows tab
   chats:      require('./chats'),      // all chats list on chats tab
+  messages:   require('./messages'),
 });

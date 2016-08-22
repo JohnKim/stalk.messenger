@@ -46,7 +46,7 @@ export default class FollowCell extends Component {
                   <Text style={styles.nickName}>
                     {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
                   </Text>
-                <Text style={styles.statusMessage}>
+                <Text numberOfLines={1} style={styles.statusMessage}>
                   {this.props.user.statusMessage}
                 </Text>
               </View>
@@ -70,7 +70,7 @@ export default class FollowCell extends Component {
                 <Text style={styles.nickName}>
                   {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
                 </Text>
-              <Text style={styles.statusMessage}>
+              <Text numberOfLines={1} style={styles.statusMessage}>
                 {this.props.user.statusMessage}
               </Text>
             </View>

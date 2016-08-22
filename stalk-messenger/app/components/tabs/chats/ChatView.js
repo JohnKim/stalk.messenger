@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { switchTab, loadMessages, latestMessage, MESSAGE_SIZE } from 's5-action';
+import { switchTab, loadMessages, setLatestMessage, MESSAGE_SIZE } from 's5-action';
 import { S5Header, S5Alert, S5Drawer } from 's5-components';
 
 import ControlPanel from './ControlPanel';
@@ -85,6 +85,9 @@ class ChatView extends Component {
             lastLoadedAt: result.messages[ result.messages.length - 1 ].createdAt,
           });
 
+          // set latest message !
+          this.props.setLatestMessage(this.props.chat.channelId, result.messages[0].text);
+
         }
 
         this.setState({ node: result.node });
@@ -116,6 +119,10 @@ class ChatView extends Component {
           XPush.onMessage( function(message){
             console.log('------ 받음 - ', message);
             self.setState((previousState) => {
+
+              // set latest message !
+              self.props.setLatestMessage(self.props.chat.channelId, message.text);
+
               return { messages: GiftedChat.append(previousState.messages, message) };
             });
           });
@@ -196,7 +203,7 @@ class ChatView extends Component {
         {this.renderMenu()}
         <Composer {...props}/>
       </View>
-    );   
+    );
   }
 
   renderMenu(props){
@@ -345,7 +352,7 @@ function actions(dispatch) {
   return {
     switchTab: () => dispatch(switchTab('chats')),
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
-    latestMessage: (message) =>  dispatch(latestMessage(message)),
+    setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
   };
 }
 

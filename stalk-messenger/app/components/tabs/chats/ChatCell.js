@@ -19,6 +19,7 @@ export default class ChatCell extends Component {
 
   static propTypes = {
     chat: React.PropTypes.object.isRequired,
+    message: React.PropTypes.string,
     onPress: React.PropTypes.func,
   };
 
@@ -72,6 +73,7 @@ export default class ChatCell extends Component {
                 {names.join(", ")} {userCount}
               </Text>
             <Text style={styles.messages}>
+              {this.props.message}
             </Text>
           </View>
         </View>

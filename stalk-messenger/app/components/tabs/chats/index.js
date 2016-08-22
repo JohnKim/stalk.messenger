@@ -23,6 +23,7 @@ class ChatsScreen extends Component {
 
   static propTypes = {
     chats: React.PropTypes.object.isRequired,
+    messages: React.PropTypes.object.isRequired,
     user: React.PropTypes.object,
     navigator: React.PropTypes.object.isRequired,
     removeChat: React.PropTypes.func.isRequired,
@@ -74,6 +75,7 @@ class ChatsScreen extends Component {
       <ChatCell
         key={chat.id}
         chat={chat}
+        message={this.props.messages.latest[chat.channelId]}
         onPress={() => this._onRowPress(chat)}
         />
     )
@@ -190,6 +192,7 @@ function select(store) {
   return {
     user: store.user,
     chats: store.chats,
+    messages: store.messages,
   };
 }
 
