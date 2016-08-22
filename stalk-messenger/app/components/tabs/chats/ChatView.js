@@ -8,6 +8,8 @@ import {
   Text,
   Navigator,
   StyleSheet,
+  TouchableHighlight,
+  Image
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -16,7 +18,7 @@ import { S5Header, S5Alert, S5Drawer } from 's5-components';
 
 import ControlPanel from './ControlPanel';
 
-import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, Send, Composer } from 'react-native-gifted-chat';
 var XPush = require( 'react-native-xpush-client' );
 
 import { SERVER_URL, APP_ID } from '../../../../env.js';
@@ -39,10 +41,14 @@ class ChatView extends Component {
     this.onSend             = this.onSend.bind(this);
     this.renderBubble       = this.renderBubble.bind(this);
     this.renderFooter       = this.renderFooter.bind(this);
+    this.renderComposer     = this.renderComposer.bind(this);
     this.renderSend         = this.renderSend.bind(this);
     this.onLoadEarlier      = this.onLoadEarlier.bind(this);
     this.openControlPanel   = this.openControlPanel.bind(this);
     this.closeControlPanel  = this.closeControlPanel.bind(this);
+
+    this.openMenu  = this.openMenu.bind(this);
+    this.closeMenu  = this.closeMenu.bind(this);
 
     XPush.init( SERVER_URL, APP_ID, this.props.user.id, 'web' );
   }
@@ -53,6 +59,14 @@ class ChatView extends Component {
 
   openControlPanel() {
     this._drawer.open()
+  };
+
+  openMenu(){
+    this.setState({ menuOpened: true });
+  };
+
+  closeMenu(){
+    this.setState({ menuOpened: false });
   };
 
   componentDidMount() {
@@ -176,6 +190,37 @@ class ChatView extends Component {
     return null;
   }
 
+  renderComposer(props){
+    return (
+      <View style={styles.composer}>
+        {this.renderMenu()}
+        <Composer {...props}/>
+      </View>
+    );   
+  }
+
+  renderMenu(props){
+    if( this.state.menuOpened ){
+      return (
+        <TouchableHighlight onPress={this.closeMenu} underlayColor={'transparent'} >
+          <Image
+            source={require('./img/icon-clear.png')}
+            style={styles.menuIcon}
+            />
+        </TouchableHighlight>
+      );
+    }
+
+    return (
+      <TouchableHighlight onPress={this.openMenu} underlayColor={'transparent'} >
+        <Image
+          source={require('./img/icon-add.png')}
+          style={styles.menuIcon}
+        />
+      </TouchableHighlight>
+    );
+  }
+
   renderSend(props) {
     if (this.state.connected) {
       return (
@@ -192,8 +237,8 @@ class ChatView extends Component {
   render() {
 
     const rightItem = {
-      title: 'search',
-      icon: require('./img/icon.png'),
+      title: 'sidemenu',
+      icon: require('./img/icon-subject.png'),
       onPress: this.openControlPanel.bind(this),
     };
 
@@ -241,6 +286,7 @@ class ChatView extends Component {
             renderBubble={this.renderBubble}
             renderFooter={this.renderFooter}
             renderSend={this.renderSend}
+            renderComposer={this.renderComposer}
 
             textInputProps={{
               editable: this.state.connected,
@@ -270,6 +316,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#aaa',
   },
+  composer: {
+    flex:1,
+    flexDirection: 'row'
+  },
+  menu: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'red',
+  },
+  menuIcon: {
+    width: 30,
+    height: 30,
+    opacity:0.5,
+    marginTop:5,
+    marginLeft:5
+  }
 });
 
 function select(store) {
