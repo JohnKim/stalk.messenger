@@ -29,58 +29,33 @@ export default class FollowCell extends Component {
 
   render() {
 
-    if(this.props.onProfilePress) {
-
-      return (
-
-          <View style={styles.container}>
-            <S5ProfilePicture
-              name={this.props.user.nickName}
-              profileFileUrl={this.props.user.profileFileUrl}
-              onPress={() => this.props.onProfilePress()}
-              size={48}
-              style={styles.image}
-            />
-            <TouchableHighlight onPress={this.props.onPress} >
-              <View style={styles.makerDetailsContainer}>
-                  <Text style={styles.nickName}>
-                    {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
-                  </Text>
-                <Text numberOfLines={1} style={styles.statusMessage}>
-                  {this.props.user.statusMessage}
-                </Text>
-              </View>
-            </TouchableHighlight>
+    return (
+      <TouchableHighlight onPress={this.props.onPress} >
+        <View style={styles.container}>
+          <S5ProfilePicture
+            key={this.props.user.id}
+            name={this.props.user.nickName}
+            profileFileUrl={this.props.user.profileFileUrl}
+            onPress={() => this.props.onProfilePress()}
+            size={48}
+            style={{
+              margin:10
+            }}
+          />
+          <View style={styles.detailContainer}>
+            <Text style={styles.nickName}>
+              {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
+            </Text>
+            <Text numberOfLines={1} style={styles.statusMessage}>
+              {this.props.user.statusMessage}
+            </Text>
           </View>
-
-      );
-
-    } else {
-
-      return (
-        <TouchableHighlight onPress={this.props.onPress} >
-          <View style={styles.container}>
-            <S5ProfilePicture
-              name={this.props.user.nickName}
-              profileFileUrl={this.props.user.profileFileUrl}
-              size={48}
-              style={styles.image}
-            />
-            <View style={styles.makerDetailsContainer}>
-                <Text style={styles.nickName}>
-                  {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
-                </Text>
-              <Text numberOfLines={1} style={styles.statusMessage}>
-                {this.props.user.statusMessage}
-              </Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-      );
-
-    }
+        </View>
+      </TouchableHighlight>
+    );
 
   }
+
 }
 
 const styles = StyleSheet.create({
@@ -92,7 +67,7 @@ const styles = StyleSheet.create({
   image: {
     margin:10,
   },
-  makerDetailsContainer: {
+  detailContainer: {
     flex: 1,
     marginRight: 10,
   },
@@ -102,14 +77,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#000000'
   },
-  statusMessage: {
-    fontSize: 12,
-    marginBottom: 5,
-    color: 'gray'
-  },
   username: {
     fontSize: 12,
     marginBottom: 5,
     color: '#DA552F'
+  },
+  statusMessage: {
+    fontSize: 12,
+    marginBottom: 5,
+    color: 'gray'
   }
 })

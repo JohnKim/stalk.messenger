@@ -69,10 +69,10 @@ export default class ChatCell extends Component {
         <View style={styles.container}>
           {this.renderProfilePictures()}
           <View style={styles.detailContainer}>
-              <Text style={styles.nickName}>
-                {names.join(", ")} {userCount}
-              </Text>
-            <Text style={styles.messages}>
+            <Text style={styles.nickName}>
+              {names.join(", ")} {userCount}
+            </Text>
+            <Text numberOfLines={2} style={styles.messages}>
               {this.props.message}
             </Text>
           </View>
@@ -108,10 +108,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     color: 'gray'
-  },
-  line:{
-    marginLeft: 12,
-    backgroundColor: '#cccccc',
-    height:1 / PixelRatio.get(),
   }
 })
