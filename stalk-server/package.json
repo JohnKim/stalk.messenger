@@ -1,0 +1,22 @@
+{
+  "name": "stalk-session-server",
+  "version": "1.4.0",
+  "description": "Stalk Messenger Session server using the parse-server module",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.7.1",
+    "express": "^4.14.0",
+    "optimist": "^0.6.1",
+    "parse": "^1.9.1",
+    "parse-server": "^2.2.18",
+    "xpush": "https://github.com/xpush/node-xpush.git"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=4.3"
+  }
+}

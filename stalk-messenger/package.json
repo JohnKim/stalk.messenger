@@ -16,14 +16,15 @@
     "react-native-gifted-spinner": "^0.1.0",
     "react-native-image-picker": "^0.21.5",
     "react-native-linear-gradient": "^1.5.12",
+    "react-native-push-notification": "^2.0.2",
     "react-native-tab-navigator": "https://github.com/JohnKim/react-native-tab-navigator",
+    "react-native-xpush-client": "https://github.com/xpush/lib-xpush-react-native",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-persist": "^3.2.2",
     "redux-thunk": "^2.1.0",
-    "tween-functions": "^1.2.0",
-    "react-native-xpush-client": "https://github.com/xpush/lib-xpush-react-native"
+    "tween-functions": "^1.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
