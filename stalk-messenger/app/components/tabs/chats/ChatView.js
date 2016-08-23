@@ -15,13 +15,26 @@ import {
 import { connect } from 'react-redux';
 import { switchTab, loadMessages, setLatestMessage, MESSAGE_SIZE } from 's5-action';
 import { S5Header, S5Alert, S5Drawer } from 's5-components';
+import { uploadImage } from 's5-action';
 
 import ControlPanel from './ControlPanel';
 
 import { GiftedChat, Bubble, Send, Composer } from 'react-native-gifted-chat';
-var XPush = require( 'react-native-xpush-client' );
 
 import { SERVER_URL, APP_ID } from '../../../../env.js';
+
+var XPush = require( 'react-native-xpush-client' );
+var ImagePicker = require('react-native-image-picker');
+
+
+var imagePickerOptions = {
+  title: 'Select Image',
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    path: 'images'
+  }
+};
 
 class ChatView extends Component {
 
@@ -44,34 +57,17 @@ class ChatView extends Component {
     this.renderComposer     = this.renderComposer.bind(this);
     this.renderSend         = this.renderSend.bind(this);
     this.onLoadEarlier      = this.onLoadEarlier.bind(this);
+
     this.openControlPanel   = this.openControlPanel.bind(this);
     this.closeControlPanel  = this.closeControlPanel.bind(this);
-
     this.openMenu  = this.openMenu.bind(this);
     this.closeMenu  = this.closeMenu.bind(this);
+    this.selectImage = this.selectImage.bind(this);
 
     XPush.init( SERVER_URL, APP_ID, this.props.user.id, 'web' );
   }
 
-  closeControlPanel() {
-    this._drawer.close()
-  };
-
-  openControlPanel() {
-    this._drawer.open()
-  };
-
-  openMenu(){
-    this.setState({ menuOpened: true });
-  };
-
-  closeMenu(){
-    this.setState({ menuOpened: false });
-  };
-
   componentDidMount() {
-
-    console.log( this.props.chat );
 
     // Load Messages from session-server
     this.props.loadMessages(this.props.chat).then(
@@ -91,20 +87,6 @@ class ChatView extends Component {
         }
 
         this.setState({ node: result.node });
-
-        /** @ TODO : HAVE TO BE SEPERATED !!!! **/
-
-        var socketConfig = {
-          nsp: '/channel',
-          forceWebsockets: true,
-          connectParams: {
-            A: result.node.app,
-            S: result.node.name,
-            C: this.props.chat.channelId,
-            U: this.props.user.id,
-            // D: Device ID !! ???
-          }
-        };
 
         var self = this;
 
@@ -140,6 +122,48 @@ class ChatView extends Component {
     if(this.socket) {
       this.socket.disconnect();
     }
+  }
+
+  openControlPanel() {
+    this._drawer.open()
+  };
+
+  closeControlPanel() {
+    this._drawer.close()
+  };
+
+  openMenu(){
+    this.setState({ menuOpened: true });
+    this.selectImage();
+  };
+
+  closeMenu(){
+    this.setState({ menuOpened: false });
+  };
+
+  selectImage(){
+    var self = this;
+    ImagePicker.showImagePicker(imagePickerOptions, (response) => {
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+        this.closeMenu();
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        var data = {
+          C : this.props.chat.channelId,
+          U : this.props.user.id,
+          imgBase64 : response.data
+        };
+
+        uploadImage(data, function(err, result){
+          self.closeMenu();
+        });
+      }
+    });
   }
 
   onLoadEarlier() {

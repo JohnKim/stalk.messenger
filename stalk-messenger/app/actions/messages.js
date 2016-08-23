@@ -111,7 +111,37 @@ export  function loadMessages(chat, datetime) {
     };
 
   };
+}
 
+export function uploadImage(data, callback) {
+
+  let imgBase64 = 'data:image/jpeg;base64,' + data.imgBase64;
+
+  var fileId = data.channel+"_"+Date.now();
+  var parseFile = new Parse.File(fileId, { base64: imgBase64 });
+
+  var channel = new Channels();
+  channel.id = data.C;
+
+  var user = new Parse.User();
+  user.id = data.U;
+
+  var message = new Messages();
+  message.set("channel",  channel       );
+  message.set("user",     user          );
+  message.set("messageFile",  parseFile );
+
+  message.save().then(
+    (result) => {
+      // TODO callback resultUrl;
+      console.warn(result);
+      //callback( null, message );
+    },
+    (error) => {
+      console.warn(error);
+      //callback( err, null );
+    }
+  );
 }
 
 function fromParseObject(obj){
