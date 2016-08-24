@@ -160,6 +160,18 @@ class ChatView extends Component {
         };
 
         uploadImage(data, function(err, result){
+
+          if( self.state.connected ) {
+            var message = {
+              image: result,
+              user: { _id: self.props.user.id },
+              createdAt: new Date(),
+              _id: 'temp-id-' + Math.round(Math.random() * 1000000)
+            };
+
+            XPush.send( message );
+          }
+
           self.closeMenu();
         });
       }

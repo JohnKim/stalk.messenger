@@ -12,6 +12,7 @@ const InteractionManager = require('InteractionManager');
 
 const Messages = Parse.Object.extend('Messages');
 const Channels = Parse.Object.extend('Channels');
+const UploadFiles = Parse.Object.extend('UploadFiles');
 
 /*
  * add latest message
@@ -117,7 +118,7 @@ export function uploadImage(data, callback) {
 
   let imgBase64 = 'data:image/jpeg;base64,' + data.imgBase64;
 
-  var fileId = data.channel+"_"+Date.now();
+  var fileId = data.C+"_"+Date.now();
   var parseFile = new Parse.File(fileId, { base64: imgBase64 });
 
   var channel = new Channels();
@@ -126,16 +127,14 @@ export function uploadImage(data, callback) {
   var user = new Parse.User();
   user.id = data.U;
 
-  var message = new Messages();
-  message.set("channel",  channel       );
-  message.set("user",     user          );
-  message.set("messageFile",  parseFile );
+  var uploadFiles = new UploadFiles();
+  uploadFiles.set("channel",  channel );
+  uploadFiles.set("user",     user    );
+  uploadFiles.set("file",  parseFile  );
 
-  message.save().then(
+  uploadFiles.save().then(
     (result) => {
-      // TODO callback resultUrl;
-      console.warn(result);
-      //callback( null, message );
+      callback( null, result.get('file').url() );
     },
     (error) => {
       console.warn(error);
@@ -152,6 +151,7 @@ function fromParseObject(obj){
     createdAt: obj.createdAt,
     user: {
       _id: obj.get("user").id
-    }
+    },
+    image: obj.get("image")
   };
 }

@@ -60,7 +60,7 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 - [x] Parse.Users 목록 조회 기능 구현 (Users relation mapping schema)
 - [x] Remove Follow (친구 삭제) 구현
 - [x] Add Follow (친구 추가) 구현
-- [ ] Favorite Follow 구현
+- [] Favorite Follow 구현
 
 ##### Chats Tab
 - [x] GiftedListView Sample 코드 구현
@@ -69,7 +69,10 @@ $ ./s5server-channel/bin/channel-server --config ./s5server-channel/config.local
 - [x] Leave Chats(채팅방 삭제) 기능 구현
 - [ ] 그룹 Chat 에 대한 다수 Profile 이미지 노출 컨포넌트 구현
 - [ ] Chat View 화면 구현
+- [x] 이미지 형태의 메시지 전송 기능 구현 
 - [x] 이전 메시지 로딩 기능 구현
+- [ ] Chat에 사용자 초대 기능 구현
+- [ ] 멀티유저 채팅방 생성 기능 구현
 - [ ] Read(읽음) 표시 기능 구현
 
 ##### Profile Tab

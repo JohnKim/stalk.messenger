@@ -46,6 +46,7 @@ var ChannelServer = exports.ChannelServer = function (options, cb) {
     message.set("channel",  channel       );
     message.set("user",     user          );
     message.set("message",  data.DT.text  );
+    message.set("image",  data.DT.image  );
     message.save().then(
       (result) => {
 
