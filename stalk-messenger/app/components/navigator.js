@@ -79,27 +79,6 @@ class AppNavigator extends Component {
     return false;
   }
 
-  render() {
-    return (
-      <Navigator
-        ref="navigator"
-        style={styles.container}
-        configureScene={(route) => {
-          if (Platform.OS === 'android') {
-            return Navigator.SceneConfigs.FloatFromBottomAndroid;
-          }
-          // TODO: Proper scene support
-          if (route.shareSettings || route.follow) {
-            return Navigator.SceneConfigs.FloatFromRight;
-          } else {
-            return Navigator.SceneConfigs.FloatFromBottom;
-          }
-        }}
-        initialRoute={{}}
-        renderScene={this.renderScene}
-      />
-    );
-  }
 
   renderScene = (route, navigator) => {
 
@@ -111,6 +90,31 @@ class AppNavigator extends Component {
       return <SettingForm navigator={navigator} field={route.field} title={route.title} validLength={route.validLength} />;
     }
     return <TabsView navigator={navigator} />;
+  }
+
+
+  render() {
+    return (
+      <Navigator
+        ref="navigator"
+        style={styles.container}
+        configureScene={(route) => {
+
+          if (Platform.OS === 'android') {
+            return Navigator.SceneConfigs.FloatFromBottomAndroid;
+          }
+
+          if (route.settingForm) {
+            return Navigator.SceneConfigs.FloatFromBottom;
+          } else {
+            return Navigator.SceneConfigs.FloatFromRight;
+          }
+          
+        }}
+        initialRoute={{}}
+        renderScene={this.renderScene}
+      />
+    );
   }
 
 }
