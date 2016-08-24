@@ -15,7 +15,7 @@ import {
 import { loadConfig, updateInstallation } from 's5-action';
 import { VERSION } from '../../env.js';
 
-import LoginScreen from './login';
+//import LoginScreen from './login';
 import AppNavigator from './navigator';
 import { connect } from 'react-redux';
 
@@ -48,9 +48,9 @@ class App extends Component {
 
   render() {
 
-    if (!this.props.isLoggedIn) {
-      return <LoginScreen />;
-    }
+    //if (!this.props.isLoggedIn) {
+    //  return <LoginScreen />;
+    //}
     return (
       <View style={styles.container}>
         <StatusBar

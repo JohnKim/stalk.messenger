@@ -21,6 +21,7 @@ import TabsView       from './tabs/TabsView';
 import ChatView       from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
 import SettingForm    from './tabs/profile/SettingForm';
+import LoginScreen from './login';
 
 class AppNavigator extends Component {
 
@@ -35,6 +36,10 @@ class AppNavigator extends Component {
     addBackButtonListener: React.PropTypes.func,
     removeBackButtonListener: React.PropTypes.func,
   };
+
+	constructor(props) {
+		super(props);
+	}
 
   getChildContext() {
     return {
@@ -80,7 +85,16 @@ class AppNavigator extends Component {
   }
 
 
-  renderScene = (route, navigator) => {
+  renderScene (route, navigator) {
+
+    if (!this.props.isLoggedIn) {
+
+      if(route.signup) {
+        console.log('signup!!!');
+      }
+
+      return <LoginScreen navigator={navigator} />;
+    }
 
     if(route.searchUserView) { // search user view
       return <SearchUserView navigator={navigator} />;
@@ -89,6 +103,7 @@ class AppNavigator extends Component {
     } else if(route.settingForm){
       return <SettingForm navigator={navigator} field={route.field} title={route.title} validLength={route.validLength} />;
     }
+
     return <TabsView navigator={navigator} />;
   }
 
@@ -109,10 +124,10 @@ class AppNavigator extends Component {
           } else {
             return Navigator.SceneConfigs.FloatFromRight;
           }
-          
+
         }}
         initialRoute={{}}
-        renderScene={this.renderScene}
+        renderScene={this.renderScene.bind(this)}
       />
     );
   }
@@ -128,6 +143,7 @@ var styles = StyleSheet.create({
 
 function select(store) {
   return {
+    isLoggedIn: store.user.isLoggedIn,
     tab: store.navigation.tab,
   };
 }

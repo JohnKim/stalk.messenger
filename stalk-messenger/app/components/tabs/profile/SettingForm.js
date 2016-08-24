@@ -44,6 +44,7 @@ class SettingForm extends Component {
     this.saveSetting = this.saveSetting.bind(this);
     this.renderIcon = this.renderIcon.bind(this);
     this.onPressRemoveButton = this.onPressRemoveButton.bind(this);
+    this.renderValidation = this.renderValidation.bind(this);
   }
 
   onPressRemoveButton(){
@@ -99,19 +100,14 @@ class SettingForm extends Component {
           }}
         />
 
-        <View style={styles.wrap}>
-          <Text style={styles.label}>
-            {this.state.placeholder}
-          </Text>
-          {this.renderValidation()}
-        </View>
-
         <S5TextInput
+          label={this.state.placeholder}
           style={styles.textinput}
           placeholder={this.state.placeholder}
           value={this.state.value}
           onChangeText={(text) => this.onChangeText(text) }
           renderContainerIcon={this.renderIcon}
+          renderRightLabel={this.renderValidation}
         />
       </View>
     )
@@ -123,23 +119,14 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  wrap: {
-    marginTop: 20,
-    marginHorizontal: 10,
-    flexDirection: 'row'
-  },
   helper:{
     position: 'absolute',
     right:0,
-    fontSize:16,
+    fontSize:14,
   },
   textinput: {
     margin: 10,
   },
-  label:{
-    fontSize: 16,
-    color:'#3b6bb2'
-  }
 });
 
 function select(store) {
