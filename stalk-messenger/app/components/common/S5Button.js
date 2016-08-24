@@ -82,7 +82,7 @@ var styles = StyleSheet.create({
     borderRadius: HEIGHT / 2,
   },
   primaryButton: {
-    borderRadius: HEIGHT / 2,
+    //borderRadius: HEIGHT / 2,
     backgroundColor: 'transparent',
   },
   icon: {

@@ -17,11 +17,13 @@ import {
 import { connect }    from 'react-redux';
 import { switchTab }  from 's5-action';
 
+import LoginScreen    from './login';
+import SignupView     from './login/SignupView';
+
 import TabsView       from './tabs/TabsView';
 import ChatView       from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
 import SettingForm    from './tabs/profile/SettingForm';
-import LoginScreen from './login';
 
 class AppNavigator extends Component {
 
@@ -89,8 +91,8 @@ class AppNavigator extends Component {
 
     if (!this.props.isLoggedIn) {
 
-      if(route.signup) {
-        console.log('signup!!!');
+      if(route.signupView) {
+        return <SignupView navigator={navigator} />;
       }
 
       return <LoginScreen navigator={navigator} />;

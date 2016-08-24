@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   TextInput,
   Text
@@ -24,6 +23,9 @@ export default class S5TextInput extends Component {
     onChangeText: React.PropTypes.func,
     renderContainerIcon: React.PropTypes.func,
     renderRightLabel: React.PropTypes.func,
+    onFocus: React.PropTypes.func,
+    onBlur: React.PropTypes.func,
+    renderLabel: React.PropTypes.func,
     style: React.PropTypes.any,
   };
 
@@ -75,7 +77,8 @@ export default class S5TextInput extends Component {
           flexDirection: 'row',
         }}>
           <Text style={{
-            fontSize: 15,
+            fontSize: 12,
+            letterSpacing: 1,
             color: this.state.borderBottomColor,
           }}>
             {this.props.label}
@@ -118,8 +121,6 @@ export default class S5TextInput extends Component {
             secureTextEntry={this.props.secureTextEntry}
             onFocus={() => {this._onFocus()}}
             onBlur={() => {this._onBlur()}}
-            borderColor={this.props.borderColor}
-            focusBorderColor={this.props.focusColor}
             value={this.props.value}
             />
             {this._renderContainerIcon()}
