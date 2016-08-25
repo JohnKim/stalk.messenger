@@ -18,6 +18,7 @@ import ChatCell from './ChatCell';
 import { loadChats, removeChat } from 's5-action';
 import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
+import ActionButton from 'react-native-action-button';
 
 class ChatsScreen extends Component {
 
@@ -58,7 +59,7 @@ class ChatsScreen extends Component {
     });
   }
 
-	_deleteRow(secId, rowId, rowMap) {
+  _deleteRow(secId, rowId, rowMap) {
 
     console.log(secId, rowId, rowMap);
 
@@ -68,7 +69,11 @@ class ChatsScreen extends Component {
     });
 
     this.props.removeChat(rowId);
-	}
+  }
+
+  _openAddUserView() {
+  	// TODO Impl this
+  }
 
   _renderRow(chat) {
     return (
@@ -107,6 +112,11 @@ class ChatsScreen extends Component {
           enableEmptySections={true}
           rightOpenValue={-150}
           />
+
+        <ActionButton
+          buttonColor="rgba(231,76,60,1)"
+          onPress={this._openAddUserView}
+        />
       </View>
 	);
   }

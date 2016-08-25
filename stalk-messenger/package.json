@@ -19,6 +19,7 @@
     "react-native-push-notification": "^2.0.2",
     "react-native-tab-navigator": "https://github.com/JohnKim/react-native-tab-navigator",
     "react-native-xpush-client": "https://github.com/xpush/lib-xpush-react-native",
+    "react-native-action-button": "^1.1.5",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
