@@ -15,11 +15,10 @@ import {
 import { loadConfig, updateInstallation } from 's5-action';
 import { VERSION } from '../../env.js';
 
-//import LoginScreen from './login';
 import AppNavigator from './navigator';
 import { connect } from 'react-redux';
 
-//import PushController from './PushController';
+import PushController from './PushController';
 
 class App extends Component {
 
@@ -50,20 +49,16 @@ class App extends Component {
 
   render() {
 
-    //if (!this.props.isLoggedIn) {
-    //  return <LoginScreen />;
-    //}
     return (
       <View style={styles.container}>
         <StatusBar
           translucent={true}
           backgroundColor="rgba(0, 0, 0, 0.2)"
           barStyle="light-content"
-         />
+          />
+          <AppNavigator />
 
-       <AppNavigator />
-
-      {/*<PushController />*/}
+          { this.props.isLoggedIn ? <PushController /> : null }
 
       </View>
     );
