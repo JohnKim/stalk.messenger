@@ -112,10 +112,10 @@ export default class S5TextInput extends Component {
         }}>
           <TextInput
             ref={(ref) => this.s5textinput = ref}
-            style={{
+            style={[{
               height: 43,
               flex: 1,
-            }}
+            }, this.props.inputStyle]}
             onChangeText={this.props.onChangeText}
             placeholder={this.props.placeholder}
             secureTextEntry={this.props.secureTextEntry}

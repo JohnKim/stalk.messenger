@@ -10,12 +10,11 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  TextInput,
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { searchUsersByPage, createFollow } from 's5-action';
-import { S5Header, S5EmptyRow } from 's5-components';
+import { S5Header, S5EmptyRow, S5TextInput, S5Button } from 's5-components';
 
 import GiftedListView from 'react-native-gifted-listview';
 import FollowCell from './FollowCell';
@@ -105,34 +104,43 @@ class SearchUserView extends Component {
     )
   }
 
+  _paginationWaitingView(paginateCallback) {
+    return (
+      <S5Button
+        type="secondary"
+        caption="LOAD MORE"
+        onPress={paginateCallback}
+      />
+    );
+  }
+
   render() {
 
     return (
       <View style={styles.container}>
 
         <S5Header
-          title="Search Users"
-          foreground="dark"
+          title="Search User"
+          style={{backgroundColor: '#224488'}}
           leftItem={{
-            icon: require('../../common/img/back.png'),
+            icon: require('../../common/img/back_white.png'),
             title: 'Back',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
           }}
         />
 
-        <View style={styles.searchRow}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            onChangeText={ this._onChangeFilterText.bind(this) }
-            placeholder="Search..."
-            style={[styles.searchTextInput]}
-            testID="explorer_search"
-            value={this.state.filter}
-          />
-        </View>
+        <S5TextInput
+          placeholder={' Search...'}
+          value={this.state.filter}
+          autoCapitalize="none"
+          clearButtonMode="always"
+          onChangeText={ this._onChangeFilterText.bind(this) }
+          inputStyle={{
+            paddingLeft: 10
+          }}
+          testID="explorer_search"
+        />
 
         <GiftedListView
           ref="listView"
@@ -145,6 +153,8 @@ class SearchUserView extends Component {
           enableEmptySections={true}
           emptyView={ this._renderEmptyRow.bind(this) }
           refreshableTintColor="blue"
+          paginationWaitingView={ this._paginationWaitingView.bind(this) }
+          paginationAllLoadedView={ () => null }
         />
 
       </View>
@@ -157,18 +167,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  searchRow: {
-    backgroundColor: '#eeeeee',
-    padding: 10,
-  },
-  searchTextInput: {
-    backgroundColor: 'white',
-    borderColor: '#cccccc',
-    borderRadius: 3,
-    borderWidth: 1,
-    paddingLeft: 8,
-    height: 35,
   },
 });
 

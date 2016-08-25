@@ -23,6 +23,7 @@ import SignupView     from './login/SignupView';
 import TabsView       from './tabs/TabsView';
 import ChatView       from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
+import UserView       from './tabs/follows/UserView';
 import SettingForm    from './tabs/profile/SettingForm';
 
 class AppNavigator extends Component {
@@ -32,6 +33,7 @@ class AppNavigator extends Component {
   static propTypes = {
     tab: React.PropTypes.string.isRequired,
     switchTab: React.PropTypes.func.isRequired,
+    isLoggedIn: React.PropTypes.bool,
   };
 
   static childContextTypes = {
@@ -90,17 +92,17 @@ class AppNavigator extends Component {
   renderScene (route, navigator) {
 
     if (!this.props.isLoggedIn) {
-
       if(route.signupView) {
         return <SignupView navigator={navigator} />;
       }
-
       return <LoginScreen navigator={navigator} />;
     }
 
     if(route.searchUserView) { // search user view
       return <SearchUserView navigator={navigator} />;
-    } else if(route.chatView) { // chatting view
+    } if(route.userView) { // user profile view
+      return <UserView navigator={navigator} user={route.user}/>;
+    }else if(route.chatView) { // chatting view
       return <ChatView navigator={navigator} chat={route.chat} />;
     } else if(route.settingForm){
       return <SettingForm navigator={navigator} field={route.field} title={route.title} validLength={route.validLength} />;
@@ -123,6 +125,8 @@ class AppNavigator extends Component {
 
           if (route.settingForm) {
             return Navigator.SceneConfigs.FloatFromBottom;
+          } if (route.userView) {
+            return Navigator.SceneConfigs.FloatFromLeft;
           } else {
             return Navigator.SceneConfigs.FloatFromRight;
           }

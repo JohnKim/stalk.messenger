@@ -82,12 +82,17 @@ class SignupView extends Component {
     return (
       <View style={styles.container}>
 
-        <TouchableHighlight onPress={() => this.props.navigator.pop()}
-          style={{marginRight:10}} underlayColor="transparent">
+        <TouchableHighlight
+          onPress={() => this.props.navigator.pop()}
+          style={{
+            marginRight:10,
+            marginTop:10
+          }}
+          underlayColor="transparent">
           <Image source={require('../common/img/ic_close.png')} />
         </TouchableHighlight>
 
-        <View style={styles.container}>
+        <View style={styles.form}>
           <Text
             style={styles.message}>
             {this.state.message}
@@ -96,7 +101,7 @@ class SignupView extends Component {
             ref="username"
             label="USERNAME"
             style={styles.textinput}
-            placeholder={''} //{"Username"}
+            placeholder={''}
             value={this.state.username}
             autoCapitalize="none"
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
@@ -105,7 +110,7 @@ class SignupView extends Component {
             ref="password"
             label="PASSWORD"
             style={styles.textinput}
-            placeholder={''}//{"Password"}
+            placeholder={''}
             value={this.state.password}
             secureTextEntry={true}
             onChangeText={(text) => this.setState({password: text})}
@@ -150,7 +155,13 @@ class SignupView extends Component {
 }
 
 var styles = StyleSheet.create({
+
   container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+  },
+  form: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end',

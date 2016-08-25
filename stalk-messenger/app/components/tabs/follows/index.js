@@ -11,13 +11,12 @@ import {
   StyleSheet,
   Text,
 	TouchableOpacity,
-  TextInput,
 } from 'react-native';
 
 import FollowCell from './FollowCell';
 
 import { loadFollows, removeFollow, createChat } from 's5-action';
-import { S5Header, S5SwipeListView } from 's5-components';
+import { S5Header, S5SwipeListView, S5TextInput } from 's5-components';
 import { connect } from 'react-redux';
 
 class FollowsScreen extends Component {
@@ -70,7 +69,10 @@ class FollowsScreen extends Component {
   }
 
   _onProfileImagePress(user) {
-    console.log('_onProfileImagePress', user);
+    this.props.navigator.push({
+      userView: 1,
+      user,
+    });
   }
 
   _openSearchUserView() {
@@ -109,17 +111,15 @@ class FollowsScreen extends Component {
           rightItem={{...rightItem, layout: 'icon'}}
         />
 
-        <View style={styles.searchRow}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            placeholder="Search..."
-            style={[styles.searchTextInput]}
-            value={this.state.filter}
-            onChangeText={text => this.setState({filter: text})}
-          />
-        </View>
+        <S5TextInput
+          placeholder={' Search...'}
+          value={this.state.filter}
+          autoCapitalize="none"
+          onChangeText={text => this.setState({filter: text})}
+          inputStyle={{
+            paddingLeft: 10
+          }}
+        />
 
         <S5SwipeListView
           ref="listView"
@@ -182,18 +182,6 @@ const styles = StyleSheet.create({
 		backgroundColor: 'red',
 		right: 0
 	},
-  searchRow: {
-    backgroundColor: '#eeeeee',
-    padding: 10,
-  },
-  searchTextInput: {
-    backgroundColor: 'white',
-    borderColor: '#cccccc',
-    borderRadius: 3,
-    borderWidth: 1,
-    paddingLeft: 8,
-    height: 35,
-  },
 });
 
 function select(store) {

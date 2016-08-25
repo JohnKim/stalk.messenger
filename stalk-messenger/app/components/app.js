@@ -19,6 +19,8 @@ import { VERSION } from '../../env.js';
 import AppNavigator from './navigator';
 import { connect } from 'react-redux';
 
+//import PushController from './PushController';
+
 class App extends Component {
 
   static propTypes = {
@@ -58,7 +60,11 @@ class App extends Component {
           backgroundColor="rgba(0, 0, 0, 0.2)"
           barStyle="light-content"
          />
-        <AppNavigator />
+
+       <AppNavigator />
+
+      {/*<PushController />*/}
+
       </View>
     );
   }
