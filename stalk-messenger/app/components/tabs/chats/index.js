@@ -36,6 +36,7 @@ class ChatsScreen extends Component {
 
 	constructor(props) {
 		super(props);
+    this._openAddUserView = this._openAddUserView.bind(this);
 	}
 
   componentDidMount(){
@@ -72,7 +73,7 @@ class ChatsScreen extends Component {
   }
 
   _openAddUserView() {
-  	// TODO Impl this
+    this.props.navigator.push({selectUserView: 1});
   }
 
   _renderRow(chat) {
@@ -82,12 +83,12 @@ class ChatsScreen extends Component {
         chat={chat}
         message={this.props.messages.latest[chat.channelId]}
         onPress={() => this._onRowPress(chat)}
-        />
+      />
     )
   }
 
   render() {
-	return (
+    return (
       <View style={styles.container}>
 
         <S5Header
@@ -118,7 +119,7 @@ class ChatsScreen extends Component {
           onPress={this._openAddUserView}
         />
       </View>
-	);
+	 );
   }
 }
 

@@ -23,6 +23,7 @@ import SignupView     from './login/SignupView';
 import TabsView       from './tabs/TabsView';
 import ChatView       from './tabs/chats/ChatView';
 import SearchUserView from './tabs/follows/SearchUserView';
+import SelectUserView from './tabs/follows/SelectUserView';
 import UserView       from './tabs/follows/UserView';
 import SettingForm    from './tabs/profile/SettingForm';
 
@@ -106,6 +107,8 @@ class AppNavigator extends Component {
       return <ChatView navigator={navigator} chat={route.chat} />;
     } else if(route.settingForm){
       return <SettingForm navigator={navigator} field={route.field} title={route.title} validLength={route.validLength} />;
+    } else if(route.selectUserView){
+      return <SelectUserView navigator={navigator} />;      
     }
 
     return <TabsView navigator={navigator} />;
@@ -123,7 +126,7 @@ class AppNavigator extends Component {
             return Navigator.SceneConfigs.FloatFromBottomAndroid;
           }
 
-          if (route.settingForm) {
+          if (route.settingForm || route.selectUserView || route.searchUserView ) {
             return Navigator.SceneConfigs.FloatFromBottom;
           } if (route.userView) {
             return Navigator.SceneConfigs.FloatFromLeft;
