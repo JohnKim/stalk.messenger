@@ -11,32 +11,88 @@ import {
   TouchableHighlight,
   StyleSheet,
   PixelRatio,
+  Image
 } from 'react-native';
 
 import { S5ProfilePicture } from 's5-components';
 
 export default class FollowCell extends Component {
+  state = {
+    checked : false
+  };
 
   static propTypes = {
     user: React.PropTypes.object.isRequired,
     onProfilePress: React.PropTypes.func,
     onPress: React.PropTypes.func,
+    selectable: React.PropTypes.bool, 
   };
 
   constructor(props) {
     super(props);
+
+    this.renderCheckbox = this.renderCheckbox.bind(this);
+    this._onPress = this._onPress.bind(this);
+    this._onProfilePress = this._onProfilePress.bind(this);
+  }
+
+  renderCheckbox() {
+    if( this.props.selectable ){
+      if( this.state.checked ){
+        return (
+          <View style={styles.checked}>
+            <Image
+              source={require('./img/ic_done.png')}
+              style={{
+                width: 30,
+                height: 30
+              }} />
+          </View>
+        )
+      } else {
+        return (
+          <View style={styles.unchecked}>
+          </View>
+        )      
+      }
+    }    
+    return null;
+  }
+
+  _onPress(){
+    if( this.props.onPress ){
+      if( this.props.selectable ){
+        this.props.onPress(!this.state.checked);
+        if( this.state.checked ){
+          this.setState( {checked:false} );
+        } else {
+          this.setState( {checked:true} );
+        }
+      } else {
+        this.props.onPress(false);
+      }
+    }
+  }
+
+  _onProfilePress(){
+    if( this.props._onProfilePress ){
+      this.props.onProfilePress();
+    } else {
+      this._onPress();
+    }
   }
 
   render() {
 
     return (
-      <TouchableHighlight onPress={this.props.onPress} >
+      <TouchableHighlight onPress={this._onPress} >
         <View style={styles.container}>
+          {this.renderCheckbox()}
           <S5ProfilePicture
             key={this.props.user.id}
             name={this.props.user.nickName}
             profileFileUrl={this.props.user.profileFileUrl}
-            onPress={() => this.props.onProfilePress()}
+            onPress={this._onProfilePress}
             size={48}
             style={{
               margin:10
@@ -86,5 +142,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     color: 'gray'
+  },
+  unchecked: {
+    marginLeft: 10,
+    backgroundColor:'white',
+    width:30,
+    height:30,
+    borderRadius: 15,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#7F91A7'
+  },
+  checked: {
+    marginLeft: 10,
+    backgroundColor:'#224488',
+    width:30,
+    height:30,
+    borderRadius: 15,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })
