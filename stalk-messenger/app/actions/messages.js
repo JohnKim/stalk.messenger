@@ -33,8 +33,6 @@ export function setLatestMessage(channelId, text) {
   };
 }
 
-/**************************** DO NOT TRIGGERED ********************************/
-
 /*
  * Load messages into this channel
  * @params chat (Chat Object)
