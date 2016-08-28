@@ -30,7 +30,7 @@ function loadChatsAsync () {
       );
   });
 
-};
+}
 
 function loadChatByIdAsync (id) {
 
@@ -49,10 +49,24 @@ function loadChatByIdAsync (id) {
       });
   });
 
-};
+}
 
 
-function createChatAsync (id) {
+function createChatAsync (ids) {
+
+  return new Promise( (resolve, reject) => {
+
+    Parse.Cloud.run('chats-create', { ids }).then(
+      (result) => {
+        resolve(result);
+      },
+      (err) => { console.error(error); reject(err); }
+    );
+  });
+
+}
+
+function addUserToChat (channelId, ids) {
 
   var param = {};
   if (typeof id == 'string' || id instanceof String) {
@@ -64,8 +78,7 @@ function createChatAsync (id) {
   }
 
   return new Promise( (resolve, reject) => {
-
-    Parse.Cloud.run('chats-create', param).then(
+    Parse.Cloud.run('chats-add', { channelId, ids }).then(
       (result) => {
         resolve(result);
       },
@@ -73,7 +86,8 @@ function createChatAsync (id) {
     );
   });
 
-};
+}
+
 
 /**
  * Load list of all chatting channels once logined
@@ -102,11 +116,11 @@ export function loadChats() {
  * create chatting channel
  * @params id : user.id of target user
  **/
-export function createChat(id) {
+export function createChat(ids) {
 
   return async (dispatch, getState) => {
 
-    var result = await createChatAsync(id);
+    var result = await createChatAsync(ids);
 
     var chat = null;
     getState().chats.list.forEach( function(obj) {
@@ -171,5 +185,18 @@ export function removeChat(row) {
       }
     });
   };
+
+}
+
+// TODO 개발 중 ( 최초 메시지를 날리면 이걸 호출해서 Chats 에 데이터를 생성해야 함 ! ! )
+export function addUsers(channelId, ids) {
+
+ return async (dispatch, getState) => {
+
+   var result = await addUserToChat(channelId, ids);
+
+   return Promise.resolve(result);
+   
+ };
 
 }

@@ -21,7 +21,6 @@ Parse.Cloud.define('chats', function(request, response) {
     );
 });
 
-
 Parse.Cloud.define('chats-create', function(request, response) {
   Parse.Cloud.useMasterKey();
 
@@ -56,6 +55,36 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
   var query = new Parse.Query(Channels);
   query.containsAll("users", userArray);
+  var ids = request.params.ids;
+
+  if (Array.isArray(ids) && ids.length == 0) {
+    return response.error({message: '[ids] must to be existed.'});
+  }
+
+  var users = [currentUser];
+
+  if (Array.isArray(ids)) {
+    ids.forEach(function(userId) {
+
+      if(userId == currentUser.id) {
+        // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+        response.error( {code: 142, message: "input param ("+userId+") is same with current user"} );
+        return;
+      }
+
+      var user = new Parse.User();
+      user.id = userId;
+      users.push(user);
+
+    });
+  } else {
+    var user = new Parse.User();
+    user.id = userId;
+    users.push(user);
+  }
+
+  var query = new Parse.Query(Channels);
+  query.containsAll("users", users);
   query.first().then(
 
     (channel) => {
@@ -65,6 +94,10 @@ Parse.Cloud.define('chats-create', function(request, response) {
         for( var key in userArray ){
           channels.addUnique("users", userArray[key]);
         }
+
+        users.forEach(function(user) {
+          channels.addUnique("users", user);
+        });
         return channels.save();
       }else{
         return Parse.Promise.as(channel);
@@ -112,6 +145,61 @@ Parse.Cloud.define('chats-create', function(request, response) {
     }
 
   );
+
+});
+
+Parse.Cloud.define('chats-add', function(request, response) {
+
+  var ids = request.params;
+  var channelId = request.params;
+
+  var users = [currentUser];
+
+  if (Array.isArray(ids)) {
+    ids.forEach(function(userId) {
+
+      if(userId == currentUser.id) {
+        // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
+        response.error( {code: 142, message: "input param ("+userId+") is same with current user"} );
+        return;
+      }
+
+      var user = new Parse.User();
+      user.id = userId;
+      users.push(user);
+
+    });
+  } else {
+    var user = new Parse.User();
+    user.id = ids;
+    users.push(user);
+  }
+
+  var channel = new Channels();
+  channel.id = channelId;
+
+  var fnCreateChat = function ( channel, user ) {
+    return new Promise((resolve, reject) => {
+      var chats = new Chats();
+      chats.set("user", user);
+      chats.set("channel", channel);
+      chats.save().then(
+        (value) => { resolve(value); },
+        (error) => { reject(error); }
+      );
+    });
+  };
+
+  var fnArray = [];
+  users.forEach(function(user) {
+    fnArray.push(fnCreateChat(channel, user));
+  });
+
+  Promise.all(fnArray).then(value => {
+    response.success(value);
+  }, reason => {
+    response.error(error);
+  });
 
 });
 
