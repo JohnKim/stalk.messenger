@@ -17,9 +17,11 @@ import {
 
 import FollowCell from './FollowCell';
 
+import { loadFollows, createChat } from 's5-action';
 import { S5Header, S5SwipeListView } from 's5-components';
-import { loadFollows } from 's5-action';
 import { connect } from 'react-redux';
+
+var checkedUsers = [];
 
 class SelectUserView extends Component {
   state = {
@@ -33,11 +35,32 @@ class SelectUserView extends Component {
 
   constructor(props) {
     super(props);
+
+    this._createChat = this._createChat.bind(this);
   }
 
-  _onRowPress(data, checked ){
-    console.log( checked );
-    console.log( data );
+  _onRowPress(user, checked ){
+    if( checked ){
+      checkedUsers.push( user.id );
+    } else {
+      if( checkedUsers.length > 0 ){
+        var inx = checkedUsers.indexOf( user.id );
+        if( inx >= 0 ){
+          checkedUsers.splice( inx, 1 );
+        }
+      }
+    }
+  }
+
+  _createChat(){
+    if( checkedUsers.length > 0 ){
+      this.props.createChat(checkedUsers).then((chat) => {
+          this.props.navigator.push({
+            chatView: true,
+            chat,
+          });
+      });
+    }
   }
 
   _renderRow(data) {
@@ -69,6 +92,10 @@ class SelectUserView extends Component {
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
           }}
+          rightItem={{
+            title: 'Invite',
+            onPress: () => this._createChat(),
+          }}
         />
 
         <S5SwipeListView
@@ -99,7 +126,8 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    loadFollows: () => dispatch(loadFollows())
+    loadFollows: () => dispatch(loadFollows()),
+    createChat: (id, callback) => dispatch(createChat(id, callback)),
   };
 }
 

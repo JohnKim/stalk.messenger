@@ -54,9 +54,18 @@ function loadChatByIdAsync (id) {
 
 function createChatAsync (id) {
 
+  var param = {};
+  if (typeof id == 'string' || id instanceof String) {
+    param.id = id;
+  } else if (typeof id == 'object') {
+    if (Array.isArray(id)) {
+      param.ids = id;
+    }
+  }
+
   return new Promise( (resolve, reject) => {
 
-    Parse.Cloud.run('chats-create', { id }).then(
+    Parse.Cloud.run('chats-create', param).then(
       (result) => {
         resolve(result);
       },

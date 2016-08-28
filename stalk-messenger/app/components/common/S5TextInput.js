@@ -122,6 +122,7 @@ export default class S5TextInput extends Component {
             onFocus={() => {this._onFocus()}}
             onBlur={() => {this._onBlur()}}
             value={this.props.value}
+            autoCapitalize={this.props.autoCapitalize}
             />
             {this._renderContainerIcon()}
         </View>

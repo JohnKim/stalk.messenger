@@ -31,29 +31,40 @@ Parse.Cloud.define('chats-create', function(request, response) {
   }
 
   var params = request.params;
-  if (!params.id) {
+  if (!params.id && !params.ids ) {
     return response.error({message: 'Need username for following.'});
   }
 
-  if(params.id == currentUser.id) {
+  if( params.id == currentUser.id) {
     // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
     response.error( {code: 142, message: "input param ("+params.id+") is same with current user"} );
     return;
   }
 
-  var user = new Parse.User();
-  user.id = params.id;
+  var userArray = [currentUser];
+  if( params.id ) {
+    var user = new Parse.User();
+    user.id = params.id;
+    userArray.push( user );
+  } else if ( params.ids ){
+    for( var key in params.ids ){
+      var user = new Parse.User();
+      user.id = params.ids[key];
+      userArray.push( user );
+    }
+  }
 
   var query = new Parse.Query(Channels);
-  query.containsAll("users", [currentUser, user]);
+  query.containsAll("users", userArray);
   query.first().then(
 
     (channel) => {
 
       if(!channel) {
         var channels = new Channels();
-        channels.addUnique("users", currentUser);
-        channels.addUnique("users", user);
+        for( var key in userArray ){
+          channels.addUnique("users", userArray[key]);
+        }
         return channels.save();
       }else{
         return Parse.Promise.as(channel);
