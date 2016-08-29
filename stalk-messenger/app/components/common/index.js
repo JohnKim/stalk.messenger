@@ -15,6 +15,7 @@ import S5SwipeRow from './S5SwipeRow';
 import S5EmptyRow from './S5EmptyRow';
 import S5Paragraph from './S5Paragraph';
 import S5TextInput from './S5TextInput';
+import S5GridPicture from './S5GridPicture';
 
 export {
   S5Alert,
@@ -30,4 +31,5 @@ export {
   S5EmptyRow,
   S5Paragraph,
   S5TextInput,
+  S5GridPicture
 };

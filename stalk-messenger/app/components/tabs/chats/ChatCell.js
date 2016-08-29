@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 
-import { S5ProfilePicture } from 's5-components';
+import { S5ProfilePicture, S5GridPicture } from 's5-components';
 
 export default class ChatCell extends Component {
 
@@ -34,22 +34,12 @@ export default class ChatCell extends Component {
     // TODO 그룹체팅의 경우, profile 이미지를 여러개 보여 줄 수 있도록 여기를 수정해야 함 !!
     this.props.chat.users.forEach( (user) => {
       let key = `${this.props.chat.channelId}_${user.id}`;
-      profiles.push((
-        <S5ProfilePicture
-          key={key}
-          name={user.nickName}
-          profileFileUrl={user.profileFileUrl}
-          size={48}
-          style={{
-            margin:10,
-            borderWidth: 1.5,
-            borderColor: '#FFFFFF',
-          }}
-        />
-      ));
+      profiles.push(user.profileFileUrl);
     });
 
-    return profiles;
+    return (
+      <S5GridPicture size={48} style={{margin:10}} images={profiles}/>
+    )
   }
 
   render() {
