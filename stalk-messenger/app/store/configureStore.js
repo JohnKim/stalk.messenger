@@ -5,19 +5,18 @@
 
 'use strict';
 
-import { applyMiddleware, createStore } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import { applyMiddleware, createStore, compose }  from 'redux';
+import { persistStore, autoRehydrate }            from 'redux-persist';
+import { AsyncStorage }                           from 'react-native';
 
-import thunk from 'redux-thunk'; // (https://github.com/gaearon/redux-thunk)
-import createLogger from 'redux-logger'; // (https://github.com/theaqua/redux-logger)
+import thunk        from 'redux-thunk';   // (https://github.com/gaearon/redux-thunk)
+import createLogger from 'redux-logger';  // (https://github.com/theaqua/redux-logger)
+import promise      from './middleware/promise';
+import array        from './middleware/array';
 
-import promise from './middleware/promise';
-import array from './middleware/array';
+import reducers     from '../reducers';
 
-// reducer
-import reducers from '../reducers';
-/* ************************************************************************** */
+import devTools     from 'remote-redux-devtools'; // (http://remotedev.io/local/)
 
 var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
@@ -27,22 +26,26 @@ var logger = createLogger({
   duration: true,
 });
 
-var createS5Store = applyMiddleware(
-  thunk,
-  promise,
-  array,
-  logger
-)(createStore);
-
 function configureStore(onComplete) {
 
-  //const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createS5Store)
-  //const store = createStoreWithMiddleware(reducers)
-  //onComplete();
+  const enhancer = compose(
+    applyMiddleware(
+      thunk,
+      promise,
+      array,
+      logger
+    ),
+    autoRehydrate(),
+    devTools()
+  );
 
-  // TODO(frantic): reconsider usage of redux-persist, maybe add cache breaker
-  const store = autoRehydrate()(createS5Store)(reducers);
+  const store = createStore(reducers, undefined, enhancer);
   persistStore(store, {storage: AsyncStorage}, onComplete);
+
+  // If you have other enhancers & middlewares
+  // update the store after creating / changing to allow devTools to use them
+  devTools.updateStore(store);
+
 
   if (isDebuggingInChrome) {
     window.store = store;

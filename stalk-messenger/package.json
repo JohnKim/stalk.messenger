@@ -3,27 +3,26 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "react-native start"
   },
   "dependencies": {
-    "faker": "^3.1.0",
     "moment": "^2.14.1",
     "parse": "^1.9.1",
     "react": "15.2.1",
-    "react-native": "0.31.0",
-    "react-native-action-button": "^1.1.5",
-    "react-native-gifted-chat": "0.0.7",
+    "react-native": "git+https://github.com/facebook/react-native.git#v0.31.0",
+    "react-native-action-button": "^2.0.1",
+    "react-native-gifted-chat": "0.0.10",
     "react-native-gifted-listview": "0.0.15",
     "react-native-gifted-spinner": "^0.1.0",
     "react-native-image-picker": "^0.21.5",
     "react-native-linear-gradient": "^1.5.12",
     "react-native-push-notification": "^2.0.2",
-    "react-native-tab-navigator": "https://github.com/JohnKim/react-native-tab-navigator",
-    "react-native-xpush-client": "https://github.com/xpush/lib-xpush-react-native",
+    "react-native-socketio": "git://github.com/JohnKim/react-native-socketio.git",
+    "react-native-tab-navigator": "git://github.com/JohnKim/react-native-tab-navigator.git",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
-    "redux-persist": "^3.2.2",
+    "redux-persist": "^3.5.0",
     "redux-thunk": "^2.1.0",
     "tween-functions": "^1.2.0"
   },
@@ -31,6 +30,8 @@
     "babel-eslint": "^6.1.2",
     "eslint": "^3.3.1",
     "eslint-plugin-react": "^6.1.2",
-    "eslint-plugin-react-native": "^2.0.0"
+    "eslint-plugin-react-native": "^2.0.0",
+    "faker": "^3.1.0",
+    "remote-redux-devtools": "^0.4.3"
   }
 }

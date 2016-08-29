@@ -21,7 +21,7 @@ export default class PushController extends Component {
       onRegister: function(token) {
 
         console.log('TOKEN for push notification => ', token);
-        
+
         Parse._getInstallationId().then(function(id) {
 
           var Installation = Parse.Object.extend("_Installation");
@@ -44,8 +44,7 @@ export default class PushController extends Component {
               return installation.save()
             })
             .catch((error) => {
-              console.log("Error:");
-              console.log(error);
+              console.log("Error:", error);
             });
 
         });

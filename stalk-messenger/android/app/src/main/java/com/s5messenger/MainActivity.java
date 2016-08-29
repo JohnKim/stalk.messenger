@@ -1,7 +1,6 @@
 package com.s5messenger;
 
 import com.facebook.react.ReactActivity;
-import com.gcrabtree.rctsocketio.SocketIoPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.imagepicker.ImagePickerPackage;
 

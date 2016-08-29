@@ -8,8 +8,6 @@ import { SERVER_URL, APP_ID } from '../../env.js';
 export const MESSAGE_SIZE     = 30;
 export const LATEST_MESSAGE   = "LATEST_MESSAGE";
 
-const InteractionManager = require('InteractionManager');
-
 const Messages = Parse.Object.extend('Messages');
 const Channels = Parse.Object.extend('Channels');
 const UploadFiles = Parse.Object.extend('UploadFiles');

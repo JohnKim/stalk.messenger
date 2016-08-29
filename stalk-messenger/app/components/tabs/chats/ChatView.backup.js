@@ -6,22 +6,26 @@ import {
   Dimensions,
   View,
   Text,
+  Navigator,
   StyleSheet,
   TouchableHighlight,
-  Image,
+  Image
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { switchTab, loadMessages, setLatestMessage, uploadImage, createChat, MESSAGE_SIZE } from 's5-action';
+import { switchTab, loadMessages, setLatestMessage, MESSAGE_SIZE } from 's5-action';
 import { S5Header, S5Alert, S5Drawer } from 's5-components';
+import { uploadImage } from 's5-action';
 
 import ControlPanel from './ControlPanel';
 
 import { GiftedChat, Bubble, Send, Composer } from 'react-native-gifted-chat';
 
-import SocketIO from 'react-native-socketio';
+import { SERVER_URL, APP_ID } from '../../../../env.js';
 
+var XPush = require( 'react-native-xpush-client' );
 var ImagePicker = require('react-native-image-picker');
+
 
 var imagePickerOptions = {
   title: 'Select Image',
@@ -45,8 +49,6 @@ class ChatView extends Component {
       isTyping:     null,
       connected:    false,
       node:         {},
-      chat:         props.chat,
-      menuOpened:   false,
     };
 
     this.onSend             = this.onSend.bind(this);
@@ -58,21 +60,19 @@ class ChatView extends Component {
 
     this.openControlPanel   = this.openControlPanel.bind(this);
     this.closeControlPanel  = this.closeControlPanel.bind(this);
-    this.openMenu           = this.openMenu.bind(this);
-    this.closeMenu          = this.closeMenu.bind(this);
-    this.selectImage        = this.selectImage.bind(this);
+    this.openMenu  = this.openMenu.bind(this);
+    this.closeMenu  = this.closeMenu.bind(this);
+    this.selectImage = this.selectImage.bind(this);
 
-    this.initChannelNodeServer = this.initChannelNodeServer.bind(this);
-
+    XPush.init( SERVER_URL, APP_ID, this.props.user.id, 'web' );
   }
 
-  componentWillMount() {  // or componentDidMount ?
+  componentDidMount() {
 
-    if(this.state.chat.type == 'TEMP') {
+    if(this.props.chat.type != 'TEMP') {
 
-    } else {
       // Load Messages from session-server
-      this.props.loadMessages(this.state.chat).then(
+      this.props.loadMessages(this.props.chat).then(
         (result) => {
 
           if(result.messages.length > 0) {
@@ -84,87 +84,41 @@ class ChatView extends Component {
             });
 
             // set latest message !
-            this.props.setLatestMessage(this.state.chat.channelId, result.messages[0].text);
+            this.props.setLatestMessage(this.props.chat.channelId, result.messages[0].text);
 
           }
 
-          this.initChannelNodeServer(result.node);
+          this.setState({ node: result.node });
 
+          var self = this;
+
+          XPush.connect( this.props.chat.channelId, function(err, data){
+
+            if( err ){
+              self.setState({ connected: false });
+            } else {
+              self.setState({ connected: true });
+            }
+
+            XPush.onMessage( function(message){
+              console.log('------ 받음 - ', message);
+              self.setState((previousState) => {
+
+                // set latest message !
+                self.props.setLatestMessage(self.props.chat.channelId, message.text);
+
+                return { messages: GiftedChat.append(previousState.messages, message) };
+              });
+            });
+          });
         },
         (error) => {
           console.warn(error);
           this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
         }
       );
+
     }
-
-  }
-
-  initChannelNodeServer(node, callback) {
-
-    this.setState({
-      node: node
-    });
-
-    var socketConfig = {
-      nsp: '/channel',
-      forceWebsockets: true,
-      connectParams: {
-        A: node.app,
-        S: node.name,
-        C: this.props.chat.channelId,
-        U: this.props.user.id,
-        // D: Device ID !! ???
-      }
-    };
-
-    if(this.socket) { this.socket = null; }
-
-    this.socket = new SocketIO(node.url, socketConfig);
-
-    console.log(node, socketConfig);
-
-    this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
-      this.setState({ connected: true }, () => {
-
-        console.log('asdfasdf');
-        if(callback) callback();
-      });
-    });
-
-    this.socket.on('error', () => { // SOCKET CONNECTION EVENT
-      this.setState({ connected: false });
-    });
-
-    this.socket.on('connect_error', (err) => { // XPUSH CONNECT ERROR EVENT
-      console.warn(err);
-    });
-
-    this.socket.on('_event', (data) => { // XPUSH EVENT
-      console.log('[_EVENT]', data);
-    });
-
-    let self = this;
-    this.socket.on('message', (message) => { // MESSAGED RECEIVED
-      console.log('------ 받음 - ', message);
-      this.setState((previousState) => {
-
-        // set latest message !
-        self.props.setLatestMessage(self.state.chat.channelId, message.text);
-
-        return { messages: GiftedChat.append(previousState.messages, message) };
-      });
-    });
-
-    this.socket.onAny((event) => {
-      console.log('[LOGGING]', event);
-    });
-
-    this.socket.on('sent', (data) => { // after sent a messeage.
-      console.log('[SENT]', data);
-    });
-
-    this.socket.connect();
 
   }
 
@@ -174,22 +128,22 @@ class ChatView extends Component {
     }
   }
 
-  closeControlPanel() {
-    this._drawer.close()
-  }
-
   openControlPanel() {
     this._drawer.open()
-  }
+  };
+
+  closeControlPanel() {
+    this._drawer.close()
+  };
 
   openMenu(){
     this.setState({ menuOpened: true });
     this.selectImage();
-  }
+  };
 
   closeMenu(){
     this.setState({ menuOpened: false });
-  }
+  };
 
   selectImage(){
     var self = this;
@@ -204,7 +158,7 @@ class ChatView extends Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         var data = {
-          C : this.state.chat.channelId,
+          C : this.props.chat.channelId,
           U : this.props.user.id,
           imgBase64 : response.data
         };
@@ -231,7 +185,7 @@ class ChatView extends Component {
   onLoadEarlier() {
 
     // Load Message earlier messages from session-server.
-    this.props.loadMessages(this.state.chat, this.state.lastLoadedAt).then( (result) => {
+    this.props.loadMessages(this.props.chat, this.state.lastLoadedAt).then( (result) => {
 
       if(result.messages.length > 0) {
         this.setState((previousState) => {
@@ -252,22 +206,8 @@ class ChatView extends Component {
     if( this.state.connected ) {
       for (x in messages) {
         console.log('------ 보냄 - ', messages[x]);
-        this.socket.emit('send', {NM:'message', DT: messages[x]});
+        XPush.send( messages[x] );
       }
-    } else if(this.state.chat.type == 'TEMP') {
-
-      let self = this;
-      this.props.createChat(this.state.chat.id, this.state.chat.users).then((result) => {
-        self.initChannelNodeServer(result.node, () => {
-          self.socket.emit('send', {NM:'message', DT: messages[0]});
-        });
-      },
-    (error)=> {
-      console.log('ERROR....>', error);
-      // TODO Channel 데이터는 생성했지만, Channel 서버를 할당받지 못한 상태 (Channel 서버가 실행되어 있지 않은 경우) 처리 필요.
-      this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
-    });
-
     }
   }
 
@@ -296,7 +236,6 @@ class ChatView extends Component {
     }
     return null;
   }
-
 
   renderComposer(props){
     return (
@@ -330,7 +269,7 @@ class ChatView extends Component {
   }
 
   renderSend(props) {
-    if ( this.state.connected || this.state.chat.type == 'TEMP' ) {
+    if (this.state.connected) {
       return (
         <Send {...props}/>
       );
@@ -345,27 +284,27 @@ class ChatView extends Component {
   render() {
 
     const rightItem = {
-      title: 'search',
-      icon: require('./img/icon.png'),
+      title: 'sidemenu',
+      icon: require('./img/icon-subject.png'),
       onPress: this.openControlPanel.bind(this),
     };
 
     return (
       <View style={styles.container}>
-      <S5Drawer
-        type="overlay"
-        content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.state.chat}/>}
-        ref={(ref) => this._drawer = ref}
-        tapToClose={true}
-        openDrawerOffset={0.2} // 20% gap on the right side of drawer
-        side="right"
-        panCloseMask={0.2}
-        closedDrawerOffset={-3}
-        styles={{main: {shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15}}}
-        tweenHandler={(ratio) => ({
-          main: { opacity:(2-ratio)/2 }
-        })}
-        >
+        <S5Drawer
+          type="overlay"
+          content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.props.chat}/>}
+          ref={(ref) => this._drawer = ref}
+          tapToClose={true}
+          openDrawerOffset={0.2} // 20% gap on the right side of drawer
+          side="right"
+          panCloseMask={0.2}
+          closedDrawerOffset={-3}
+          styles={{main: {shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15}}}
+          tweenHandler={(ratio) => ({
+            main: { opacity:(2-ratio)/2 }
+          })}
+          >
           <S5Header
             title="Chats"
             style={{backgroundColor: '#224488'}}
@@ -397,7 +336,7 @@ class ChatView extends Component {
             renderComposer={this.renderComposer}
 
             textInputProps={{
-              editable: ( this.state.connected || this.state.chat.type == 'TEMP' ),
+              editable: this.state.connected,
             }}
           />
         </S5Drawer>
@@ -428,13 +367,19 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'row'
   },
+  menu: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'red',
+  },
   menuIcon: {
     width: 30,
     height: 30,
     opacity:0.5,
     marginTop:5,
     marginLeft:5
-  },
+  }
 });
 
 function select(store) {
@@ -448,7 +393,6 @@ function actions(dispatch) {
     switchTab: () => dispatch(switchTab('chats')),
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
     setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
-    createChat: (id, users) => dispatch(createChat(id, users)),
   };
 }
 

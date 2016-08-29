@@ -1,7 +1,7 @@
 /**
  * Chat datas for Chats Tab
  */
-import { LOADED_CHATS, ADDED_CHATS, REMOVED_CHATS, LOGGED_OUT } from 's5-action';
+import { LOADED_CHATS, ADDED_TEMP_CHAT, ADDED_CHAT, REMOVED_CHATS, LOGGED_OUT } from 's5-action';
 
 const initialState = {
   list: [],
@@ -22,12 +22,35 @@ function chats(state = initialState, action) {
         lastLoadedAt: new Date(),
       };
 
-  } else if (action.type === ADDED_CHATS) {
+  } else if (action.type === ADDED_TEMP_CHAT) {
+
+    currentUser = action.user;
+
+    let chat = _generateTempChatJSON(action.id, action.users);
+    let newData = [...state.list];
+    newData.unshift(chat);
+
+    return {
+      list: newData,
+      lastLoadedAt: new Date(),
+    };
+
+  } else if (action.type === ADDED_CHAT) {
 
     currentUser = action.user;
 
     let chat = _parseObjToJSON(action.chat);
     let newData = [...state.list];
+
+    if(action.beforeId) {
+      for(var i = newData.length-1; i--;){
+        if ( newData[i].id === action.beforeId ) {
+          newData.splice(i, 1);
+          break;
+        }
+      }
+    }
+
     newData.unshift(chat);
 
     return {
@@ -77,18 +100,36 @@ function _parseObjToJSON(object){
         statusMessage: user.get('statusMessage'),
         profileFileUrl: profileFileUrl,
       }
-      names.push(user.get('username'));
+      names.push(user.get('nickName'));
     }
   }, []);
 
   return {
     id: object.id,
     channelId: channel.id,
-    createdAt: object.get("createdAt"), // because of using javascript date objects instead of parse object 'object.createdAt',
+    updatedAt: object.get("updatedAt"), // because of using javascript date objects instead of parse object 'object.createdAt',
     name: names.join(", "),
+    type: 'STORED',
     users,
   };
 
+}
+
+function _generateTempChatJSON(id, users) {
+
+  var names = [];
+  users.forEach(function (user) {
+    names.push(user.nickName);
+  });
+
+  return {
+    id,
+    channelId: id,
+    updatedAt: new Date(),
+    name: names.join(", "),
+    type: 'TEMP',
+    users,
+  };
 }
 
 module.exports = chats;
