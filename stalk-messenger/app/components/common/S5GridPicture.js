@@ -17,7 +17,7 @@ export default class S5GridPicture extends Component {
 
   static propTypes = {
     size: React.PropTypes.number,
-    images: React.PropTypes.object.isRequired,
+    images: React.PropTypes.array.isRequired,
     style: React.PropTypes.any,
   };
 

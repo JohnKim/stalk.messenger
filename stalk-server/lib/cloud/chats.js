@@ -89,6 +89,11 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
     (channel) => {
 
+      // 채널 사용자 수가 다른 경우, 채널을 신규생성 해야함
+      if( channel && channel.get("users") && ( channel.get("users").length != users.length ) ){
+        channel = null;
+      }
+
       if(!channel) {
         var channels = new Channels();
         for( var key in userArray ){

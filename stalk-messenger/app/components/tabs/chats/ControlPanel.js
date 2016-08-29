@@ -24,8 +24,6 @@ export default class ControlPanel extends Component {
   render() {
     let {closeDrawer} = this.props;
 
-    console.log( this.props.chat.users );
-
     return (
       <View style={styles.container}>
         <ScrollView >

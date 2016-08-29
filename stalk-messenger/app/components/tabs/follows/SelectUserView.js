@@ -55,10 +55,10 @@ class SelectUserView extends Component {
   _createChat(){
     if( checkedUsers.length > 0 ){
       this.props.createChat(checkedUsers).then((chat) => {
-          this.props.navigator.push({
-            chatView: true,
-            chat,
-          });
+        this.props.navigator.replace({
+          chatView: true,
+          chat,
+        });
       });
     }
   }
