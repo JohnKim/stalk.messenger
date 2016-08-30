@@ -34,6 +34,15 @@ var imagePickerOptions = {
 
 class ChatView extends Component {
 
+
+  static propTypes = {
+    chat: React.PropTypes.object,
+    user: React.PropTypes.object.isRequired,
+    users: React.PropTypes.array,
+    navigator: React.PropTypes.object.isRequired,
+    createChat: React.PropTypes.func.isRequired,
+  };
+
   constructor(props) {
 
     super(props);
@@ -45,7 +54,7 @@ class ChatView extends Component {
       isTyping:     null,
       connected:    false,
       node:         {},
-      chat:         props.chat,
+      chat:         props.chat ? props.chat : { users: props.users },
       menuOpened:   false,
     };
 
@@ -61,6 +70,7 @@ class ChatView extends Component {
     this.openMenu           = this.openMenu.bind(this);
     this.closeMenu          = this.closeMenu.bind(this);
     this.selectImage        = this.selectImage.bind(this);
+    this.sendMesage         = this.sendMesage.bind(this);
 
     this.initChannelNodeServer = this.initChannelNodeServer.bind(this);
 
@@ -68,9 +78,8 @@ class ChatView extends Component {
 
   componentWillMount() {  // or componentDidMount ?
 
-    if(this.state.chat.type == 'TEMP') {
+    if(this.state.chat.channelId) {
 
-    } else {
       // Load Messages from session-server
       this.props.loadMessages(this.state.chat).then(
         (result) => {
@@ -88,7 +97,7 @@ class ChatView extends Component {
 
           }
 
-          this.initChannelNodeServer(result.node);
+          this.initChannelNodeServer(result.node, this.state.chat.channelId);
 
         },
         (error) => {
@@ -100,7 +109,7 @@ class ChatView extends Component {
 
   }
 
-  initChannelNodeServer(node, callback) {
+  initChannelNodeServer(node, channelId, callback) {
 
     this.setState({
       node: node
@@ -112,7 +121,7 @@ class ChatView extends Component {
       connectParams: {
         A: node.app,
         S: node.name,
-        C: this.props.chat.channelId,
+        C: channelId,
         U: this.props.user.id,
         // D: Device ID !! ???
       }
@@ -122,12 +131,9 @@ class ChatView extends Component {
 
     this.socket = new SocketIO(node.url, socketConfig);
 
-    console.log(node, socketConfig);
-
     this.socket.on('connect', () => { // SOCKET CONNECTION EVENT
       this.setState({ connected: true }, () => {
 
-        console.log('asdfasdf');
         if(callback) callback();
       });
     });
@@ -150,7 +156,7 @@ class ChatView extends Component {
       this.setState((previousState) => {
 
         // set latest message !
-        self.props.setLatestMessage(self.state.chat.channelId, message.text);
+        self.props.setLatestMessage(self.state.chat.channelId, message[0].text);
 
         return { messages: GiftedChat.append(previousState.messages, message) };
       });
@@ -192,6 +198,7 @@ class ChatView extends Component {
   }
 
   selectImage(){
+
     var self = this;
     ImagePicker.showImagePicker(imagePickerOptions, (response) => {
 
@@ -219,7 +226,8 @@ class ChatView extends Component {
               _id: 'temp-id-' + Math.round(Math.random() * 1000000)
             };
 
-            XPush.send( message );
+            self.sendMesage(message);
+
           }
 
           self.closeMenu();
@@ -249,26 +257,42 @@ class ChatView extends Component {
 
   onSend(messages = []) {
 
-    if( this.state.connected ) {
-      for (x in messages) {
-        console.log('------ 보냄 - ', messages[x]);
-        this.socket.emit('send', {NM:'message', DT: messages[x]});
-      }
-    } else if(this.state.chat.type == 'TEMP') {
+    console.log(this.socket, this.state.connected, this.state.chat.channelId, ((this.socket && this.state.connected) || !this.state.chat.channelId));
 
-      let self = this;
-      this.props.createChat(this.state.chat.id, this.state.chat.users).then((result) => {
-        self.initChannelNodeServer(result.node, () => {
-          self.socket.emit('send', {NM:'message', DT: messages[0]});
+    if ( (this.socket && this.state.connected) || !this.state.chat.channelId ){
+      this.sendMesage(messages[0]);
+    }
+
+  }
+
+  sendMesage(message){
+    console.log(message);
+
+    if( this.socket ) {
+      this.socket.emit('send', {NM:'message', DT: message});
+
+    } else {
+
+      console.log(this.state.chat.users);
+      this.props.createChat(this.state.chat.users).then(
+        (result) => {
+
+          console.log('CREATED CHAT!!!', result);
+
+          this.setState({ chat: result.chat });
+          var self = this;
+          this.initChannelNodeServer(result.node, result.chat.channelId, () => {
+            self.socket.emit('send', {NM:'message', DT: message });
+          });
+        },
+        (error)=> {
+          console.log('ERROR....>', error);
+          // TODO Channel 데이터는 생성했지만, Channel 서버를 할당받지 못한 상태 (Channel 서버가 실행되어 있지 않은 경우) 처리 필요.
+          this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
         });
-      },
-    (error)=> {
-      console.log('ERROR....>', error);
-      // TODO Channel 데이터는 생성했지만, Channel 서버를 할당받지 못한 상태 (Channel 서버가 실행되어 있지 않은 경우) 처리 필요.
-      this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
-    });
 
     }
+
   }
 
   renderBubble(props) {
@@ -330,7 +354,7 @@ class ChatView extends Component {
   }
 
   renderSend(props) {
-    if ( this.state.connected || this.state.chat.type == 'TEMP' ) {
+    if ( this.state.connected || !this.state.chat.channelId ) {
       return (
         <Send {...props}/>
       );
@@ -397,7 +421,7 @@ class ChatView extends Component {
             renderComposer={this.renderComposer}
 
             textInputProps={{
-              editable: ( this.state.connected || this.state.chat.type == 'TEMP' ),
+              editable: ( this.state.connected || !this.state.chat.channelId ),
             }}
           />
         </S5Drawer>
@@ -448,7 +472,7 @@ function actions(dispatch) {
     switchTab: () => dispatch(switchTab('chats')),
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
     setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
-    createChat: (id, users) => dispatch(createChat(id, users)),
+    createChat: (users) => dispatch(createChat(users)),
   };
 }
 

@@ -15,7 +15,7 @@ import {
 
 import FollowCell from './FollowCell';
 
-import { loadFollows, removeFollow, createTempChat } from 's5-action';
+import { loadFollows, removeFollow } from 's5-action';
 import { S5Header, S5SwipeListView, S5TextInput } from 's5-components';
 import { connect } from 'react-redux';
 
@@ -25,7 +25,6 @@ class FollowsScreen extends Component {
     navigator: React.PropTypes.object.isRequired,
     follows:  React.PropTypes.object.isRequired,
     removeFollow: React.PropTypes.func.isRequired,
-    createTempChat: React.PropTypes.func.isRequired,
   };
 
   state = {
@@ -60,11 +59,9 @@ class FollowsScreen extends Component {
 	}
 
   _onRowPress(user) {
-    this.props.createTempChat([user]).then((chat) => {
-        this.props.navigator.push({
-          chatView: true,
-          chat,
-        });
+    this.props.navigator.push({
+      chatView: true,
+      users: [user]
     });
   }
 
@@ -194,7 +191,6 @@ function actions(dispatch) {
   return {
     loadFollows: () => dispatch(loadFollows()), // @ TODO not used !!
     removeFollow: (rowId) => dispatch(removeFollow(rowId)),
-    createTempChat: (users) => dispatch(createTempChat(users)),
   };
 }
 

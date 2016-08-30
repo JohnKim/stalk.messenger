@@ -31,21 +31,21 @@ export default class S5GridPicture extends Component {
 
     if( !images ){
       return (
-        <Image source={require('./img/face.png')} 
+        <Image source={require('./img/face.png')}
           style={{
           width: size,
           height: size,
           flexDirection: 'row',
-          borderRadius: size / 2}} />     
+          borderRadius: size / 2}} />
       )
     }else if( images.length == 1 ){
       return (
         <Image source={{uri:images[0]}}
-          style={{width: size, height: size, borderRadius: size / 2}} />      
+          style={{width: size, height: size, borderRadius: size / 2}} />
       )
     } else if ( images.length == 2 ){
       return (
-        <Image source={require('./img/face.png')} 
+        <Image source={require('./img/face.png')}
           style={{
           width: size,
           height: size,
@@ -58,7 +58,7 @@ export default class S5GridPicture extends Component {
       )
     } else if ( images.length == 3 ){
       return (
-        <Image source={require('./img/face.png')} 
+        <Image source={require('./img/face.png')}
           style={{
           width: size,
           height: size,
@@ -75,7 +75,7 @@ export default class S5GridPicture extends Component {
       )
     } else {
       return (
-        <Image source={require('./img/face.png')} 
+        <Image source={require('./img/face.png')}
           style={{
           width: size,
           height: size,

@@ -7,7 +7,6 @@ import { SERVER_URL, APP_ID } from '../../env.js';
 
 export const LOADED_CHATS     = 'LOADED_CHATS';
 export const ADDED_CHAT       = 'ADDED_CHAT';
-export const ADDED_TEMP_CHAT  = 'ADDED_TEMP_CHAT';
 export const REMOVED_CHATS    = 'REMOVED_CHATS';
 
 const InteractionManager = require('InteractionManager');
@@ -75,7 +74,7 @@ function loadChatByIdAsync (id) {
         },
         error: function(object, error) {
           console.error(error);
-          reject(err);
+          reject(error);
         }
       });
   });
@@ -146,52 +145,11 @@ export function loadChats() {
 
 }
 
-export function createTempChat(users) {
-
-  return (dispatch, getState) => {
-
-    var currentUser = Parse.User.current();
-
-    // chat id for temp chat data !
-    let chatId = users.length == 1 ? users[0].id : new Date().valueOf();
-
-    var chat = null;
-
-    if(users.length == 1) {
-      getState().chats.list.forEach( function(obj) {
-         if( obj.id == chatId ) {
-           chat = obj;
-         }
-      } );
-    }
-
-    if(!chat){
-      dispatch({
-        type: ADDED_TEMP_CHAT,
-        user: currentUser,
-        id: chatId,
-        users,
-      });
-
-      getState().chats.list.forEach( function(obj) {
-         if( obj.id == chatId ) {
-           chat = obj;
-         }
-      } );
-
-    }
-
-    return Promise.resolve(chat);
-
-  };
-
-}
-
 /**
  * create chatting channel
  * @params id : user.id of target user
  **/
-export function createChat(chatId, users) {
+export function createChat(users) {
 
   return async (dispatch, getState) => {
 
@@ -203,7 +161,7 @@ export function createChat(chatId, users) {
        if( obj.id == result.id ) {
          chat = obj;
        }
-    } );
+    });
 
     if(!chat) {
 
@@ -212,7 +170,6 @@ export function createChat(chatId, users) {
 
       dispatch({
         type: ADDED_CHAT,
-        beforeId: chatId,
         user: currentUser,
         chat
       });
@@ -221,7 +178,7 @@ export function createChat(chatId, users) {
          if( obj.id == chat.id ) {
            chat = obj;
          }
-      } );
+      });
 
     }
 

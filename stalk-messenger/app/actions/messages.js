@@ -46,9 +46,9 @@ export  function loadMessages(chat, datetime) {
       var channel = new Channels();
       channel.id = chat.channelId;
 
-      /*console.log(
+      console.log(
         'Conditions : '+ new Date(chat.createdAt) + " ~ " + (datetime ? new Date(datetime) : new Date())
-      );*/
+      );
 
       new Parse.Query(Messages)
         .equalTo("channel", channel)
