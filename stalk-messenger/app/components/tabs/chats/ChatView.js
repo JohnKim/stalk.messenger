@@ -47,6 +47,8 @@ class ChatView extends Component {
 
     super(props);
 
+    console.log(props);
+
     this.state = {
       messages:     [],
       loadEarlier:  false,
@@ -202,6 +204,7 @@ class ChatView extends Component {
     var self = this;
     ImagePicker.showImagePicker(imagePickerOptions, (response) => {
 
+      // TODO 맨 처음 이미지를 보내는 경우 (socket 이 연결 안된 경우) channelID 를 모르기 때문에 아래 동작은 정상 적으로 되지 않음. 이부분 어떻게 고쳐야 멋질까?
       if (response.didCancel) {
         console.log('User cancelled photo picker');
         this.closeMenu();

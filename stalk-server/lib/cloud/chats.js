@@ -119,6 +119,9 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
     (channel) => {
 
+
+      // **중요** TODO Users 별로 각각 Chats 를 데이터를 생성해줘야 한다. !! (그룹 체팅 같은)
+
       var queryChats = new Parse.Query(Chats);
       queryChats.equalTo("user", currentUser);
       queryChats.equalTo("channel", channel);
@@ -153,6 +156,8 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
 });
 
+
+// TODO unused 사용하지 않는 호출 !!!!
 Parse.Cloud.define('chats-add', function(request, response) {
 
   var ids = request.params;

@@ -100,6 +100,7 @@ function createChatAsync (users) {
 
 }
 
+// TODO unused 사용하지 않는 호출 !!!!
 function addUserToChat (channelId, ids) {
 
   var param = {};
@@ -227,7 +228,7 @@ export function removeChat(row) {
 
 }
 
-// TODO 개발 중 ( 최초 메시지를 날리면 이걸 호출해서 Chats 에 데이터를 생성해야 함 ! ! )
+// TODO unused 사용하지 않음.
 export function addUsers(channelId, ids) {
 
  return async (dispatch, getState) => {

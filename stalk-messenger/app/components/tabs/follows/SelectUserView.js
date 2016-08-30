@@ -21,9 +21,9 @@ import { loadFollows, createChat } from 's5-action';
 import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
 
-var checkedUsers = [];
 
 class SelectUserView extends Component {
+
   state = {
     dataSource: new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
@@ -37,28 +37,28 @@ class SelectUserView extends Component {
     super(props);
 
     this._createChat = this._createChat.bind(this);
+    this.checkedUsers = {};
   }
 
   _onRowPress(user, checked ){
     if( checked ){
-      checkedUsers.push( user.id );
+      this.checkedUsers[user.id] = user;
     } else {
-      if( checkedUsers.length > 0 ){
-        var inx = checkedUsers.indexOf( user.id );
-        if( inx >= 0 ){
-          checkedUsers.splice( inx, 1 );
-        }
-      }
+      if( this.checkedUsers[user.id] ) delete this.checkedUsers[user.id];
     }
   }
 
   _createChat(){
-    if( checkedUsers.length > 0 ){
-      this.props.createChat(checkedUsers).then((chat) => {
-        this.props.navigator.replace({
-          chatView: true,
-          chat,
-        });
+    var users = [];
+
+    for (var prop in this.checkedUsers) {
+      users.push(this.checkedUsers[prop]);
+    }
+
+    if( users.length > 0 ){
+      this.props.navigator.replace({
+        chatView: true,
+        users,
       });
     }
   }
@@ -105,7 +105,7 @@ class SelectUserView extends Component {
           enableEmptySections={true}
           sectionKey="username"
           autoSection={true}
-        />        
+        />
       </View>
     )
   }
