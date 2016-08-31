@@ -30,15 +30,17 @@ export default class ChatCell extends Component {
   renderProfilePictures(){
 
     let profiles = [];
+    let alts = [];
 
     // TODO 그룹체팅의 경우, profile 이미지를 여러개 보여 줄 수 있도록 여기를 수정해야 함 !!
     this.props.chat.users.forEach( (user) => {
       let key = `${this.props.chat.channelId}_${user.id}`;
       profiles.push(user.profileFileUrl);
+      alts.push(user.nickName);
     });
 
     return (
-      <S5GridPicture size={48} style={{margin:10}} images={profiles}/>
+      <S5GridPicture size={48} style={{margin:10}} images={profiles} alts={alts}/>
     )
   }
 
