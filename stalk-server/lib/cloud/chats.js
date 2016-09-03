@@ -2,6 +2,76 @@
 var Chats = Parse.Object.extend("Chats");
 var Channels = Parse.Object.extend("Channels");
 
+var _addChats = function(channel, users) {
+
+  var fnCreateChat = function ( channel, user ) {
+
+    return new Promise((resolve, reject) => {
+
+      var queryChats = new Parse.Query(Chats);
+      queryChats.equalTo("user", user);
+      queryChats.equalTo("channel", channel);
+      queryChats.first().then(
+
+        (chat) => {
+          if(!chat){
+            var chats = new Chats();
+            chats.set("user", user);
+            chats.set("channel", channel);
+            chats.save().then(
+              (value) => { resolve(value);  },
+              (error) => { reject(error);   }
+            );
+          }else{
+            resolve(chat);
+          }
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+
+    });
+  };
+
+  var fnArray = [];
+  users.forEach(function(user) {
+    fnArray.push(fnCreateChat(channel, user));
+  });
+
+  return new Promise((__resolve, __reject) => {
+
+    Promise.all(fnArray).then(value => {
+      __resolve(value);
+    }, reason => {
+      __reject(reason);
+    });
+
+  });
+
+}
+
+var _getChats = function(channel, user) {
+  return new Promise( (resolve, reject) => {
+    return new Parse.Query(Chats)
+      .include('channel.users')
+      .equalTo("channel", channel)
+      .equalTo("user", user)
+      .first({
+        success: function(chat) {
+          resolve(chat);
+        },
+        error: function(object, error) {
+          console.error(error);
+          reject(error);
+        }
+      });
+
+  });
+}
+
+
+
 
 Parse.Cloud.define('chats', function(request, response) {
   Parse.Cloud.useMasterKey();
@@ -110,60 +180,46 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
     },
     (error) => {
-
       response.error(error);
-
     }
 
   ).then(
 
     (channel) => {
 
+      _addChats(channel, userArray).then(
+        (results) => {
 
-      // **중요** TODO Users 별로 각각 Chats 를 데이터를 생성해줘야 한다. !! (그룹 체팅 같은)
-
-      var queryChats = new Parse.Query(Chats);
-      queryChats.equalTo("user", currentUser);
-      queryChats.equalTo("channel", channel);
-      queryChats.first().then(
-
-        (chat) => {
-          if(!chat){
-            var chats = new Chats();
-            chats.set("user", currentUser);
-            chats.set("channel", channel);
-            chats.save().then(
-              (value) => { response.success(value); },
-              (error) => { response.error(error); }
-            );
-          }else{
-            response.success(chat);
-          }
+          _getChats(channel, currentUser).then(
+            (chat) => {
+              response.success(chat);
+            },
+            (error) => {
+              response.error(error);
+            }
+          );
         },
         (error) => {
           response.error(error);
         }
       );
-
     },
     (error) => {
-
       response.error(error);
-
     }
 
   );
 
 });
 
-
-// TODO unused 사용하지 않는 호출 !!!!
 Parse.Cloud.define('chats-add', function(request, response) {
 
-  var ids = request.params;
-  var channelId = request.params;
+  var { ids, channelId } = request.params;
 
-  var users = [currentUser];
+  var channel = new Channels();
+  channel.id = channelId;
+
+  var users = [];
 
   if (Array.isArray(ids)) {
     ids.forEach(function(userId) {
@@ -185,31 +241,15 @@ Parse.Cloud.define('chats-add', function(request, response) {
     users.push(user);
   }
 
-  var channel = new Channels();
-  channel.id = channelId;
 
-  var fnCreateChat = function ( channel, user ) {
-    return new Promise((resolve, reject) => {
-      var chats = new Chats();
-      chats.set("user", user);
-      chats.set("channel", channel);
-      chats.save().then(
-        (value) => { resolve(value); },
-        (error) => { reject(error); }
-      );
-    });
-  };
-
-  var fnArray = [];
-  users.forEach(function(user) {
-    fnArray.push(fnCreateChat(channel, user));
-  });
-
-  Promise.all(fnArray).then(value => {
-    response.success(value);
-  }, reason => {
-    response.error(error);
-  });
+  _addChats(channel, users).then(
+    (results) => {
+      response.success(results);
+    },
+    (error) => {
+      response.error(error);
+    }
+  );
 
 });
 
