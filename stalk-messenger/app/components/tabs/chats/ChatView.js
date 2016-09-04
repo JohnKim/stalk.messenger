@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import {
-  Linking,
-  Platform,
-  ActionSheetIOS,
-  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -34,20 +30,20 @@ var imagePickerOptions = {
 
 class ChatView extends Component {
 
-
   static propTypes = {
     chat: React.PropTypes.object,
     user: React.PropTypes.object.isRequired,
     users: React.PropTypes.array,
     navigator: React.PropTypes.object.isRequired,
+    setLatestMessage: React.PropTypes.func.isRequired,
+    loadMessages: React.PropTypes.func.isRequired,
+    switchTab: React.PropTypes.func.isRequired,
     createChat: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
 
     super(props);
-
-    console.log(props);
 
     this.state = {
       messages:     [],

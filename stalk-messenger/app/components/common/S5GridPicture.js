@@ -50,7 +50,7 @@ export default class S5GridPicture extends Component {
       )
     }else if( images.length == 1 ){
       return (
-        <S5Image source={{uri:images[0]}}
+        <S5Image source={{uri:images[0]}} alt={alts[0]}
           style={{width: size, height: size, borderRadius: size / 2}} />
       )
     } else if ( images.length == 2 ){

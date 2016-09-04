@@ -32,9 +32,8 @@ export default class ChatCell extends Component {
     let profiles = [];
     let alts = [];
 
-    // TODO 그룹체팅의 경우, profile 이미지를 여러개 보여 줄 수 있도록 여기를 수정해야 함 !!
     this.props.chat.users.forEach( (user) => {
-      let key = `${this.props.chat.channelId}_${user.id}`;
+      //let key = `${this.props.chat.channelId}_${user.id}`;
       profiles.push(user.profileFileUrl);
       alts.push(user.nickName);
     });
@@ -61,8 +60,8 @@ export default class ChatCell extends Component {
         <View style={styles.container}>
           {this.renderProfilePictures()}
           <View style={styles.detailContainer}>
-            <Text style={styles.nickName}>
-              {names.join(", ")} {userCount}
+            <Text numberOfLines={2} style={styles.nickName}>
+              {userCount} {names.join(", ")} 
             </Text>
             <Text numberOfLines={2} style={styles.messages}>
               {this.props.message}
