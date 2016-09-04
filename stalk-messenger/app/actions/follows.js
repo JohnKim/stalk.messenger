@@ -18,6 +18,7 @@ function loadFollowsAsync () {
     new Parse.Query(Follows)
       .equalTo('userFrom', currentUser)
       .include('userTo')
+      .ascending('nickName')
       .find()
       .then(
         (list) => {
@@ -57,7 +58,7 @@ export function createFollow(id) {
   return (dispatch) => {
     return Parse.Cloud.run('follows-create', {id}, {
       success: (follow) => {
-        
+
         if(follow) {
         //  InteractionManager.runAfterInteractions(() => {
             dispatch(({type: ADDED_FOLLOWS, follow}));

@@ -9,12 +9,19 @@ const initialState = {
   lastLoadedAt: null,
 };
 
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
 function follows(state = initialState, action) {
 
   if (action.type === LOADED_FOLLOWS) {
       let list = action.list.map(_parseObjToJSON);
       return {
-        list,
+        list: sortByKey(list, 'nickName'),
         lastLoadedAt: new Date(),
       };
 
@@ -33,7 +40,7 @@ function follows(state = initialState, action) {
     newData.unshift(follow);
 
     return {
-      list: newData,
+      list: sortByKey(newData, 'nickName'),
       lastLoadedAt: new Date(),
     };
 

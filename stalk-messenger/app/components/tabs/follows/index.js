@@ -134,7 +134,7 @@ class FollowsScreen extends Component {
             </View>
           )}
           enableEmptySections={true}
-          sectionKey="username"
+          sectionKey="nickName"
           autoSection={true}
           leftOpenValue={75}
           rightOpenValue={-150}
