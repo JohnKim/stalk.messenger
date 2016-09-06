@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ListView
+  ListView,
+  Image
 } from 'react-native'
 
 import { S5ProfilePicture } from 's5-components';
@@ -17,7 +18,7 @@ export default class ControlPanel extends Component {
     chat: PropTypes.any.isRequired
   };
 
-   constructor(props){
+  constructor(props){
     super(props);
   }
 
@@ -32,13 +33,20 @@ export default class ControlPanel extends Component {
           </View>
 
           <View style={styles.itemList}>
-            {this.props.chat.users.map(user => (
+            <TouchableOpacity onPress={closeDrawer}>
               <View style={styles.item}>
+                <Image source={require('./img/ic_person_add.png')} style={styles.imageInvite}/>
+                <Text style={[styles.itemText,{color:'#02a8f3'}]}>Invite follower</Text>                
+              </View>
+            </TouchableOpacity>
+
+            {this.props.chat.users.map(user => (
+              <View key={user.username} style={styles.item}>
                 <S5ProfilePicture
                   name={user.nickName}
                   profileFileUrl={user.profileFileUrl}
                   size={40}
-                  style={styles.image}
+                  style={styles.profileImage}
                 />
                 <Text style={styles.itemText}>
                   {user.nickName}
@@ -47,9 +55,11 @@ export default class ControlPanel extends Component {
             ))}
           </View>
         </ScrollView>
-        <TouchableOpacity style={styles.button} onPress={closeDrawer}>
-          <Text>Close Drawer</Text>
-        </TouchableOpacity>
+        <View style={styles.footer}>
+          <TouchableOpacity onPress={closeDrawer}>
+            <Image source={require('./img/ic_chevron_right.png')}/>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -59,31 +69,46 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'black'
+    borderLeftWidth: 1,
+    borderLeftColor: 'black'
   },
   header: {
     padding: 20,
+    backgroundColor: '#f8f8f8',
+  },
+  footer: {
+    padding: 10,
     backgroundColor: '#f8f8f8',
   },
   controlText: {
     color: 'black',
   },
   button: {
-    padding: 20,
+    padding: 10,
     backgroundColor: 'white',
   },
-  image: {
-    margin:10
+  imageInvite: {
+    margin:10,
+    width:40,
+    height:40,
+    borderWidth: 1,
+    borderRadius:20,
+    borderColor:'#02a8f3'
+  },
+  profileImage: {
+    margin:10,
+    width:40,
+    height:40
   },
   itemList: {
-    padding: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
     flex: 1
   },
   item: {
     flex: 1,
     flexDirection: 'row',
-    height: 60,
+    height: 50,
   },
   itemText: {
     color: 'black',

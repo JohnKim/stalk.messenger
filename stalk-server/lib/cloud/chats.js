@@ -214,7 +214,8 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
 Parse.Cloud.define('chats-add', function(request, response) {
 
-  var { ids, channelId } = request.params;
+  var ids = request.params.ids;
+  var channelId =  request.params.channelId;
 
   var channel = new Channels();
   channel.id = channelId;

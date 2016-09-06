@@ -369,7 +369,7 @@ class ChatView extends Component {
 
     const rightItem = {
       title: 'search',
-      icon: require('./img/icon.png'),
+      icon: require('./img/ic_menu_w.png'),
       onPress: this.openControlPanel.bind(this),
     };
 
@@ -384,7 +384,7 @@ class ChatView extends Component {
         side="right"
         panCloseMask={0.2}
         closedDrawerOffset={-3}
-        styles={{main: {shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15}}}
+        styles={{main: {shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 15}}}
         tweenHandler={(ratio) => ({
           main: { opacity:(2-ratio)/2 }
         })}
