@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "moment": "^2.14.1",
-    "parse": "git+https://github.com/S5Platform/Parse-SDK-JS.git",
+    "parse": "git://github.com/S5Platform/Parse-SDK-JS.git",
     "react": "15.3.1",
     "react-native": "0.32.0",
     "react-native-action-button": "^2.0.1",
@@ -26,7 +26,6 @@
     "redux-logger": "^2.6.1",
     "redux-persist": "^3.5.0",
     "redux-thunk": "^2.1.0",
-    "remote-redux-devtools": "^0.4.7",
     "tween-functions": "^1.2.0"
   },
   "devDependencies": {
