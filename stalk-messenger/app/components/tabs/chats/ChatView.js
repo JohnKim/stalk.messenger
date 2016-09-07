@@ -367,10 +367,19 @@ class ChatView extends Component {
 
   render() {
 
+    const leftItem = {
+      title: 'backup',
+      icon: 'arrow-back',
+      onPress: () => {
+        this.props.switchTab();
+        this.props.navigator.pop();
+      },
+    };
+
     const rightItem = {
-      title: 'search',
-      icon: require('./img/ic_menu_w.png'),
-      onPress: this.openControlPanel.bind(this),
+      title: 'menu',
+      icon: 'menu',
+      onPress: () => this.openControlPanel(),
     };
 
     return (
@@ -392,15 +401,7 @@ class ChatView extends Component {
           <S5Header
             title="Chats"
             style={{backgroundColor: '#224488'}}
-            leftItem={{
-              icon: require('../../common/img/ic_keyboard_arrow_left_white.png'),
-              title: 'Back',
-              layout: 'icon',
-              onPress: () => {
-                this.props.switchTab();
-                this.props.navigator.pop();
-              },
-            }}
+            leftItem={{...leftItem, layout: 'icon'}}
             rightItem={{...rightItem, layout: 'icon'}}
           />
 

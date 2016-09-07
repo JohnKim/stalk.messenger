@@ -14,7 +14,7 @@ import {
   Image
 } from 'react-native';
 
-import { S5ProfilePicture } from 's5-components';
+import { S5ProfilePicture, S5Icon } from 's5-components';
 
 export default class FollowCell extends Component {
   state = {
@@ -25,7 +25,7 @@ export default class FollowCell extends Component {
     user: React.PropTypes.object.isRequired,
     onProfilePress: React.PropTypes.func,
     onPress: React.PropTypes.func,
-    selectable: React.PropTypes.bool, 
+    selectable: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -41,21 +41,16 @@ export default class FollowCell extends Component {
       if( this.state.checked ){
         return (
           <View style={styles.checked}>
-            <Image
-              source={require('./img/ic_done.png')}
-              style={{
-                width: 30,
-                height: 30
-              }} />
+            <S5Icon name={'checkmark'} color={'white'} />
           </View>
         )
       } else {
         return (
           <View style={styles.unchecked}>
           </View>
-        )      
+        )
       }
-    }    
+    }
     return null;
   }
 

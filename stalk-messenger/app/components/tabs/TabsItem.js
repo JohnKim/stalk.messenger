@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import { S5Icon } from 's5-components';
 
 export default class TabsItem extends Component {
 
@@ -32,11 +33,7 @@ export default class TabsItem extends Component {
 
   constructor(props) {
 		super(props);
-    this.tabIcons = [];
 	}
-
-  renderTabOption(name, page) {
-  }
 
   renderTab(name, page, isTabActive, onPressHandler) {
     const { activeColor, inactiveColor, textStyle, } = this.props;
@@ -51,12 +48,7 @@ export default class TabsItem extends Component {
       onPress={() => onPressHandler(page)}
     >
       <View style={[styles.tab, this.props.tabStyle, ]}>
-        <Icon
-            name={name}
-            size={30}
-            color={itemColor}
-            ref={(icon) => { this.tabIcons[page] = icon; }}
-          />
+        <S5Icon name={name} size={30} color={itemColor} />
         {/* <Text style={[{color: textColor, fontSize: 10, fontWeight, }, textStyle, ]}>
           {name}
         </Text> */}

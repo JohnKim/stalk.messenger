@@ -95,7 +95,7 @@ class FollowsScreen extends Component {
 
     const rightItem = {
       title: 'search',
-      icon: require('./img/ic_search_white.png'),
+      icon: 'search',
       onPress: this._openSearchUserView.bind(this),
     };
 

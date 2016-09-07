@@ -51,9 +51,9 @@ class TabsView extends Component {
           locked={true}
           onChangeTab={(data) => this.onTabSelect(data.i)}
           >
-          <FollowsView tabLabel="ios-people" navigator={this.props.navigator} />
-          <ChatsView tabLabel="ios-chatboxes" navigator={this.props.navigator} />
-          <ProfileView tabLabel="ios-list" navigator={this.props.navigator} />
+          <FollowsView  tabLabel="people"     navigator={this.props.navigator} />
+          <ChatsView    tabLabel="chatboxes"  navigator={this.props.navigator} />
+          <ProfileView  tabLabel="list"       navigator={this.props.navigator} />
         </ScrollableTabView>
       );
 
@@ -67,9 +67,9 @@ class TabsView extends Component {
           locked={true}
           onChangeTab={(data) => this.onTabSelect(data.i)}
           >
-          <FollowsView tabLabel="ios-people" navigator={this.props.navigator} />
-          <ChatsView tabLabel="ios-chatboxes" navigator={this.props.navigator} />
-          <ProfileView tabLabel="ios-list" navigator={this.props.navigator} />
+          <FollowsView  tabLabel="people"     navigator={this.props.navigator} />
+          <ChatsView    tabLabel="chatboxes"  navigator={this.props.navigator} />
+          <ProfileView  tabLabel="list"       navigator={this.props.navigator} />
         </ScrollableTabView>
       );
     }

@@ -87,13 +87,15 @@ class SelectUserView extends Component {
           title="Select User"
           style={{backgroundColor: '#224488'}}
           leftItem={{
-            icon: require('../../common/img/back_white.png'),
+            icon: 'arrow-back',
             title: 'Back',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
           }}
           rightItem={{
             title: 'Invite',
+            icon: 'checkmark-circle-outline',
+            layout: 'icon',
             onPress: () => this._createChat(),
           }}
         />

@@ -15,7 +15,9 @@ import {
   Image,
   ToolbarAndroid,
 } from 'react-native';
+
 import S5Colors from './S5Colors';
+import S5Icon   from './S5Icon';
 
 export const Item = {
   title: React.PropTypes.string,
@@ -136,7 +138,9 @@ class ItemWrapperIOS extends React.Component {
         </Text>
       );
     } else if (icon) {
-      content = <Image source={icon} style={{height:18}}/>;
+      //content = <Image source={icon} style={{height:18}}/>;
+      content = <S5Icon name={icon} color={color} size={22} />
+
     }
 
     return (
@@ -172,7 +176,7 @@ var styles = StyleSheet.create({
   titleText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 18,
   },
   leftItem: {
     flex: 1,
