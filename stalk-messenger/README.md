@@ -12,7 +12,7 @@ rnpm link
 npm install --save moment git://github.com/S5Platform/Parse-SDK-JS.git redux react-redux redux-logger redux-persist redux-thunk tween-functions
 npm install --save-dev faker # babel-eslint eslint eslint-plugin-react eslint-plugin-react-native remote-redux-devtools
 
-npm install --save react-native-action-button react-native-gifted-chat react-native-gifted-listview react-native-gifted-spinner react-native-push-notification  git://github.com/JohnKim/react-native-tab-navigator.git git://github.com/S5Platform/react-native-socketio.git react-native-scrollable-tab-view
+npm install --save react-native-action-button react-native-gifted-chat react-native-gifted-listview react-native-gifted-spinner react-native-push-notification  git://github.com/S5Platform/react-native-socketio.git react-native-scrollable-tab-view
 
 # Setting react-native-push-notification MANUALLY
 # https://github.com/zo0r/react-native-push-notification

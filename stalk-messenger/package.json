@@ -19,7 +19,6 @@
     "react-native-push-notification": "^2.0.2",
     "react-native-scrollable-tab-view": "^0.6.0",
     "react-native-socketio": "git://github.com/S5Platform/react-native-socketio.git",
-    "react-native-tab-navigator": "git://github.com/JohnKim/react-native-tab-navigator.git",
     "react-native-vector-icons": "^2.1.0",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",

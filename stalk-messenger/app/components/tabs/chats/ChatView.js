@@ -468,7 +468,7 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    switchTab: () => dispatch(switchTab('chats')),
+    switchTab: () => dispatch(switchTab(1)), // to 'chats' tab
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
     setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
     createChat: (users) => dispatch(createChat(users)),

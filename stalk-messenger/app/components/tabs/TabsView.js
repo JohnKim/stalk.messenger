@@ -7,11 +7,15 @@
 import React, { Component } from 'react';
 import {
   Image,
+  View,
+  Platform,
 } from 'react-native';
 
 import { connect }    from 'react-redux';
 import { switchTab }  from 's5-action';
-import TabNavigator   from 'react-native-tab-navigator';
+
+import TabsItem from './TabsItem';
+import ScrollableTabView, {DefaultTabBar} from 'react-native-scrollable-tab-view';
 
 import FollowsView    from './follows';
 import ChatsView      from './chats';
@@ -20,55 +24,56 @@ import ProfileView    from './profile';
 class TabsView extends Component {
 
   static propTypes = {
-    tab:  React.PropTypes.string,
-    onTabSelect: React.PropTypes.func.isRequired,
+    tab: React.PropTypes.number,
+    switchTab: React.PropTypes.func.isRequired,
     navigator: React.PropTypes.object.isRequired,
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    console.log(props);
+    this.initialPage = props.tab;
   }
 
   onTabSelect(tab) {
-    if (this.props.tab !== tab) {
-      this.props.onTabSelect(tab);
-    }
+    this.props.switchTab(tab);
   }
 
   render() {
 
-    return (
-      <TabNavigator>
+    if (Platform.OS === 'ios') {
+      return (
+        <ScrollableTabView
+          initialPage={this.initialPage}
+          page={this.props.tab}
+          renderTabBar={() => <TabsItem />}
+          tabBarPosition={'bottom'}
+          locked={true}
+          onChangeTab={(data) => this.onTabSelect(data.i)}
+          >
+          <FollowsView tabLabel="ios-people" navigator={this.props.navigator} />
+          <ChatsView tabLabel="ios-chatboxes" navigator={this.props.navigator} />
+          <ProfileView tabLabel="ios-list" navigator={this.props.navigator} />
+        </ScrollableTabView>
+      );
 
-        <TabNavigator.Item
-          title="Follows"
-          selected={this.props.tab === 'follows'}
-          renderIcon={() => <Image source={require('./follows/img/icon.png')} />}
-          renderSelectedIcon={() => <Image source={require('./follows/img/icon-active.png')} />}
-          onPress={() => this.onTabSelect('follows')}>
-          <FollowsView navigator={this.props.navigator} />
-        </TabNavigator.Item>
+    } else {
+      return (
+        <ScrollableTabView
+          style={{marginTop: 20, }}
+          page={this.props.tab}
+          renderTabBar={() => <TabsItem />}
+          tabBarPosition={'top'}
+          locked={true}
+          onChangeTab={(data) => this.onTabSelect(data.i)}
+          >
+          <FollowsView tabLabel="ios-people" navigator={this.props.navigator} />
+          <ChatsView tabLabel="ios-chatboxes" navigator={this.props.navigator} />
+          <ProfileView tabLabel="ios-list" navigator={this.props.navigator} />
+        </ScrollableTabView>
+      );
+    }
 
-        <TabNavigator.Item
-          title="Chats"
-          selected={this.props.tab === 'chats'}
-          renderIcon={() => <Image source={require('./chats/img/icon.png')} />}
-          renderSelectedIcon={() => <Image source={require('./chats/img/icon-active.png')} />}
-          badgeText="1" // TODO implements !!
-          onPress={() => this.onTabSelect('chats')}>
-          <ChatsView navigator={this.props.navigator} />
-        </TabNavigator.Item>
-
-        <TabNavigator.Item
-          title="Profile"
-          selected={this.props.tab === 'profile'}
-          renderIcon={() => <Image source={require('./profile/img/icon.png')} />}
-          renderSelectedIcon={() => <Image source={require('./profile/img/icon-active.png')} />}
-          onPress={() => this.onTabSelect('profile')}>
-          <ProfileView navigator={this.props.navigator} />
-        </TabNavigator.Item>
-
-      </TabNavigator>
-    );
   }
 
 }
@@ -81,7 +86,7 @@ function select(store) {
 
 function actions(dispatch) {
   return {
-    onTabSelect: (tab) => dispatch(switchTab(tab)),
+    switchTab: (tab) => dispatch(switchTab(tab)),
   };
 }
 

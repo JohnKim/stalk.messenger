@@ -12,6 +12,7 @@
     "jsx": true
   },
   "extends": [
+      "airbnb",
       "eslint:recommended",
       "plugin:react/recommended"
   ],

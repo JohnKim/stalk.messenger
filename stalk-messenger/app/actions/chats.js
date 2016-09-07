@@ -13,7 +13,6 @@ const InteractionManager = require('InteractionManager');
 
 const Chats = Parse.Object.extend('Chats');
 
-
 function loadChannelNode (channelId) {
 
   return new Promise( (resolve, reject) => {

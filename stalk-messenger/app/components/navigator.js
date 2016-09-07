@@ -32,7 +32,7 @@ class AppNavigator extends Component {
   _handlers = [];//:
 
   static propTypes = {
-    tab: React.PropTypes.string.isRequired,
+    tab: React.PropTypes.number.isRequired,
     switchTab: React.PropTypes.func.isRequired,
     isLoggedIn: React.PropTypes.bool,
   };
@@ -82,8 +82,8 @@ class AppNavigator extends Component {
       return true;
     }
 
-    if (this.props.tab !== 'chats') {
-      this.props.switchTab('chats');
+    if (this.props.tab !== 1) { // "chats tab"
+      this.props.switchTab(1);
       return true;
     }
     return false;
@@ -96,6 +96,7 @@ class AppNavigator extends Component {
       if(route.signupView) {
         return <SignupView navigator={navigator} />;
       }
+
       return <LoginScreen navigator={navigator} />;
     }
 
