@@ -9,6 +9,8 @@ import {
   StyleSheet
 } from 'react-native';
 
+import { S5Icon } from 's5-components';
+
 export default class SettingCell extends Component {
 
   static propTypes = {
@@ -33,9 +35,7 @@ export default class SettingCell extends Component {
             <Text style={styles.text}>
               {this.props.text}
             </Text>
-            <Image source={require('./img/icon_arrow_right.png')}
-              style={styles.arrow}>
-            </Image>
+            <S5Icon name={'arrow-forward'} color={'gray'} style={styles.arrow}/>
           </View>
         </TouchableHighlight>
     )

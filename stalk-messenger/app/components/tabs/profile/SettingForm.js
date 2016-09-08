@@ -89,7 +89,7 @@ class SettingForm extends Component {
           title={this.state.title}
           style={{backgroundColor: '#224488'}}
           leftItem={{
-            icon: require('../../common/img/back_white.png'),
+            icon: 'arrow-back',
             title: 'Back',
             layout: 'icon',
             onPress: () => this.props.navigator.pop(),
