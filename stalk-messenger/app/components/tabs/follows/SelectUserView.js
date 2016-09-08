@@ -38,6 +38,13 @@ class SelectUserView extends Component {
 
     this._createChat = this._createChat.bind(this);
     this.checkedUsers = {};
+    this.existUserIds = [];
+
+    if( this.props.users ){
+      for( var inx = 0 ; inx < this.props.users.length;inx++ ){
+        this.existUserIds.push( this.props.users[inx].username );
+      }
+    }
   }
 
   _onRowPress(user, checked ){
@@ -64,10 +71,20 @@ class SelectUserView extends Component {
   }
 
   _renderRow(data) {
+
+    var disabled = false;
+    var checked = false;
+    if( this.existUserIds.indexOf( data.username ) > -1 ){
+      disabled = true;
+      checked = true;
+    }
+
     return (
       <FollowCell
         key={data.id}
         user={data}
+        disabled ={disabled}
+        checked={checked}
         onPress={(checked) => this._onRowPress(data, checked)}
         selectable={true}
       />

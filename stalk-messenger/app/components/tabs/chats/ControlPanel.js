@@ -18,8 +18,38 @@ export default class ControlPanel extends Component {
     chat: PropTypes.any.isRequired
   };
 
+  state = {
+    users: this.props.chat.users
+  };
+
   constructor(props){
     super(props);
+    this._openAddUserView = this._openAddUserView.bind(this);
+    this._renderUsers = this._renderUsers.bind(this);
+  }
+
+  _openAddUserView() {
+    this.props.navigator.push({selectUserView: 1, users:this.state.users});
+  }
+
+  _renderUsers(){
+    var userList = this.state.users.map(function(user){
+      return (
+        <View key={user.username} style={styles.item}>
+          <S5ProfilePicture
+            name={user.nickName}
+            profileFileUrl={user.profileFileUrl}
+            size={40}
+            style={styles.profileImage}
+          />
+          <Text style={styles.itemText}>
+            {user.nickName}
+          </Text>
+        </View>
+      );
+    })
+
+    return userList;
   }
 
   render() {
@@ -33,26 +63,13 @@ export default class ControlPanel extends Component {
           </View>
 
           <View style={styles.itemList}>
-            <TouchableOpacity onPress={closeDrawer}>
+            <TouchableOpacity onPress={this._openAddUserView}>
               <View style={styles.item}>
                 <Image source={require('./img/ic_person_add.png')} style={styles.imageInvite}/>
                 <Text style={[styles.itemText,{color:'#02a8f3'}]}>Invite follower</Text>                
               </View>
             </TouchableOpacity>
-
-            {this.props.chat.users.map(user => (
-              <View key={user.username} style={styles.item}>
-                <S5ProfilePicture
-                  name={user.nickName}
-                  profileFileUrl={user.profileFileUrl}
-                  size={40}
-                  style={styles.profileImage}
-                />
-                <Text style={styles.itemText}>
-                  {user.nickName}
-                </Text>
-              </View>
-            ))}
+            {this._renderUsers()}
           </View>
         </ScrollView>
         <View style={styles.footer}>

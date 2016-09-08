@@ -256,7 +256,7 @@ class ChatView extends Component {
 
   onSend(messages = []) {
 
-    console.log(this.socket, this.state.connected, this.state.chat.channelId, ((this.socket && this.state.connected) || !this.state.chat.channelId));
+    //console.log(this.socket, this.state.connected, this.state.chat.channelId, ((this.socket && this.state.connected) || !this.state.chat.channelId));
 
     if ( (this.socket && this.state.connected) || !this.state.chat.channelId ){
       this.sendMesage(messages[0]);
@@ -386,7 +386,7 @@ class ChatView extends Component {
       <View style={styles.container}>
       <S5Drawer
         type="overlay"
-        content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.state.chat}/>}
+        content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.state.chat} navigator={this.props.navigator} />}
         ref={(ref) => this._drawer = ref}
         tapToClose={true}
         openDrawerOffset={0.2} // 20% gap on the right side of drawer

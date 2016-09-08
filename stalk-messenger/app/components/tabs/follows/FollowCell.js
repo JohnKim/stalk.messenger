@@ -18,7 +18,7 @@ import { S5ProfilePicture, S5Icon } from 's5-components';
 
 export default class FollowCell extends Component {
   state = {
-    checked : false
+    checked : this.props.checked?this.props.checked:false
   };
 
   static propTypes = {
@@ -38,24 +38,39 @@ export default class FollowCell extends Component {
 
   renderCheckbox() {
     if( this.props.selectable ){
-      if( this.state.checked ){
-        return (
-          <View style={styles.checked}>
-            <S5Icon name={'checkmark'} color={'white'} />
-          </View>
-        )
+      if( this.props.disabled ) {
+        if( this.state.checked ){
+          return (
+            <View style={styles.disabledChecked}>
+              <S5Icon name={'checkmark'} color={'white'} />
+            </View>
+          )
+        } else {
+          return (
+            <View style={styles.disabledUnchecked}>
+            </View>
+          )
+        }
       } else {
-        return (
-          <View style={styles.unchecked}>
-          </View>
-        )
+        if( this.state.checked ){
+          return (
+            <View style={styles.checked}>
+              <S5Icon name={'checkmark'} color={'white'} />
+            </View>
+          )
+        } else {
+          return (
+            <View style={styles.unchecked}>
+            </View>
+          )
+        }
       }
     }
     return null;
   }
 
   _onPress(){
-    if( this.props.onPress ){
+    if( this.props.onPress && !this.props.disabled ){
       if( this.props.selectable ){
         this.props.onPress(!this.state.checked);
         if( this.state.checked ){
@@ -153,6 +168,28 @@ const styles = StyleSheet.create({
   checked: {
     marginLeft: 10,
     backgroundColor:'#224488',
+    width:30,
+    height:30,
+    borderRadius: 15,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabledUnchecked:{
+    marginLeft: 10,
+    backgroundColor:'#838585',
+    width:30,
+    height:30,
+    borderRadius: 15,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#7F91A7'    
+  },
+  disabledChecked:{
+    marginLeft: 10,
+    backgroundColor:'#838585',
     width:30,
     height:30,
     borderRadius: 15,

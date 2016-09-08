@@ -109,7 +109,7 @@ class AppNavigator extends Component {
     } else if(route.settingForm){
       return <SettingForm navigator={navigator} field={route.field} title={route.title} validLength={route.validLength} />;
     } else if(route.selectUserView){
-      return <SelectUserView navigator={navigator} />;
+      return <SelectUserView navigator={navigator} users={route.users}/>;
     }
 
     return <TabsView navigator={navigator} />;
