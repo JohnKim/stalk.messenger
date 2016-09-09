@@ -99,20 +99,11 @@ function createChatAsync (users) {
 
 }
 
-// TODO unused 사용하지 않는 호출 !!!!
-function addUserToChat (channelId, ids) {
-
-  var param = {};
-  if (typeof id == 'string' || id instanceof String) {
-    param.id = id;
-  } else if (typeof id == 'object') {
-    if (Array.isArray(id)) {
-      param.ids = id;
-    }
-  }
+function addUserToChat (chatId, channelId, ids) {
 
   return new Promise( (resolve, reject) => {
-    Parse.Cloud.run('chats-add', { channelId, ids }).then(
+
+    Parse.Cloud.run('chats-add', { chatId, channelId, ids }).then(
       (result) => {
         resolve(result);
       },
@@ -227,12 +218,11 @@ export function removeChat(row) {
 
 }
 
-// TODO unused 사용하지 않음.
-export function addUsers(channelId, ids) {
+export function addUsers(chatId, channelId, ids) {
 
  return async (dispatch, getState) => {
 
-   var result = await addUserToChat(channelId, ids);
+   var result = await addUserToChat(chatId, channelId, ids);
 
    return Promise.resolve(result);
 

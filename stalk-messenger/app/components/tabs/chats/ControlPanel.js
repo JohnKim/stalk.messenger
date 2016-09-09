@@ -29,7 +29,8 @@ export default class ControlPanel extends Component {
   }
 
   _openAddUserView() {
-    this.props.navigator.push({selectUserView: 1, users:this.state.users});
+    this.props.closeDrawer();
+    this.props.navigator.push({selectUserView: 1, chat:this.props.chat});
   }
 
   _renderUsers(){

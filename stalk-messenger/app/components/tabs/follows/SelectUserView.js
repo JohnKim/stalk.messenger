@@ -17,7 +17,7 @@ import {
 
 import FollowCell from './FollowCell';
 
-import { loadFollows, createChat } from 's5-action';
+import { loadFollows, addUsers } from 's5-action';
 import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
 
@@ -36,13 +36,13 @@ class SelectUserView extends Component {
   constructor(props) {
     super(props);
 
-    this._createChat = this._createChat.bind(this);
+    this._onRightItemPress = this._onRightItemPress.bind(this);
     this.checkedUsers = {};
     this.existUserIds = [];
 
-    if( this.props.users ){
-      for( var inx = 0 ; inx < this.props.users.length;inx++ ){
-        this.existUserIds.push( this.props.users[inx].username );
+    if( this.props.chat && this.props.chat.users ){
+      for( var inx = 0 ; inx < this.props.chat.users.length;inx++ ){
+        this.existUserIds.push( this.props.chat.users[inx].username );
       }
     }
   }
@@ -55,11 +55,19 @@ class SelectUserView extends Component {
     }
   }
 
+  _onRightItemPress(){
+    if( this.props.chat ){
+      this._addUsers();
+    } else {
+      this._createChat();
+    }
+  }
+
   _createChat(){
     var users = [];
 
-    for (var prop in this.checkedUsers) {
-      users.push(this.checkedUsers[prop]);
+    for (var username in this.checkedUsers) {
+      users.push(this.checkedUsers[username]);
     }
 
     if( users.length > 0 ){
@@ -67,6 +75,25 @@ class SelectUserView extends Component {
         chatView: true,
         users,
       });
+    }
+  }
+
+  _addUsers(){
+    var users = [];
+
+    for (var prop in this.checkedUsers) {
+      users.push(this.checkedUsers[prop].id);
+    }
+
+    if( users.length > 0 ){
+      this.props.addUsers(this.props.chat.id, this.props.chat.channelId, users).then(
+        (result) => {
+          console.log('Add users', result);
+          // TODO : implement screen refresh logic
+        },
+        (error)=> {
+          console.log('ERROR....>', error);
+        });
     }
   }
 
@@ -113,7 +140,7 @@ class SelectUserView extends Component {
             title: 'Invite',
             icon: 'checkmark-circle-outline',
             layout: 'icon',
-            onPress: () => this._createChat(),
+            onPress: () => this._onRightItemPress(),
           }}
         />
 
@@ -146,7 +173,7 @@ function select(store) {
 function actions(dispatch) {
   return {
     loadFollows: () => dispatch(loadFollows()),
-    createChat: (id, callback) => dispatch(createChat(id, callback)),
+    addUsers: (chatId, channelId, ids) => dispatch(addUsers(chatId, channelId, ids)),
   };
 }
 

@@ -94,9 +94,14 @@ export default class FollowCell extends Component {
 
   render() {
 
+    var bgColorStyle = {};
+    if( this.props.disabled ){
+      bgColorStyle = {"backgroundColor":"#f1f1f1"};
+    }
+
     return (
       <TouchableHighlight onPress={this._onPress} >
-        <View style={styles.container}>
+        <View style={[styles.container,bgColorStyle]}>
           {this.renderCheckbox()}
           <S5ProfilePicture
             key={this.props.user.id}

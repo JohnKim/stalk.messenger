@@ -267,6 +267,8 @@ class ChatView extends Component {
   sendMesage(message){
     console.log(message);
 
+    message.createdAt = Date.now();
+
     if( this.socket ) {
       this.socket.emit('send', {NM:'message', DT: message});
 

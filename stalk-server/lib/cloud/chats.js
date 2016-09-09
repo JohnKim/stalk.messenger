@@ -110,47 +110,26 @@ Parse.Cloud.define('chats-create', function(request, response) {
     return;
   }
 
-  var userArray = [currentUser];
+  var users = [currentUser];
   if( params.id ) {
     var user = new Parse.User();
     user.id = params.id;
-    userArray.push( user );
+    users.push( user );
   } else if ( params.ids ){
-    for( var key in params.ids ){
-      var user = new Parse.User();
-      user.id = params.ids[key];
-      userArray.push( user );
+    var ids = request.params.ids;
+
+    if( Array.isArray(ids) ){
+      ids.forEach(function(userId) {
+
+        if(userId == currentUser.id) {
+          console.error( "input param ("+userId+") is same with current user" );
+        } else {
+          var user = new Parse.User();
+          user.id = userId;
+          users.push(user);
+        }
+      });
     }
-  }
-
-  var query = new Parse.Query(Channels);
-  query.containsAll("users", userArray);
-  var ids = request.params.ids;
-
-  if (Array.isArray(ids) && ids.length == 0) {
-    return response.error({message: '[ids] must to be existed.'});
-  }
-
-  var users = [currentUser];
-
-  if (Array.isArray(ids)) {
-    ids.forEach(function(userId) {
-
-      if(userId == currentUser.id) {
-        // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
-        response.error( {code: 142, message: "input param ("+userId+") is same with current user"} );
-        return;
-      }
-
-      var user = new Parse.User();
-      user.id = userId;
-      users.push(user);
-
-    });
-  } else {
-    var user = new Parse.User();
-    user.id = userId;
-    users.push(user);
   }
 
   var query = new Parse.Query(Channels);
@@ -166,10 +145,6 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
       if(!channel) {
         var channels = new Channels();
-        for( var key in userArray ){
-          channels.addUnique("users", userArray[key]);
-        }
-
         users.forEach(function(user) {
           channels.addUnique("users", user);
         });
@@ -187,7 +162,7 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
     (channel) => {
 
-      _addChats(channel, userArray).then(
+      _addChats(channel, users).then(
         (results) => {
 
           _getChats(channel, currentUser).then(
@@ -214,11 +189,14 @@ Parse.Cloud.define('chats-create', function(request, response) {
 
 Parse.Cloud.define('chats-add', function(request, response) {
 
+  var currentUser = request.user;
+
   var ids = request.params.ids;
   var channelId =  request.params.channelId;
+  var chatId = request.params.chatId;
 
-  var channel = new Channels();
-  channel.id = channelId;
+  var currentChannel = new Channels();
+  currentChannel.id = channelId;
 
   var users = [];
 
@@ -226,14 +204,12 @@ Parse.Cloud.define('chats-add', function(request, response) {
     ids.forEach(function(userId) {
 
       if(userId == currentUser.id) {
-        // ParseError.VALIDATION_ERROR = 142; (Error code indicating that a Cloud Code validation failed.)
-        response.error( {code: 142, message: "input param ("+userId+") is same with current user"} );
-        return;
+        console.error( "input param ("+userId+") is same with current user" );
+      } else {
+        var user = new Parse.User();
+        user.id = userId;
+        users.push(user);
       }
-
-      var user = new Parse.User();
-      user.id = userId;
-      users.push(user);
 
     });
   } else {
@@ -242,16 +218,35 @@ Parse.Cloud.define('chats-add', function(request, response) {
     users.push(user);
   }
 
+  users.forEach(function(user) {
+    currentChannel.addUnique("users", user);
+  });
 
-  _addChats(channel, users).then(
+  currentChannel.save().then(
     (results) => {
-      response.success(results);
+
+      _addChats(currentChannel, users).then(
+        (results) => {
+
+          _getChats(currentChannel, currentUser).then(
+            (chat) => {
+              response.success(chat);
+            },
+            (error) => {
+              response.error(error);
+            }
+          );
+        },
+        (error) => {
+          response.error(error);
+        }
+      );
+
     },
     (error) => {
       response.error(error);
     }
   );
-
 });
 
 Parse.Cloud.define('chats-remove', function(request, response) {
