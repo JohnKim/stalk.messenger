@@ -80,6 +80,7 @@ export default class S5TextInput extends Component {
             fontSize: 12,
             letterSpacing: 1,
             color: this.state.borderBottomColor,
+            backgroundColor: 'transparent',
           }}>
             {this.props.label}
           </Text>

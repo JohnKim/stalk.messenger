@@ -17,6 +17,8 @@ import { connect } from 'react-redux';
 import { signup }   from 's5-action';
 import { S5TextInput, S5Button } from 's5-components';
 
+import KeyboardSpacer from './KeyboardSpacer';
+
 class SignupView extends Component {
 
   static propTypes = {
@@ -30,6 +32,7 @@ class SignupView extends Component {
     password: '',
     passwordChecked: '',
     message: '',
+    bottomHeight: 200,
   };
 
   componentDidMount() {
@@ -104,6 +107,8 @@ class SignupView extends Component {
             placeholder={''}
             value={this.state.username}
             autoCapitalize="none"
+            autoCorrect={false}
+            onFocus={() => this.setState({bottomHeight: 100})}
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
           />
           <S5TextInput
@@ -113,6 +118,7 @@ class SignupView extends Component {
             placeholder={''}
             value={this.state.password}
             secureTextEntry={true}
+            onFocus={() => this.setState({bottomHeight: 100})}
             onChangeText={(text) => this.setState({password: text})}
           />
           <S5TextInput
@@ -121,6 +127,7 @@ class SignupView extends Component {
             placeholder={''}
             value={this.state.passwordChecked}
             secureTextEntry={true}
+            onFocus={() => this.setState({bottomHeight: 210})}
             onChangeText={(text) => this.setState({passwordChecked: text})}
           />
 
@@ -131,6 +138,9 @@ class SignupView extends Component {
             placeholder={''}
             value={this.state.email}
             autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="email-address"
+            onFocus={() => this.setState({bottomHeight: 210})}
             onChangeText={(text) => this.setState({email: text})}
           />
         </View>
@@ -146,6 +156,8 @@ class SignupView extends Component {
           caption="ALREADY HAVE AN ACCOUNT ?"
           onPress={() => this.props.navigator.pop()}
         />
+
+      <KeyboardSpacer height={this.state.bottomHeight} style={{backgroundColor: '#FFFFFF'}}/>
 
       </View>
     );
@@ -166,17 +178,17 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     backgroundColor: '#FFFFFF',
-    padding: 20,
+    padding: 10,
     // Image's source contains explicit size, but we want
     // it to prefer flex: 1
     width: undefined,
     height: undefined,
   },
   textinput: {
-    marginTop: 20,
+    marginTop: 10,
   },
   signupBtn: {
-    marginTop: 20,
+    marginTop: 10,
   },
   message: {
     color: 'red',

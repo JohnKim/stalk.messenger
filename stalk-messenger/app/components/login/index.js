@@ -9,11 +9,14 @@ import {
   Image,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
 import { connect } from 'react-redux';
 import { signin }   from 's5-action';
 import { S5TextInput, S5Button } from 's5-components';
+
+import KeyboardSpacer from './KeyboardSpacer';
 
 class LoginScreen extends Component {
 
@@ -55,48 +58,52 @@ class LoginScreen extends Component {
   render() {
 
     return (
-      <Image
-        style={styles.container}
-        source={require('./img/background.png')}>
+      <View style={[{flex: 1}]}>
+        <Image
+          style={styles.container}
+          source={require('./img/background.png')}>
 
-        <Text
-          style={styles.message}>
-          {this.state.message}
-        </Text>
+          <Text
+            style={styles.message}>
+            {this.state.message}
+          </Text>
 
-        <S5TextInput
-          ref="username"
-          label="USERNAME"
-          style={styles.textinput}
-          placeholder={''} //{"Username"}
-          value={this.state.username}
-          autoCapitalize="none"
-          onChangeText={(text) => this.setState({username: text.toLowerCase()})}
-        />
+          <S5TextInput
+            ref="username"
+            label="USERNAME"
+            style={styles.textinput}
+            placeholder={''} //{"Username"}
+            value={this.state.username}
+            autoCapitalize="none"
+            onChangeText={(text) => this.setState({username: text.toLowerCase()})}
+          />
 
-        <S5TextInput
-          ref="password"
-          label="PASSWORD"
-          style={styles.textinput}
-          placeholder={''}//{"Password"}
-          value={this.state.password}
-          secureTextEntry={true}
-          onChangeText={(text) => this.setState({password: text})}
-        />
+          <S5TextInput
+            ref="password"
+            label="PASSWORD"
+            style={styles.textinput}
+            placeholder={''}//{"Password"}
+            value={this.state.password}
+            secureTextEntry={true}
+            onChangeText={(text) => this.setState({password: text})}
+          />
 
-        <S5Button
-          style={styles.loginBtn}
-          caption="Login"
-          onPress={this.login.bind(this)}
-        />
+          <S5Button
+            style={styles.loginBtn}
+            caption="Login"
+            onPress={this.login.bind(this)}
+          />
 
-        <S5Button
-          type="secondary"
-          caption="DON'T HAVE AN ACCOUNT ?"
-          onPress={() => this.props.navigator.push({signupView: 1})}
-        />
+          <S5Button
+            type="secondary"
+            caption="DON'T HAVE AN ACCOUNT ?"
+            onPress={() => this.props.navigator.push({signupView: 1})}
+          />
 
-      </Image>
+        </Image>
+
+        <KeyboardSpacer height={260} style={{backgroundColor: '#FFFFFF'}}/>
+      </View>
     );
 
   }
