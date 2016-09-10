@@ -24,7 +24,8 @@ const S5Icon = (props) => {
     name={Platform.OS === 'ios' ? 'ios-'+props.name : 'md-'+props.name}
     size={props.size || 30}
     color={props.color || 'black'}
-    style={{backgroundColor: 'transparent'}}
+    style={[{backgroundColor: 'transparent'}, props.style]}
+    onPress={props.onPress}
     />;
 };
 

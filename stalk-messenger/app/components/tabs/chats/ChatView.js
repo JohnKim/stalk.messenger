@@ -9,7 +9,7 @@ import {
 
 import { connect } from 'react-redux';
 import { switchTab, loadMessages, setLatestMessage, uploadImage, createChat, MESSAGE_SIZE } from 's5-action';
-import { S5Header, S5Alert, S5Drawer } from 's5-components';
+import { S5Header, S5Alert, S5Drawer, S5Icon } from 's5-components';
 
 import ControlPanel from './ControlPanel';
 
@@ -343,22 +343,16 @@ class ChatView extends Component {
   renderMenu(props){
     if( this.state.menuOpened ){
       return (
-        <TouchableHighlight onPress={this.closeMenu} underlayColor={'transparent'} >
-          <Image
-            source={require('./img/icon-clear.png')}
-            style={styles.menuIcon}
-            />
-        </TouchableHighlight>
+        //<TouchableOpacity onPress={this.closeMenu} underlayColor={'transparent'} >
+          <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
+        //</TouchableOpacity>
       );
     }
 
     return (
-      <TouchableHighlight onPress={this.openMenu} underlayColor={'transparent'} >
-        <Image
-          source={require('./img/icon-add.png')}
-          style={styles.menuIcon}
-        />
-      </TouchableHighlight>
+      //<TouchableHighlight onPress={this.openMenu} underlayColor={'transparent'} >
+        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
+      //</TouchableHighlight>
     );
   }
 
@@ -465,9 +459,9 @@ const styles = StyleSheet.create({
   menuIcon: {
     width: 30,
     height: 30,
-    opacity:0.5,
-    marginTop:5,
-    marginLeft:5
+    opacity:0.8,
+    paddingTop: 5,
+    paddingLeft: 10,
   },
 });
 
