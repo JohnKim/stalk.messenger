@@ -79,6 +79,7 @@ class SelectUserView extends Component {
   }
 
   _addUsers(){
+    var self = this;
     var users = [];
 
     for (var prop in this.checkedUsers) {
@@ -89,7 +90,9 @@ class SelectUserView extends Component {
       this.props.addUsers(this.props.chat.id, this.props.chat.channelId, users).then(
         (result) => {
           console.log('Add users', result);
-          // TODO : implement screen refresh logic
+          if( self.props.callback ){
+            self.props.callback( result );
+          }       
         },
         (error)=> {
           console.log('ERROR....>', error);

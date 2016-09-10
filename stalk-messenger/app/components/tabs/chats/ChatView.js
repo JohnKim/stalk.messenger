@@ -71,6 +71,7 @@ class ChatView extends Component {
     this.sendMesage         = this.sendMesage.bind(this);
 
     this.initChannelNodeServer = this.initChannelNodeServer.bind(this);
+    this._addUserCallback = this._addUserCallback.bind(this);
 
   }
 
@@ -178,8 +179,16 @@ class ChatView extends Component {
     }
   }
 
-  closeControlPanel() {
-    this._drawer.close()
+  closeControlPanel(action) {
+    this._drawer.close();
+    if(action.openSelectUserView){
+      this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
+    }
+  }
+
+  _addUserCallback(newChat){
+    this.setState( {chat:newChat} );
+    this.props.navigator.pop();
   }
 
   openControlPanel() {
@@ -274,7 +283,6 @@ class ChatView extends Component {
 
     } else {
 
-      console.log(this.state.chat.users);
       this.props.createChat(this.state.chat.users).then(
         (result) => {
 
@@ -388,7 +396,7 @@ class ChatView extends Component {
       <View style={styles.container}>
       <S5Drawer
         type="overlay"
-        content={<ControlPanel closeDrawer={this.closeControlPanel} chat={this.state.chat} navigator={this.props.navigator} />}
+        content={<ControlPanel closeDrawer={this.closeControlPanel} users={this.state.chat.users} navigator={this.props.navigator} />}
         ref={(ref) => this._drawer = ref}
         tapToClose={true}
         openDrawerOffset={0.2} // 20% gap on the right side of drawer

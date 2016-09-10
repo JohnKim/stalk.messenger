@@ -8,6 +8,7 @@ import { SERVER_URL, APP_ID } from '../../env.js';
 export const LOADED_CHATS     = 'LOADED_CHATS';
 export const ADDED_CHAT       = 'ADDED_CHAT';
 export const REMOVED_CHATS    = 'REMOVED_CHATS';
+export const ADDED_USERS_IN_CHAT = 'ADDED_USERS_IN_CHAT';
 
 const InteractionManager = require('InteractionManager');
 
@@ -222,10 +223,23 @@ export function addUsers(chatId, channelId, ids) {
 
  return async (dispatch, getState) => {
 
-   var result = await addUserToChat(chatId, channelId, ids);
+    var currentUser = Parse.User.current();
+    var result = await addUserToChat(chatId, channelId, ids);
 
-   return Promise.resolve(result);
+    dispatch({
+      type: ADDED_USERS_IN_CHAT,
+      user: currentUser,
+      chat: result
+    });
 
+    var chat;
+    getState().chats.list.forEach( function(obj) {
+       if( obj.id == result.id ) {
+         chat = obj;
+       }
+    });
+
+    return Promise.resolve(chat);
  };
 
 }

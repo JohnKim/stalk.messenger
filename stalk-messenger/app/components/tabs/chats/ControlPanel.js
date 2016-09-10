@@ -15,11 +15,11 @@ import { S5ProfilePicture } from 's5-components';
 export default class ControlPanel extends Component {
   static propTypes = {
     closeDrawer: PropTypes.func.isRequired,
-    chat: PropTypes.any.isRequired
+    users: PropTypes.any.isRequired
   };
 
   state = {
-    users: this.props.chat.users
+    users: this.props.users
   };
 
   constructor(props){
@@ -29,8 +29,12 @@ export default class ControlPanel extends Component {
   }
 
   _openAddUserView() {
-    this.props.closeDrawer();
-    this.props.navigator.push({selectUserView: 1, chat:this.props.chat});
+    this.props.closeDrawer({openSelectUserView:1});
+  }
+
+  componentWillReceiveProps (nextProps) {
+    console.log( nextProps.users );
+    // TODO : update control panel when update finished
   }
 
   _renderUsers(){

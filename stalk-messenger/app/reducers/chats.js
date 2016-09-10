@@ -1,7 +1,7 @@
 /**
  * Chat datas for Chats Tab
  */
-import { LOADED_CHATS, ADDED_CHAT, REMOVED_CHATS, LOGGED_OUT } from 's5-action';
+import { LOADED_CHATS, ADDED_CHAT, REMOVED_CHATS, LOGGED_OUT, ADDED_USERS_IN_CHAT } from 's5-action';
 
 const initialState = {
   list: [],
@@ -48,6 +48,23 @@ function chats(state = initialState, action) {
 
   } else if (action.type === LOGGED_OUT) {
     return initialState;
+  } else if( action.type === ADDED_USERS_IN_CHAT ){
+    currentUser = action.user;
+    let chat = _parseObjToJSON(action.chat);
+    let newData = [...state.list];
+
+    var updated = false;
+    for( var inx = 0; !updated && inx < newData.length; inx++ ){
+      if( newData[inx].id == chat.id ){
+        newData[inx] = chat;
+        updated = true;
+      }
+    }
+
+    return {
+      list: newData,
+      lastLoadedAt: new Date(),
+    };
   }
 
   return state;
