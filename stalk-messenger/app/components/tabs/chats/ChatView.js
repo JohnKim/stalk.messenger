@@ -181,7 +181,7 @@ class ChatView extends Component {
 
   closeControlPanel(action) {
     this._drawer.close();
-    if(action.openSelectUserView){
+    if(action && action.openSelectUserView){
       this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
     }
   }

@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   View,
@@ -15,7 +14,7 @@ import {
 
 import { connect } from 'react-redux';
 import { signup }   from 's5-action';
-import { S5TextInput, S5Button } from 's5-components';
+import { S5TextInput, S5Button, S5Icon } from 's5-components';
 
 import KeyboardSpacer from './KeyboardSpacer';
 
@@ -92,7 +91,9 @@ class SignupView extends Component {
             marginTop:10
           }}
           underlayColor="transparent">
-          <Image source={require('../common/img/ic_close.png')} />
+          <View>
+            <S5Icon name={'close'} color={'grey'} size={40} />
+          </View>
         </TouchableHighlight>
 
         <View style={styles.form}>

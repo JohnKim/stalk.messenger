@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   View,
   ListView,
-  Image
 } from 'react-native'
 
-import { S5ProfilePicture } from 's5-components';
+import { S5ProfilePicture, S5Icon } from 's5-components';
 
 export default class ControlPanel extends Component {
+
   static propTypes = {
     closeDrawer: PropTypes.func.isRequired,
     users: PropTypes.any.isRequired
@@ -36,7 +36,7 @@ export default class ControlPanel extends Component {
   }
 
   componentDidMount(){
-    this.setState({dataSource:this.getDataSource(this.state.users)}); 
+    this.setState({dataSource:this.getDataSource(this.state.users)});
   }
 
   componentWillReceiveProps (nextProps) {
@@ -76,32 +76,32 @@ export default class ControlPanel extends Component {
   }
 
   render() {
-    let {closeDrawer} = this.props;
 
     return (
       <View style={styles.container}>
         <ScrollView >
           <View style={styles.header}>
-            <Text style={styles.controlText}>User List</Text>
+            <S5Icon name={'close'} color={'grey'} onPress={this.props.closeDrawer}  />
           </View>
-
           <View style={styles.itemList}>
             <TouchableOpacity onPress={this._openAddUserView}>
               <View style={styles.item}>
-                <Image source={require('./img/ic_person_add.png')} style={styles.imageInvite}/>
-                <Text style={[styles.itemText,{color:'#02a8f3'}]}>Invite follower</Text>                
+                <S5Icon name={'add'} size={40} color={'#02a8f3'} style={styles.imageInvite} />
+                <Text style={[styles.itemText,{color:'#02a8f3'}]}>Invite follower</Text>
               </View>
             </TouchableOpacity>
             {this._renderUsers()}
           </View>
         </ScrollView>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={closeDrawer}>
-            <Image source={require('./img/ic_chevron_right.png')}/>
-          </TouchableOpacity>
+          <View >
+            <S5Icon name={'log-out'} color={'grey'} onPress={this.props.closeDrawer}>
+              <Text style={{color: 'gray'}}> Leave </Text>
+            </S5Icon>
+          </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -110,22 +110,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     borderLeftWidth: 1,
-    borderLeftColor: 'black'
+    borderLeftColor: 'grey'
   },
   header: {
-    padding: 20,
+    paddingTop: 15,
+    paddingLeft: 20,
+    paddingBottom: 10,
     backgroundColor: '#f8f8f8',
   },
   footer: {
-    padding: 10,
+    paddingTop: 2,
+    paddingLeft: 20,
+    paddingBottom: 2,
     backgroundColor: '#f8f8f8',
-  },
-  controlText: {
-    color: 'black',
-  },
-  button: {
-    padding: 10,
-    backgroundColor: 'white',
   },
   imageInvite: {
     margin:10,
@@ -133,7 +130,8 @@ const styles = StyleSheet.create({
     height:40,
     borderWidth: 1,
     borderRadius:20,
-    borderColor:'#02a8f3'
+    borderColor:'#02a8f3',
+    paddingLeft:10
   },
   profileImage: {
     margin:10,
@@ -148,6 +146,7 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     height: 50,
   },
   itemText: {
