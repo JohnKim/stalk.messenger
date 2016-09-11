@@ -19,7 +19,10 @@ export default class ControlPanel extends Component {
   };
 
   state = {
-    users: this.props.users
+    users: this.props.users,
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2
+    })
   };
 
   constructor(props){
@@ -32,29 +35,44 @@ export default class ControlPanel extends Component {
     this.props.closeDrawer({openSelectUserView:1});
   }
 
+  componentDidMount(){
+    this.setState({dataSource:this.getDataSource(this.state.users)}); 
+  }
+
   componentWillReceiveProps (nextProps) {
-    console.log( nextProps.users );
-    // TODO : update control panel when update finished
+    this.setState({dataSource:this.getDataSource(nextProps.users)});
+  }
+
+  getDataSource(users: Array<any>): ListView.DataSource {
+    return this.state.dataSource.cloneWithRows(users);
+  }
+
+  _renderRow(user){
+    return (
+      <View key={user.username} style={styles.item}>
+        <S5ProfilePicture
+          name={user.nickName}
+          profileFileUrl={user.profileFileUrl}
+          size={40}
+          style={styles.profileImage}
+        />
+        <Text style={styles.itemText}>
+          {user.nickName}
+        </Text>
+      </View>
+    );
   }
 
   _renderUsers(){
-    var userList = this.state.users.map(function(user){
-      return (
-        <View key={user.username} style={styles.item}>
-          <S5ProfilePicture
-            name={user.nickName}
-            profileFileUrl={user.profileFileUrl}
-            size={40}
-            style={styles.profileImage}
-          />
-          <Text style={styles.itemText}>
-            {user.nickName}
-          </Text>
-        </View>
-      );
-    })
 
-    return userList;
+    return (
+      <ListView
+        ref="listView"
+        dataSource={this.state.dataSource}
+        removeClippedSubviews={false}
+        renderRow={ (data) => this._renderRow(data) }
+      />
+    );
   }
 
   render() {
