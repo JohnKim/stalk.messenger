@@ -112,6 +112,7 @@ class ChatsScreen extends Component {
           ) }
           enableEmptySections={true}
           rightOpenValue={-150}
+          removeClippedSubviews={false}
           />
 
         <ActionButton

@@ -138,6 +138,7 @@ class FollowsScreen extends Component {
           autoSection={true}
           leftOpenValue={75}
           rightOpenValue={-150}
+          removeClippedSubviews={false}
         />
 
       </View>
