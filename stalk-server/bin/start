@@ -41,21 +41,6 @@ var help = [
   ""
 ].join('\n');
 
-var welcome = [
-  " ",
-  " ,  ",
-  " |\\  ",
-  " \\ | ",
-  "  | \\ /          OPENSOURCE MESSENGER PROJECT",
-  "   \\|/    _,                   SESSION SERVER",
-  "    /  __/ /      _____________   __   __ __  ",
-  "   | _/ _.'      / __/_  __/ _ | / /  / //_/  ",
-  "   |/__/        _\\ \\  / / / __ |/ /__/ ,<    ",
-  "    \\          /___/ /_/ /_/ |_/____/_/|_|   ",
-  " ",
-  " "
-].join('\n');
-
 if (argv.h || argv.help) {
   return console.log(help);
 }
@@ -78,15 +63,14 @@ if( argv.config ){
 var options = {};
 options['host'] = argv.host || config.host || process.env.HOST || utils.getIP();
 options['port'] = argv.port || config.port || process.env.PORT || 8080;
-options['logo'] = welcome;
 
 options['zookeeper'] = config.zookeeper || process.env.ZOOKEEPER;
 options['redis'] = config.redis || process.env.REDIS;
 
 /* ONLY FOR SESSION SERVER */
 options['mongodb'] = config.mongodb || process.env.MONGODB;
-options['app'] = config.app || process.env.APP_ID;
-options['master'] = config.master || process.env.MASTER_KEY;
+options['app'] = config.app || process.env.APP_ID || 'STALK';
+options['master'] = config.master || process.env.MASTER_KEY || 's3cR3T';
 
 var homeDir = config.home || process.env.HOME_DIR;
 if (homeDir){
@@ -102,6 +86,22 @@ if(argv.session) options['type'] = 'session';
 if(argv.channel) options['type'] = 'channel';
 
 // start server
+console.log('\n    ##### Options #####\n',options,'\n\n');
+
+options['logo'] = [
+  " ",
+  " ,  ",
+  " |\\  ",
+  " \\ | ",
+  "  | \\ /          OPENSOURCE MESSENGER PROJECT",
+  "   \\|/    _,                   "+options['type']+" server",
+  "    /  __/ /      _____________   __   __ __  ",
+  "   | _/ _.'      / __/_  __/ _ | / /  / //_/  ",
+  "   |/__/        _\\ \\  / / / __ |/ /__/ ,<    ",
+  "    \\          /___/ /_/ /_/ |_/____/_/|_|   ",
+  " ",
+  " "
+].join('\n');
 
 if( options['type'] == 'channel' ){
 

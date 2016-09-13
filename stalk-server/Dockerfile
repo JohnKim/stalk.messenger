@@ -4,9 +4,14 @@ RUN mkdir -p /stalk-server
 
 ENV STALK_HOME /stalk-server
 
-ADD . ${STALK_HOME}/
+ADD bin ${STALK_HOME}/bin
+ADD lib ${STALK_HOME}/lib
+ADD package.json ${STALK_HOME}/
 
 WORKDIR $STALK_HOME
 RUN npm install
 
-CMD ["./bin/start"]
+ENV PORT 8080
+EXPOSE $PORT
+
+CMD ["/stalk-server/bin/start"]
