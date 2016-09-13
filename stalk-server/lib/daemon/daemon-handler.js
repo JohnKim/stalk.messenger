@@ -33,10 +33,9 @@ exports.startDaemon = function (options, callback) {
       X_PID: process.pid,
       X_PATH: basePath,
       X_HOST: options['host'],
-      X_PORT: options['port']
+      X_PORT: options['port'],
+      X_ZOOKEEPER: options['zookeeper']
     };
-
-    if (options['config_path']) paramEnv['X_CONFIG'] = options['config_path'];
 
     spawn(process.execPath, [monitorFilePath], {
       stdio: ['ignore', out, err],

@@ -9,24 +9,9 @@ var envPid = process.env.X_PID;   // Process Id
 var envPath = process.env.X_PATH; // home dir path
 var envHost = process.env.X_HOST;
 var envPort = process.env.X_PORT;
-var envConfig = process.env.X_CONFIG;
+var envZookeeper = process.env.X_ZOOKEEPER;
 
 var serverName;
-
-var config = {};
-
-if (envConfig) {
-
-  envConfig = path.resolve(envConfig);
-
-  try {
-    var data = fs.readFileSync(envConfig);
-    config = JSON.parse(data.toString());
-  } catch (ex) {
-    console.error('Error starting daemon process: ' + ex);
-    process.exit(1);
-  }
-}
 
 var pidFilePath = utils.getPidFilePath(envPath, envType, envPort);
 
@@ -37,7 +22,6 @@ console.log(' - PID : ' + envPid + ' (' + pidFilePath + ')');
 console.log(' - PATH : ' + envPath);
 console.log(' - HOST : ' + envHost);
 console.log(' - PORT : ' + envPort);
-console.log(' - CONFIG : ' + envConfig);
 
 function exit() {
   console.warn('What the hell ... ? By the way, bye ... :) ');
@@ -46,7 +30,6 @@ function exit() {
 
 process.on('SIGINT', exit);
 process.on('SIGTERM', exit);
-
 
 var afterProcess = function () {
 
@@ -57,7 +40,7 @@ var afterProcess = function () {
 
     function (callback) {
 
-      zkClient = xpush.createZookeeperClient(config);
+      zkClient = xpush.createZookeeperClient(envZookeeper);
       zkClient.once('connected', function () {
 
         zkClient.getChildren(
