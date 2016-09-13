@@ -56,7 +56,8 @@ class SelectUserView extends Component {
   }
 
   _onRightItemPress(){
-    if( this.props.chat ){
+    // 채널ID가 이미 생성된 상태일때
+    if( this.props.chat && this.props.chat.channelId ){
       this._addUsers();
     } else {
       this._createChat();
@@ -65,16 +66,33 @@ class SelectUserView extends Component {
 
   _createChat(){
     var users = [];
+    var self = this;
+
+    // channelId 가 생성되기 전 상태일때( 첫번째 메시지 발송 전 )
+    var useCallback = false;
+    if( this.props.chat && this.props.chat.users ){
+      for( var inx in this.props.chat.users ){
+        users.push( this.props.chat.users[inx] );
+      }
+      if( self.props.callback ){
+        useCallback = true;
+      }
+    }
 
     for (var username in this.checkedUsers) {
       users.push(this.checkedUsers[username]);
     }
 
     if( users.length > 0 ){
-      this.props.navigator.replace({
-        chatView: true,
-        users,
-      });
+      if( useCallback ){
+        self.props.callback( 'C', users );
+      } else {
+        // 신규생성
+        this.props.navigator.replace({
+          chatView: true,
+          users,
+        });        
+      }
     }
   }
 
@@ -88,15 +106,17 @@ class SelectUserView extends Component {
 
     if( users.length > 0 ){
       this.props.addUsers(this.props.chat.id, this.props.chat.channelId, users).then(
-        (result) => {
-          console.log('Add users', result);
+        (updatedChat) => {
+          console.log('Add users', updatedChat );
           if( self.props.callback ){
-            self.props.callback( result );
+            self.props.callback( 'A', updatedChat );
           }       
         },
         (error)=> {
           console.log('ERROR....>', error);
         });
+    } else {
+      this.props.navigator.pop();
     }
   }
 

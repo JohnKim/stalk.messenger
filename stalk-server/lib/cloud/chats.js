@@ -193,7 +193,6 @@ Parse.Cloud.define('chats-add', function(request, response) {
 
   var ids = request.params.ids;
   var channelId =  request.params.channelId;
-  var chatId = request.params.chatId;
 
   var currentChannel = new Channels();
   currentChannel.id = channelId;

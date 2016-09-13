@@ -186,9 +186,18 @@ class ChatView extends Component {
     }
   }
 
-  _addUserCallback(newChat){
-    this.setState( {chat:newChat} );
-    this.props.navigator.pop();
+  _addUserCallback(type, data){
+    if( type =='A' ){
+      this.setState( {chat:data} );
+      this.props.navigator.pop();
+    } else if ( type =='C' ){
+      // 신규생성
+      this.props.navigator.pop();
+      this.props.navigator.replace({
+        chatView: true,
+        users:data
+      });
+    }
   }
 
   openControlPanel() {
