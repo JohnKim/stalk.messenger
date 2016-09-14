@@ -15,7 +15,7 @@ import {
 
 import { connect }  from 'react-redux';
 import { signup }   from 's5-action';
-import { S5ProfilePicture, S5Button } from 's5-components';
+import { S5ProfilePicture, S5Button, S5Icon } from 's5-components';
 
 class UserView extends Component {
 
@@ -32,33 +32,35 @@ class UserView extends Component {
 	}
 
   componentDidMount() {
-    console.log(this.props);
   }
 
   render() {
 
     return (
       <View style={styles.container}>
-
-        <TouchableHighlight
-          onPress={() => this.props.navigator.pop()}
-          style={{
-            marginRight:10,
-            marginTop:10
-          }}
-          underlayColor="transparent">
-          <Image source={require('../../common/img/ic_close.png')} />
-        </TouchableHighlight>
-
         <View style={styles.form}>
-
-          <Text> 개발 해야 함 !! </Text>
+          <View style={{width:100,height:200,backgroundColor:'#FFFFFF'}}>
+          </View>
           <S5ProfilePicture
             name={this.props.user.nickName}
             profileFileUrl={this.props.user.profileFileUrl}
             size={100}
           />
-
+          <Text style={styles.nickName}>
+            {this.props.user.nickName}
+          </Text>
+          <Text style={{marginTop: 10}}>
+            {this.props.user.email}
+          </Text>
+          <View style={{marginTop: 15}}>
+            <View style={styles.icon}>
+              <S5Icon name={'chatboxes'} color={'#272822'} onPress={() => this.props.navigator.pop()}  />
+            </View>
+            <Text style={styles.iconText}>1:1 Chat</Text>
+          </View>
+        </View>
+        <View style={styles.closeButton}>
+          <S5Icon name={'close'} color={'grey'} onPress={() => this.props.navigator.pop()}  />
         </View>
       </View>
     );
@@ -74,17 +76,38 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 20,
   },
+  closeButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position:'absolute',
+    left:20,
+    top:20
+  },
   form: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#FFFFFF',
-    padding: 20,
-    // Image's source contains explicit size, but we want
-    // it to prefer flex: 1
     width: undefined,
-    height: undefined,
+    height: undefined
   },
+  nickName: {
+    fontSize :20,
+    paddingTop: 10
+  },
+  icon: {
+    width:50,
+    height:50,
+    borderRadius:25,
+    backgroundColor:'#8f8f8f',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  iconText: {
+    marginTop:4,
+    fontSize:8,
+    textAlign: 'center',
+  }
 });
 
 function actions(dispatch) {

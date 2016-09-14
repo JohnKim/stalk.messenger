@@ -31,7 +31,6 @@ class TabsView extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.initialPage = props.tab;
   }
 

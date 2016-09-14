@@ -30,7 +30,6 @@ export function signup(data, callback) {
 
     user.signUp(null, {
       success: function(user) {
-        console.log(user);
         dispatch({
           type: SIGNED_UP,
           data: {
