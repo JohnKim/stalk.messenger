@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   Image,
+  Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ import ControlPanel from './ControlPanel';
 import { GiftedChat, Bubble, Send, Composer } from 'react-native-gifted-chat';
 
 import SocketIO from 'react-native-socketio';
+
+import { leaveChat } from 's5-action';
 
 var ImagePicker = require('react-native-image-picker');
 
@@ -72,6 +75,7 @@ class ChatView extends Component {
 
     this.initChannelNodeServer = this.initChannelNodeServer.bind(this);
     this._addUserCallback = this._addUserCallback.bind(this);
+    this._leaveChat = this._leaveChat.bind(this);
 
   }
 
@@ -180,10 +184,29 @@ class ChatView extends Component {
   }
 
   closeControlPanel(action) {
+    var self = this;
     this._drawer.close();
-    if(action && action.openSelectUserView){
-      this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
+    if( action ){
+      if( action.openSelectUserView){
+        this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
+      } else if( action.leaveChat && self.state.chat && self.state.chat.id ){
+
+        Alert.alert(
+          'Alert Title',
+          'Do you want leave?',
+          [
+            {text: 'Leave', onPress: () => self._leaveChat(self.state.chat.id)},
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+          ]
+        )
+      }
     }
+  }
+
+  _leaveChat(chatId){
+    this.props.leaveChat(chatId).then(() => {
+      this.props.navigator.pop();
+    });
   }
 
   _addUserCallback(type, data){
@@ -220,8 +243,8 @@ class ChatView extends Component {
 
       // TODO 맨 처음 이미지를 보내는 경우 (socket 이 연결 안된 경우) channelID 를 모르기 때문에 아래 동작은 정상 적으로 되지 않음. 이부분 어떻게 고쳐야 멋질까?
       if (response.didCancel) {
-        console.log('User cancelled photo picker');
         this.closeMenu();
+        console.log('User cancelled photo picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
@@ -352,17 +375,13 @@ class ChatView extends Component {
   renderMenu(props){
     if( this.state.menuOpened ){
       return (
-        //<TouchableOpacity onPress={this.closeMenu} underlayColor={'transparent'} >
-          <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
-        //</TouchableOpacity>
+        <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
+      );
+    } else {
+      return (
+        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
       );
     }
-
-    return (
-      //<TouchableHighlight onPress={this.openMenu} underlayColor={'transparent'} >
-        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
-      //</TouchableHighlight>
-    );
   }
 
   renderSend(props) {
@@ -486,6 +505,7 @@ function actions(dispatch) {
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
     setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
     createChat: (users) => dispatch(createChat(users)),
+    leaveChat: (chatId) => dispatch(leaveChat(chatId))
   };
 }
 

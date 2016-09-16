@@ -15,7 +15,7 @@ import {
 
 import ChatCell from './ChatCell';
 
-import { loadChats, removeChat } from 's5-action';
+import { loadChats, leaveChat } from 's5-action';
 import { S5Header, S5SwipeListView } from 's5-components';
 import { connect } from 'react-redux';
 import ActionButton from 'react-native-action-button';
@@ -27,7 +27,7 @@ class ChatsScreen extends Component {
     messages: React.PropTypes.object.isRequired,
     user: React.PropTypes.object,
     navigator: React.PropTypes.object.isRequired,
-    removeChat: React.PropTypes.func.isRequired,
+    leaveChat: React.PropTypes.func.isRequired,
   };
 
   state = {
@@ -60,10 +60,10 @@ class ChatsScreen extends Component {
     });
   }
 
-  _deleteRow(secId, rowId, rowMap) {
+  _deleteRow(secId, rowId, rowMap, chatId) {
 
 		rowMap[`${secId}${rowId}`].closeRow();
-    this.props.removeChat(rowId).then((row) => {
+    this.props.leaveChat(chatId).then(() => {
       // TODO do something after deleting.
     });
   }
@@ -101,7 +101,7 @@ class ChatsScreen extends Component {
               <View style={[styles.backRightBtn, styles.backRightBtnLeft]}>
                 <Text style={styles.backTextWhite}>Mark as Read</Text>
               </View>
-              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ () => this._deleteRow(secId, rowId, rowMap) }>
+              <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ () => this._deleteRow(secId, rowId, rowMap, data.id) }>
                 <Text style={styles.backTextWhite}>Leave</Text>
               </TouchableOpacity>
             </View>
@@ -207,7 +207,7 @@ function select(store) {
 function actions(dispatch) {
   return {
     loadChats: () => dispatch(loadChats()), // @ TODO not used !!
-    removeChat: (rowId) => dispatch(removeChat(rowId)),
+    leaveChat: (chatId) => dispatch(leaveChat(chatId)),
   };
 }
 

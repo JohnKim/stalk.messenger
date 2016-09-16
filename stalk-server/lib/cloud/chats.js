@@ -300,6 +300,7 @@ Parse.Cloud.define('chats-remove', function(request, response) {
 
       },
       error: function(error) {
+        console.log( '33333' );
         console.log(error);
         response.error(error);
       }

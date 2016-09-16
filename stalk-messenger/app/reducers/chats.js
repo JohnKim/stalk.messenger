@@ -39,7 +39,15 @@ function chats(state = initialState, action) {
   } else if (action.type === REMOVED_CHATS) {
 
       let newData = [...state.list];
-      newData.splice(action.row, 1);
+      var rowId = -1;
+
+      for( var inx = 0; rowId < 0 && inx < newData.length ; inx++ ){
+        if( newData[inx].id == action.chatId ){
+          rowId = inx;
+        }
+      }
+
+      newData.splice(rowId, 1);
 
       return {
         list: newData,
