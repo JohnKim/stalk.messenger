@@ -10,7 +10,7 @@ npm install --save react-native-image-picker@latest react-native-linear-gradient
 rnpm link
 
 npm install --save moment git://github.com/S5Platform/Parse-SDK-JS.git redux react-redux redux-logger redux-persist redux-thunk tween-functions
-npm install --save-dev faker # babel-eslint eslint eslint-plugin-react eslint-plugin-react-native remote-redux-devtools
+npm install --save-dev faker remote-redux-devtools # babel-eslint eslint eslint-plugin-react eslint-plugin-react-native
 
 npm install --save react-native-action-button react-native-gifted-chat react-native-gifted-listview react-native-gifted-spinner react-native-push-notification  git://github.com/S5Platform/react-native-socketio.git react-native-scrollable-tab-view
 
