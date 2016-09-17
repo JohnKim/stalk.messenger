@@ -85,7 +85,7 @@ export default class FollowCell extends Component {
   }
 
   _onProfilePress(){
-    if( this.props._onProfilePress ){
+    if( this.props.onProfilePress ){
       this.props.onProfilePress();
     } else {
       this._onPress();

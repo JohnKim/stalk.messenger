@@ -189,11 +189,9 @@ export function createChat(users) {
  * Remove(leave) chatting channel
  * @params id : user.id of target user
  **/
-export function removeChat(row) {
+export function leaveChat(chatId) {
 
   return (dispatch, getState) => {
-
-    let chatId = getState().chats.list[row].id;
 
     return Parse.Cloud.run('chats-remove', { id: chatId }, {
       success: (result) => {
@@ -203,10 +201,10 @@ export function removeChat(row) {
           dispatch({
             type: REMOVED_CHATS,
             result,
-            row
+            chatId
           });
 
-          return Promise.resolve(row);
+          return Promise.resolve();
 
         });
 

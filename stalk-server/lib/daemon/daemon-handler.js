@@ -22,7 +22,6 @@ exports.startDaemon = function (options, callback) {
 
     console.log('  [ monitoring daemon ]');
     console.log('  -- log : ' + logFilePath);
-    console.log('  -- config file : ' + (options['config_path'] ? options['config_path'] : 'not specified. (default setting)'));
 
     var
       out = fs.openSync(logFilePath, 'a'),

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableHighlight,
   Image,
+  Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -16,6 +17,8 @@ import ControlPanel from './ControlPanel';
 import { GiftedChat, Bubble, Send, Composer } from 'react-native-gifted-chat';
 
 import SocketIO from 'react-native-socketio';
+
+import { leaveChat } from 's5-action';
 
 var ImagePicker = require('react-native-image-picker');
 
@@ -72,6 +75,10 @@ class ChatView extends Component {
 
     this.initChannelNodeServer = this.initChannelNodeServer.bind(this);
     this._addUserCallback = this._addUserCallback.bind(this);
+
+
+    this._createChat = this._createChat.bind(this);
+    this._leaveChat = this._leaveChat.bind(this);
 
   }
 
@@ -180,10 +187,53 @@ class ChatView extends Component {
   }
 
   closeControlPanel(action) {
+    var self = this;
     this._drawer.close();
-    if(action && action.openSelectUserView){
-      this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
+    if( action ){
+      if( action.openSelectUserView){
+        this.props.navigator.push({selectUserView: 1, chat:this.state.chat, callback:this._addUserCallback});
+      } else if( action.leaveChat && self.state.chat && self.state.chat.id ){
+
+        Alert.alert(
+          'Alert Title',
+          'Do you want leave?',
+          [
+            {text: 'Leave', onPress: () => self._leaveChat(self.state.chat.id)},
+            {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+          ]
+        )
+      }
     }
+  }
+
+  _createChat(callback){
+    if( this.socket ){
+      callback();
+      return;
+    }
+
+    this.props.createChat(this.state.chat.users).then(
+      (result) => {
+
+        console.log('CREATED CHAT!!!', result);
+
+        this.setState({ chat: result.chat });
+        var self = this;
+        this.initChannelNodeServer(result.node, result.chat.channelId, () => {
+          callback();
+        });
+      },
+      (error)=> {
+        console.log('ERROR....>', error);
+        // TODO Channel 데이터는 생성했지만, Channel 서버를 할당받지 못한 상태 (Channel 서버가 실행되어 있지 않은 경우) 처리 필요.
+        this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
+      });
+  }
+
+  _leaveChat(chatId){
+    this.props.leaveChat(chatId).then(() => {
+      this.props.navigator.pop();
+    });
   }
 
   _addUserCallback(type, data){
@@ -218,36 +268,38 @@ class ChatView extends Component {
     var self = this;
     ImagePicker.showImagePicker(imagePickerOptions, (response) => {
 
-      // TODO 맨 처음 이미지를 보내는 경우 (socket 이 연결 안된 경우) channelID 를 모르기 때문에 아래 동작은 정상 적으로 되지 않음. 이부분 어떻게 고쳐야 멋질까?
       if (response.didCancel) {
-        console.log('User cancelled photo picker');
         this.closeMenu();
+        console.log('User cancelled photo picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        var data = {
-          C : this.state.chat.channelId,
-          U : this.props.user.id,
-          imgBase64 : response.data
-        };
 
-        uploadImage(data, function(err, result){
+        self._createChat(function(){
+          var data = {
+            C : self.state.chat.channelId,
+            U : self.props.user.id,
+            imgBase64 : response.data
+          };
 
-          if( self.state.connected ) {
-            var message = {
-              image: result,
-              user: { _id: self.props.user.id },
-              createdAt: new Date(),
-              _id: 'temp-id-' + Math.round(Math.random() * 1000000)
-            };
+          uploadImage(data, function(err, result){
 
-            self.sendMesage(message);
+            if( self.state.connected ) {
+              var message = {
+                image: result,
+                user: { _id: self.props.user.id },
+                createdAt: new Date(),
+                _id: 'temp-id-' + Math.round(Math.random() * 1000000)
+              };
 
-          }
+              self.sendMesage(message);
 
-          self.closeMenu();
+            }
+
+            self.closeMenu();
+          });
         });
       }
     });
@@ -274,8 +326,6 @@ class ChatView extends Component {
 
   onSend(messages = []) {
 
-    //console.log(this.socket, this.state.connected, this.state.chat.channelId, ((this.socket && this.state.connected) || !this.state.chat.channelId));
-
     if ( (this.socket && this.state.connected) || !this.state.chat.channelId ){
       this.sendMesage(messages[0]);
     }
@@ -289,26 +339,11 @@ class ChatView extends Component {
 
     if( this.socket ) {
       this.socket.emit('send', {NM:'message', DT: message});
-
     } else {
-
-      this.props.createChat(this.state.chat.users).then(
-        (result) => {
-
-          console.log('CREATED CHAT!!!', result);
-
-          this.setState({ chat: result.chat });
-          var self = this;
-          this.initChannelNodeServer(result.node, result.chat.channelId, () => {
-            self.socket.emit('send', {NM:'message', DT: message });
-          });
-        },
-        (error)=> {
-          console.log('ERROR....>', error);
-          // TODO Channel 데이터는 생성했지만, Channel 서버를 할당받지 못한 상태 (Channel 서버가 실행되어 있지 않은 경우) 처리 필요.
-          this.refs['alert'].alert('error', 'Error', 'an error occured, please try again late');
-        });
-
+      var self = this;
+      this._createChat(function(){
+       self.socket.emit('send', {NM:'message', DT: message });
+      });
     }
 
   }
@@ -352,17 +387,13 @@ class ChatView extends Component {
   renderMenu(props){
     if( this.state.menuOpened ){
       return (
-        //<TouchableOpacity onPress={this.closeMenu} underlayColor={'transparent'} >
-          <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
-        //</TouchableOpacity>
+        <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
+      );
+    } else {
+      return (
+        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
       );
     }
-
-    return (
-      //<TouchableHighlight onPress={this.openMenu} underlayColor={'transparent'} >
-        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
-      //</TouchableHighlight>
-    );
   }
 
   renderSend(props) {
@@ -486,6 +517,7 @@ function actions(dispatch) {
     loadMessages: (chat, date) => dispatch(loadMessages(chat, date)),
     setLatestMessage: (channelId, text) =>  dispatch(setLatestMessage(channelId, text)),
     createChat: (users) => dispatch(createChat(users)),
+    leaveChat: (chatId) => dispatch(leaveChat(chatId))
   };
 }
 

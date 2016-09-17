@@ -28,11 +28,16 @@ export default class ControlPanel extends Component {
   constructor(props){
     super(props);
     this._openAddUserView = this._openAddUserView.bind(this);
+    this._leaveChat = this._leaveChat.bind(this);
     this._renderUsers = this._renderUsers.bind(this);
   }
 
   _openAddUserView() {
     this.props.closeDrawer({openSelectUserView:1});
+  }
+
+  _leaveChat() {
+    this.props.closeDrawer({leaveChat:1});
   }
 
   componentDidMount(){
@@ -95,7 +100,7 @@ export default class ControlPanel extends Component {
         </ScrollView>
         <View style={styles.footer}>
           <View >
-            <S5Icon name={'log-out'} color={'grey'} onPress={this.props.closeDrawer}>
+            <S5Icon name={'log-out'} color={'grey'} onPress={this._leaveChat}>
               <Text style={{color: 'gray'}}> Leave </Text>
             </S5Icon>
           </View>

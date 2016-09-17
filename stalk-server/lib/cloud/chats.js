@@ -264,9 +264,34 @@ Parse.Cloud.define('chats-remove', function(request, response) {
       success: (result) => {
 
         if(result) {
-          result.destroy().then(
-            (object)  => { response.success(object);  },
-            (error)   => { response.error(error);     }
+          var channel = result.get("channel");
+          var queryChannels = new Parse.Query(Channels);
+          queryChannels.equalTo("objectId", channel.id);
+          queryChannels.first().then(
+            (channel) => {
+              if(channel){
+                if( channel.get("users").length > 1 ){
+                  channel.remove("users", currentUser);
+                }
+
+                channel.save().then(
+                  (done) => {
+                    result.destroy().then(
+                      (object)  => { response.success(object);  },
+                      (error)   => { response.error(error);     }
+                    );   
+                  },
+                  (error) => {
+                    console.log( error );
+                  }
+                );
+              } else {
+                response.error( {code: 101, message: "object doesn't exist."} );
+              }
+            },
+            (error) => {
+              console.log(error);
+            }
           );
         } else {
           // ParseError.OBJECT_NOT_FOUND = 101 (Error code indicating the specified object doesn't exist.)
@@ -275,6 +300,7 @@ Parse.Cloud.define('chats-remove', function(request, response) {
 
       },
       error: function(error) {
+        console.log( '33333' );
         console.log(error);
         response.error(error);
       }
