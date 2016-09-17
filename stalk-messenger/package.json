@@ -28,10 +28,6 @@
     "tween-functions": "^1.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
-    "eslint": "^3.4.0",
-    "eslint-plugin-react": "^6.2.0",
-    "eslint-plugin-react-native": "^2.0.0",
     "faker": "^3.1.0",
     "remote-redux-devtools": "^0.4.8"
   }
