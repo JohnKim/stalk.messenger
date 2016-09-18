@@ -18,6 +18,8 @@ import {
   Image
 } from "react-native"
 
+import S5Icon from './S5Icon';
+
 var closeTimeoutId
 const DEFAULT_IMAGE_DIMENSIONS = 36
 const WINDOW = Dimensions.get('window')
@@ -49,14 +51,15 @@ export default class S5Alert extends Component {
     titleNumOfLines: 1,
     messageNumOfLines: 3,
     titleStyle: {
-      fontSize: 16,
+      paddingTop: 10,
+      fontSize: 14,
       textAlign: 'left',
       fontWeight: 'bold',
       color: 'white',
       backgroundColor: 'transparent'
     },
     messageStyle: {
-      fontSize: 14,
+      fontSize: 13,
       textAlign: 'left',
       fontWeight: 'normal',
       color: 'white',
@@ -134,7 +137,7 @@ export default class S5Alert extends Component {
       )
     } else if (src != null) {
       return (
-        <Image style={this.props.imageStyle} source={src} />
+        <S5Icon style={this.props.imageStyle} name={src} color={'white'} />
       )
     } else {
       return null
@@ -150,13 +153,13 @@ export default class S5Alert extends Component {
   }
   renderDropDown() {
     if (this.state.visible) {
-      var style = this.props.containerStyle
+      var style = this.props.containerStyle;
       if (!style['flexDirection'] && !style['alignItems']) {
         // Try to help keep somewhat organized if these styles were not given.
         style = [this.props.containerStyle, styles.customContainer]
       }
-      var source = this.props.imageSrc
-      var statusBarBackgroundColor = this.props.backgroundColor
+      var source = 'warning'; // AS-IS -> this.props.imageSrc;
+      var statusBarBackgroundColor = this.props.backgroundColor;
       switch (this.state.type) {
         case 'info':
           style = styles.infoContainer
@@ -164,12 +167,12 @@ export default class S5Alert extends Component {
           break;
         case 'warn':``
           style = styles.warnContainer
-          source = require('./img/ic_error_outline_white.png')
+          source = 'warning'
           statusBarBackgroundColor = 'peru'
           break;
         case 'error':
           style = styles.errorContainer
-          source = require('./img/ic_error_outline_white.png')
+          source = 'warning'
           statusBarBackgroundColor = '#cc3232'
           break;
       }
