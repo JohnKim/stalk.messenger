@@ -40,20 +40,15 @@
 - [x] GiftedMessenger Sample 코드 구현
 - [x] Chats 목록 조회 기능 구현
 - [x] Leave Chats(채팅방 삭제) 기능 구현
-- [ ] 그룹 Chat 에 대한 다수 Profile 이미지 노출 컨포넌트 구현
-- [ ] Chat View 화면 구현
+- [x] 그룹 Chat 에 대한 다수 Profile 이미지 노출 컨포넌트 구현
+- [x] Chat View 화면 구현
 - [x] 이미지 형태의 메시지 전송 기능 구현
 - [x] 이전 메시지 로딩 기능 구현
-- [ ] Chat에 사용자 초대 기능 구현
-- [ ] 멀티유저 채팅방 생성 기능 구현
+- [x] Chat에 사용자 초대 기능 구현
+- [x] 멀티유저 채팅방 생성 기능 구현
 - [ ] Read(읽음) 표시 기능 구현
+- [ ] 메시지를 쓰면, Chat List 에 최 상단으로 이동
 
 ##### Profile Tab
 - [x] Profile 이미지 업로드 구현
 - [x] Profile 관리 기능 구현
-
-##### ** Design **
-- [x] 아티스트 섭외
-- [ ] 브랜드 디자인
-- [ ] 모바일 앱 디자인
-- [ ] UI 개발 가이드

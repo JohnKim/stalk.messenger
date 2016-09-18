@@ -54,7 +54,6 @@ class ChatView extends Component {
       isTyping:     null,
       connected:    false,
       node:         {},
-      chat:         props.chat ? props.chat : { users: props.users },
       menuOpened:   false,
     };
 
@@ -83,10 +82,31 @@ class ChatView extends Component {
 
   componentWillMount() {  // or componentDidMount ?
 
-    if(this.state.chat.channelId) {
+
+    var chat = {};
+
+    // 1명과 1:1 시도인 경우, 이미 Chat List 에 있는지 확인해야 함 !
+    if(!this.props.chat && this.props.users && this.props.users.length == 1) {
+      chat = { users: this.props.users };
+
+      for(var i=0, l = this.props.chats.list.length; i < l; i++){
+        var obj = this.props.chats.list[i];
+        if(obj.uid && obj.uid == this.props.users[0].id){
+          chat = obj;
+          break;
+        }
+      }
+
+    } else {
+      chat = this.props.chat ? this.props.chat : { users: this.props.users };
+    }
+
+    this.setState({ chat });
+
+    if(chat.channelId) {
 
       // Load Messages from session-server
-      this.props.loadMessages(this.state.chat).then(
+      this.props.loadMessages(chat).then(
         (result) => {
 
           if(result.messages.length > 0) {
@@ -103,11 +123,11 @@ class ChatView extends Component {
             }
 
             // set latest message !
-            this.props.setLatestMessage(this.state.chat.channelId, latest);
+            this.props.setLatestMessage(chat.channelId, latest);
 
           }
 
-          this.initChannelNodeServer(result.node, this.state.chat.channelId);
+          this.initChannelNodeServer(result.node, chat.channelId);
 
         },
         (error) => {
@@ -168,7 +188,7 @@ class ChatView extends Component {
         // set latest message !
         var latest = message[0].text;
         if(message[0].image){
-          latest = '@image'; 
+          latest = '@image';
         }
         self.props.setLatestMessage(self.state.chat.channelId, latest);
 
@@ -393,14 +413,18 @@ class ChatView extends Component {
   }
 
   renderMenu(props){
-    if( this.state.menuOpened ){
-      return (
-        <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
-      );
+    if( this.state.connected || !this.state.chat.channelId ) {
+      if( this.state.menuOpened ){
+        return (
+          <S5Icon name={'close'} color={'gray'} onPress={this.closeMenu} style={styles.menuIcon}/>
+        );
+      } else {
+        return (
+          <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
+        );
+      }
     } else {
-      return (
-        <S5Icon name={'add'} color={'gray'} onPress={this.openMenu} style={styles.menuIcon}/>
-      );
+      return null;
     }
   }
 
@@ -516,6 +540,7 @@ const styles = StyleSheet.create({
 function select(store) {
   return {
     user: store.user,
+    chats: store.chats,
   };
 }
 

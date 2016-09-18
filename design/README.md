@@ -1,6 +1,8 @@
-`● ● ●` is `Morse code`, refers to the '**S**' ( 'S' is initial character of `STALK` ).
+
 
 ## Logo Design
+
+`● ● ●` is `Morse code`, refers to the '**S**' ( 'S' is initial character of `STALK` ).
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/JohnKim/stalk.messenger/master/design/logo.png" width="150px"/>
@@ -14,4 +16,4 @@
 
 ## for designers
 
-download sketch file and inject your inspiration
+Download sketch file and inject your inspiration.

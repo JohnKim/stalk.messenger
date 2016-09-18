@@ -113,7 +113,7 @@ function _parseObjToJSON(object){
     createdAt: object.get("createdAt"),
     updatedAt: object.get("updatedAt"), // because of using javascript date objects instead of parse object 'object.createdAt',
     name: names.join(", "),
-    type: 'STORED',
+    uid: users.length == 1 ? users[0].id : null, // uid 이 Null 이면, Group Chat !
     users,
   };
 

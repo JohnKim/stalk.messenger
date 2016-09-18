@@ -24,14 +24,22 @@ class UserView extends Component {
     user: React.PropTypes.object.isRequired,
   };
 
-  state = {
-  };
+  state = {};
 
 	constructor(props) {
 		super(props);
+
+    this.onPressChat = this.onPressChat.bind(this);
 	}
 
   componentDidMount() {
+  }
+
+  onPressChat() {
+    this.props.navigator.replace({
+      chatView: true,
+      users: [this.props.user]
+    });
   }
 
   render() {
@@ -54,7 +62,7 @@ class UserView extends Component {
           </Text>
           <View style={{marginTop: 15}}>
             <View style={styles.icon}>
-              <S5Icon name={'chatboxes'} color={'#272822'} onPress={() => this.props.navigator.pop()}  />
+              <S5Icon name={'chatboxes'} color={'#272822'} onPress={this.onPressChat}  />
             </View>
             <Text style={styles.iconText}>1:1 Chat</Text>
           </View>
