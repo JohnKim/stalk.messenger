@@ -45,7 +45,13 @@ var ChannelServer = exports.ChannelServer = function (options, cb) {
     var message = new Messages();
     message.set("channel",  channel       );
     message.set("user",     user          );
-    message.set("message",  data.DT.text  );
+    if( data.DT.text ){
+      message.set("message",  data.DT.text  );
+    }
+    if( data.DT.image ){
+       message.set("image",  data.DT.image  );     
+    }
+
     message.save().then(
       (result) => {
 

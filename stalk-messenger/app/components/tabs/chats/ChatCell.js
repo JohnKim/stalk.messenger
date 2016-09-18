@@ -13,7 +13,7 @@ import {
   PixelRatio,
 } from 'react-native';
 
-import { S5ProfilePicture, S5GridPicture } from 's5-components';
+import { S5ProfilePicture, S5GridPicture, S5Icon } from 's5-components';
 
 export default class ChatCell extends Component {
 
@@ -25,6 +25,7 @@ export default class ChatCell extends Component {
 
   constructor(props) {
     super(props);
+    this.renderLatestMessage = this.renderLatestMessage.bind(this);
   }
 
   renderProfilePictures(){
@@ -40,6 +41,25 @@ export default class ChatCell extends Component {
 
     return (
       <S5GridPicture size={48} style={{margin:10}} images={profiles} alts={alts}/>
+    )
+  }
+
+  renderLatestMessage(){
+    if( this.props.message == '@image' ){
+      return(
+        <View style={{'flexDirection':'row'}}>
+          <View>
+            <S5Icon name={'image'} color={'#09aaf3'} size={20} />
+          </View>
+          <Text numberOfLines={1} style={[styles.messages,{paddingLeft:4}]}>Image</Text>
+        </View>
+      )
+    }
+
+    return(
+      <Text numberOfLines={1} style={styles.messages}>
+        {this.props.message}
+      </Text>
     )
   }
 
@@ -60,12 +80,10 @@ export default class ChatCell extends Component {
         <View style={styles.container}>
           {this.renderProfilePictures()}
           <View style={styles.detailContainer}>
-            <Text numberOfLines={2} style={styles.nickName}>
+            <Text numberOfLines={1} style={styles.nickName}>
               {userCount} {names.join(", ")} 
             </Text>
-            <Text numberOfLines={2} style={styles.messages}>
-              {this.props.message}
-            </Text>
+            {this.renderLatestMessage()}
           </View>
         </View>
       </TouchableHighlight>

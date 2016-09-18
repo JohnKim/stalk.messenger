@@ -98,8 +98,13 @@ class ChatView extends Component {
               lastLoadedAt: result.messages[ result.messages.length - 1 ].createdAt,
             });
 
+            var latest = result.messages[0].text;
+            if(result.messages[0].image){
+              latest = '@image';
+            }
+
             // set latest message !
-            this.props.setLatestMessage(this.state.chat.channelId, result.messages[0].text);
+            this.props.setLatestMessage(this.state.chat.channelId, latest);
 
           }
 
@@ -162,7 +167,11 @@ class ChatView extends Component {
       this.setState((previousState) => {
 
         // set latest message !
-        self.props.setLatestMessage(self.state.chat.channelId, message[0].text);
+        var latest = message[0].text;
+        if(message[0].image){
+          latest = '@image'; 
+        }
+        self.props.setLatestMessage(self.state.chat.channelId, latest);
 
         return { messages: GiftedChat.append(previousState.messages, message) };
       });
