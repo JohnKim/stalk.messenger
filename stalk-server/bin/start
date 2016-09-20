@@ -103,17 +103,43 @@ options['logo'] = [
   " "
 ].join('\n');
 
+
+var checkPort = function (callback, port) {
+  port = port || 8080;
+
+  var tester = net.createServer()
+    .once('error', function (err) {
+
+      checkPort(callback, port + 100);
+
+    })
+    .once('listening', function () {
+      tester.once('close', function () {
+          callback(port);
+        })
+        .close();
+    })
+    .listen(port);
+};
+
+
 if( options['type'] == 'channel' ){
 
-  daemon.startDaemon(options, function (err) {
-    if (err) {
-      console.error('\n\n process daemon was not yet finished \n');
-      if (err.code == 'PID_EXISTED') {
-        console.info(err.message);
+  checkPort(function (port) {
+
+    options['port'] = port;
+
+    daemon.startDaemon(options, function (err) {
+      if (err) {
+        console.error('\n\n process daemon was not yet finished \n');
+        if (err.code == 'PID_EXISTED') {
+          console.info(err.message);
+        }
+      } else {
+        server = stalkServer.createChannelServer(options);
       }
-    } else {
-      server = stalkServer.createChannelServer(options);
-    }
+    });
+
   });
 
 }else{
