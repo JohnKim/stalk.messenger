@@ -43,9 +43,6 @@ class ChatsScreen extends Component {
     this.setState({
       listViewData: this.props.chats.list
     });
-
-    console.log( '11111' );
-    console.log( this.props.messages );
   }
 
   componentWillReceiveProps (nextProps) {

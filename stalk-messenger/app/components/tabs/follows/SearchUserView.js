@@ -87,13 +87,15 @@ class SearchUserView extends Component {
   }
 
   _renderRowView(user) {
-    return (
-      <FollowCell
-        key={user.id}
-        user={user}
-        onPress={() => this._onRowPress(user)}
-      />
-    )
+
+    if( this.props.user.id == user.id) {
+      return <FollowCell key={user.id} user={user} prefix={'ME'}/>
+    } else if( this.props.ids.indexOf(user.id) > -1){
+      return <FollowCell key={user.id} user={user} prefix={'FOLLOW'} />
+    } else {
+      return <FollowCell key={user.id} user={user} onPress={() => this._onRowPress(user)} />
+    }
+
   }
 
   _renderEmptyRow() {
@@ -170,10 +172,17 @@ const styles = StyleSheet.create({
   },
 });
 
+function select(store) {
+  return {
+    user: store.user,
+    ids: store.follows.ids,
+  };
+}
+
 function actions(dispatch) {
   return {
     createFollow: (id) => dispatch(createFollow(id)),
   };
 }
 
-module.exports = connect(null, actions)(SearchUserView);
+module.exports = connect(select, actions)(SearchUserView);

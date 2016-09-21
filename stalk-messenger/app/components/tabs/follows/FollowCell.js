@@ -10,13 +10,13 @@ import {
   View,
   TouchableHighlight,
   StyleSheet,
-  PixelRatio,
-  Image
+  PixelRatio
 } from 'react-native';
 
 import { S5ProfilePicture, S5Icon } from 's5-components';
 
 export default class FollowCell extends Component {
+
   state = {
     checked : this.props.checked?this.props.checked:false
   };
@@ -26,12 +26,14 @@ export default class FollowCell extends Component {
     onProfilePress: React.PropTypes.func,
     onPress: React.PropTypes.func,
     selectable: React.PropTypes.bool,
+    prefix: React.PropTypes.string,
   };
 
   constructor(props) {
     super(props);
 
     this.renderCheckbox = this.renderCheckbox.bind(this);
+    this.renderPrefix = this.renderPrefix.bind(this);
     this._onPress = this._onPress.bind(this);
     this._onProfilePress = this._onProfilePress.bind(this);
   }
@@ -65,6 +67,13 @@ export default class FollowCell extends Component {
           )
         }
       }
+    }
+    return null;
+  }
+
+  renderPrefix() {
+    if( this.props.prefix ){
+      return <Text style={styles.prefix}>{this.props.prefix}  </Text>
     }
     return null;
   }
@@ -115,7 +124,7 @@ export default class FollowCell extends Component {
           />
           <View style={styles.detailContainer}>
             <Text style={styles.nickName}>
-              {this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
+              {this.renderPrefix()}{this.props.user.nickName} <Text style={styles.username}> {this.props.user.username} </Text>
             </Text>
             <Text numberOfLines={1} style={styles.statusMessage}>
               {this.props.user.statusMessage}
@@ -152,6 +161,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 5,
     color: '#DA552F'
+  },
+  prefix: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#7F91A7',
   },
   statusMessage: {
     fontSize: 12,
@@ -190,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#7F91A7'    
+    borderColor: '#7F91A7'
   },
   disabledChecked:{
     marginLeft: 10,

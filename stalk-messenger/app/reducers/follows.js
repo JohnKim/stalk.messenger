@@ -6,22 +6,31 @@ import { LOADED_FOLLOWS, ADDED_FOLLOWS, REMOVED_FOLLOWS, LOGGED_OUT } from 's5-a
 
 const initialState = {
   list: [],
+  ids: '',
   lastLoadedAt: null,
 };
 
 function sortByKey(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
+  return array.sort(function(a, b) {
+    var x = a[key]; var y = b[key];
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+  });
+}
+
+function generateIds(array) {
+  return array.map(function(elem){
+    return elem.id;
+  }).join("^");
 }
 
 function follows(state = initialState, action) {
 
   if (action.type === LOADED_FOLLOWS) {
       let list = action.list.map(_parseObjToJSON);
+
       return {
         list: sortByKey(list, 'nickName'),
+        ids: generateIds(list),
         lastLoadedAt: new Date(),
       };
 
@@ -30,6 +39,7 @@ function follows(state = initialState, action) {
       newData.splice(action.row, 1);
       return {
         list: newData,
+        ids: generateIds(newData),
         lastLoadedAt: new Date(),
       };
 
@@ -41,6 +51,7 @@ function follows(state = initialState, action) {
 
     return {
       list: sortByKey(newData, 'nickName'),
+      ids: generateIds(newData),
       lastLoadedAt: new Date(),
     };
 

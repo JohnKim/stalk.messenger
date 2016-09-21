@@ -6,7 +6,6 @@ import { LOADED_CHATS, ADDED_CHAT, REMOVED_CHATS, LOGGED_OUT, ADDED_USERS_IN_CHA
 const initialState = {
   list: [],
   lastLoadedAt: null,
-  ids: '',
 };
 
 let currentUser = null; // to emit current user data into chat users of the channel.

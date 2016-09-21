@@ -91,7 +91,7 @@ class SelectUserView extends Component {
         this.props.navigator.replace({
           chatView: true,
           users,
-        });        
+        });
       }
     }
   }
@@ -110,7 +110,7 @@ class SelectUserView extends Component {
           console.log('Add users', updatedChat );
           if( self.props.callback ){
             self.props.callback( 'A', updatedChat );
-          }       
+          }
         },
         (error)=> {
           console.log('ERROR....>', error);
