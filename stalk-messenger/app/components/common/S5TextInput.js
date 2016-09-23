@@ -106,10 +106,10 @@ export default class S5TextInput extends Component {
         {this._renderLabel()}
 
         <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            borderBottomColor: this.state.borderBottomColor,
-            borderBottomWidth: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderBottomColor: this.state.borderBottomColor,
+          borderBottomWidth: 1,
         }}>
           <TextInput
             ref={(ref) => this.s5textinput = ref}
@@ -123,9 +123,16 @@ export default class S5TextInput extends Component {
             onFocus={() => {this._onFocus()}}
             onBlur={() => {this._onBlur()}}
             value={this.props.value}
+            autoCorrect={this.props.autoCorrect}
             autoCapitalize={this.props.autoCapitalize}
+            returnKeyType={this.props.returnKeyType}
+            keyboardType={this.props.keyboardType}
+            onSubmitEditing={this.props.onSubmitEditing}
+            blurOnSubmit={this.props.blurOnSubmit}
             />
-            {this._renderContainerIcon()}
+
+          {this._renderContainerIcon()}
+
         </View>
       </View>
     );

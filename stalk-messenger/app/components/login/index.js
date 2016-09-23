@@ -31,6 +31,7 @@ class LoginScreen extends Component {
   };
 
   componentDidMount() {
+    this.refs['username'].focus();
   }
 
   login(){
@@ -74,8 +75,12 @@ class LoginScreen extends Component {
             style={styles.textinput}
             placeholder={''} //{"Username"}
             value={this.state.username}
+            autoFocus={true}
             autoCapitalize="none"
+            returnKeyType={"next"}
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
+            blurOnSubmit={false}
+            onSubmitEditing={() => this.refs['password'].focus()}
           />
 
           <S5TextInput

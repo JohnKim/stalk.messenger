@@ -55,6 +55,7 @@ class App extends Component {
           translucent={true}
           backgroundColor="rgba(0, 0, 0, 0.2)"
           barStyle="light-content"
+          hidden={!this.props.isLoggedIn}
           />
           <AppNavigator />
 

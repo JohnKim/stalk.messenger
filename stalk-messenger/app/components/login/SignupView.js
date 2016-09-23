@@ -41,12 +41,6 @@ class SignupView extends Component {
 
     this.setState({ message: '' });
 
-    if(!this.state.email) {
-      this.setState({ message: 'Email must be filled' });
-      this.refs['email'].focus();
-      return false;
-    }
-
     if(!this.state.username) {
       this.setState({ message: 'Username must be filled' });
       this.refs['username'].focus();
@@ -68,6 +62,12 @@ class SignupView extends Component {
         password: '',
         passwordChecked: '',
       });
+      return false;
+    }
+
+    if(!this.state.email) {
+      this.setState({ message: 'Email must be filled' });
+      this.refs['email'].focus();
       return false;
     }
 
@@ -104,6 +104,7 @@ class SignupView extends Component {
           <S5TextInput
             ref="username"
             label="USERNAME"
+            returnKeyType={"next"}
             style={styles.textinput}
             placeholder={''}
             value={this.state.username}
@@ -111,6 +112,8 @@ class SignupView extends Component {
             autoCorrect={false}
             onFocus={() => this.setState({bottomHeight: 100})}
             onChangeText={(text) => this.setState({username: text.toLowerCase()})}
+            blurOnSubmit={false}
+            onSubmitEditing={() => this.refs['password'].focus()}
           />
           <S5TextInput
             ref="password"
@@ -119,17 +122,24 @@ class SignupView extends Component {
             placeholder={''}
             value={this.state.password}
             secureTextEntry={true}
+            returnKeyType={"next"}
             onFocus={() => this.setState({bottomHeight: 100})}
             onChangeText={(text) => this.setState({password: text})}
+            blurOnSubmit={false}
+            onSubmitEditing={() => this.refs['password2'].focus()}
           />
           <S5TextInput
+            ref="password2"
             label="PASSWORD ONE MORE!"
             style={styles.textinput}
             placeholder={''}
             value={this.state.passwordChecked}
             secureTextEntry={true}
-            onFocus={() => this.setState({bottomHeight: 210})}
+            returnKeyType={"next"}
+            onFocus={() => this.setState({bottomHeight: 230})}
             onChangeText={(text) => this.setState({passwordChecked: text})}
+            blurOnSubmit={false}
+            onSubmitEditing={() => this.refs['email'].focus()}
           />
 
           <S5TextInput
@@ -141,8 +151,11 @@ class SignupView extends Component {
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
-            onFocus={() => this.setState({bottomHeight: 210})}
+            returnKeyType="done"
+            onFocus={() => this.setState({bottomHeight: 230})}
             onChangeText={(text) => this.setState({email: text})}
+            //blurOnSubmit={false}
+            //onSubmitEditing={() => this.signup()}
           />
         </View>
 
