@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { signup }   from 's5-action';
+import { signup, dismissKeyboard }   from 's5-action';
 import { S5TextInput, S5Button, S5Icon } from 's5-components';
 
 import KeyboardSpacer from './KeyboardSpacer';
@@ -38,6 +38,8 @@ class SignupView extends Component {
   }
 
   signup(){
+
+    dismissKeyboard();
 
     this.setState({ message: '' });
 

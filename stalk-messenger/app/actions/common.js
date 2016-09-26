@@ -2,7 +2,10 @@
 import {
   Platform,
   InteractionManager,
+  TextInput,
 } from 'react-native';
+
+const { State: TextInputState } = TextInput;
 
 import {
   APP_NAME,
@@ -47,4 +50,10 @@ export async function currentInstallation() {
 export async function updateInstallation(updates) {
   const installation = await currentInstallation();
   await installation.save(updates);
+}
+
+/**************************** utils ********************************/
+
+export function dismissKeyboard() {
+  TextInputState.blurTextInput(TextInputState.currentlyFocusedField());
 }

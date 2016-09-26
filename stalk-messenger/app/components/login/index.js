@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import { signin }   from 's5-action';
+import { signin, dismissKeyboard }   from 's5-action';
 import { S5TextInput, S5Button } from 's5-components';
 
 import KeyboardSpacer from './KeyboardSpacer';
@@ -31,10 +31,12 @@ class LoginScreen extends Component {
   };
 
   componentDidMount() {
-    this.refs['username'].focus();
+    //this.refs['username'].focus();
   }
 
   login(){
+
+    dismissKeyboard();
 
     this.setState({ message: '' });
     if(!this.state.username) {
@@ -108,6 +110,7 @@ class LoginScreen extends Component {
         </Image>
 
         <KeyboardSpacer height={260} style={{backgroundColor: '#FFFFFF'}}/>
+
       </View>
     );
 
@@ -140,7 +143,6 @@ var styles = StyleSheet.create({
     alignSelf: 'center',
   }
 });
-
 
 function actions(dispatch) {
   return {

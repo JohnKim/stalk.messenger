@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 import { connect }    from 'react-redux';
-import { switchTab }  from 's5-action';
+import { switchTab, dismissKeyboard }  from 's5-action';
 
 import LoginScreen    from './login';
 import SignupView     from './login/SignupView';
@@ -93,10 +93,12 @@ class AppNavigator extends Component {
   renderScene (route, navigator) {
 
     if (!this.props.isLoggedIn) {
+
+      dismissKeyboard();
+
       if(route.signupView) {
         return <SignupView navigator={navigator} />;
       }
-
       return <LoginScreen navigator={navigator} />;
     }
 
