@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import {
   View,
   TextInput,
-  Text
+  Text,
+  Platform
 } from 'react-native';
 
 export default class S5TextInput extends Component {
@@ -98,44 +99,88 @@ export default class S5TextInput extends Component {
 
   render() {
 
-    return (
+    if(Platform.OS == 'android'){
 
+      return (
 
-      <View style={this.props.style}>
+        <View style={this.props.style}>
 
-        {this._renderLabel()}
+          {this._renderLabel()}
 
-        <View style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomColor: this.state.borderBottomColor,
-          borderBottomWidth: 1,
-        }}>
-          <TextInput
-            ref={(ref) => this.s5textinput = ref}
-            style={[{
-              height: 43,
-              flex: 1,
-            }, this.props.inputStyle]}
-            onChangeText={this.props.onChangeText}
-            placeholder={this.props.placeholder}
-            secureTextEntry={this.props.secureTextEntry}
-            onFocus={() => {this._onFocus()}}
-            onBlur={() => {this._onBlur()}}
-            value={this.props.value}
-            autoCorrect={this.props.autoCorrect}
-            autoCapitalize={this.props.autoCapitalize}
-            returnKeyType={this.props.returnKeyType}
-            keyboardType={this.props.keyboardType}
-            onSubmitEditing={this.props.onSubmitEditing}
-            blurOnSubmit={this.props.blurOnSubmit}
-            />
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomColor: this.state.borderBottomColor,
+            borderBottomWidth: 1,
+          }}>
+            <TextInput
+              ref={(ref) => this.s5textinput = ref}
+              style={[{
+                height: 43,
+                flex: 1,
+              }, this.props.inputStyle]}
+              onChangeText={this.props.onChangeText}
+              placeholder={this.props.placeholder}
+              secureTextEntry={this.props.secureTextEntry}
+              onFocus={() => {this._onFocus()}}
+              onBlur={() => {this._onBlur()}}
+              value={this.props.value}
+              autoCorrect={this.props.autoCorrect}
+              autoCapitalize={this.props.autoCapitalize}
+              returnKeyType={this.props.returnKeyType}
+              keyboardType={this.props.keyboardType}
+              onSubmitEditing={this.props.onSubmitEditing}
+              blurOnSubmit={this.props.blurOnSubmit}
+              underlineColorAndroid='rgba(0,0,0,0)'
+              />
 
-          {this._renderContainerIcon()}
+            {this._renderContainerIcon()}
 
+          </View>
         </View>
-      </View>
-    );
+      );
+
+    } else {
+
+      return (
+
+        <View style={this.props.style}>
+
+          {this._renderLabel()}
+
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomColor: this.state.borderBottomColor,
+            borderBottomWidth: 1,
+          }}>
+            <TextInput
+              ref={(ref) => this.s5textinput = ref}
+              style={[{
+                height: 43,
+                flex: 1,
+              }, this.props.inputStyle]}
+              onChangeText={this.props.onChangeText}
+              placeholder={this.props.placeholder}
+              secureTextEntry={this.props.secureTextEntry}
+              onFocus={() => {this._onFocus()}}
+              onBlur={() => {this._onBlur()}}
+              value={this.props.value}
+              autoCorrect={this.props.autoCorrect}
+              autoCapitalize={this.props.autoCapitalize}
+              returnKeyType={this.props.returnKeyType}
+              keyboardType={this.props.keyboardType}
+              onSubmitEditing={this.props.onSubmitEditing}
+              blurOnSubmit={this.props.blurOnSubmit}
+              />
+
+            {this._renderContainerIcon()}
+
+          </View>
+        </View>
+      );
+    }
+
   }
 
 }

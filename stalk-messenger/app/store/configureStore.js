@@ -5,6 +5,7 @@
 
 'use strict';
 
+import { Platform } from 'react-native';
 import { applyMiddleware, createStore, compose }  from 'redux';
 import { persistStore, autoRehydrate }            from 'redux-persist';
 import { AsyncStorage }                           from 'react-native';
@@ -36,7 +37,10 @@ function configureStore(onComplete) {
       logger
     ),
     autoRehydrate(),
-    devTools()
+    devTools({
+      name: Platform.OS,
+      hostname: 'localhost'
+    })
   );
 
   const store = createStore(reducers, undefined, enhancer);
