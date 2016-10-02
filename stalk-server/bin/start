@@ -71,6 +71,7 @@ options['redis'] = config.redis || process.env.REDIS;
 options['mongodb'] = config.mongodb || process.env.MONGODB;
 options['app'] = config.app || process.env.APP_ID || 'STALK';
 options['master'] = config.master || process.env.MASTER_KEY || 's3cR3T';
+options['push'] = utils.getPushConfig();
 
 var homeDir = config.home || process.env.HOME_DIR;
 if (homeDir){
