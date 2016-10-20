@@ -11,7 +11,12 @@ import {
   StyleSheet,
 } from 'react-native';
 
-import TabsView from './tabs/TabsView';
+import TabsView       from './tabs/TabsView';
+
+import ChatView       from './tabs/chats/ChatView';
+import SearchUserView from './tabs/follows/SearchUserView';
+import SelectUserView from './tabs/follows/SelectUserView';
+
 import Colors from 'S5Colors';
 
 export default class AppNavigator extends Component {
@@ -76,7 +81,17 @@ export default class AppNavigator extends Component {
 
   renderScene (route, navigator) {
 
-    return <TabsView navigator={navigator} />;
+    switch (route.name) {
+      case 'searchUserView':
+        return <SearchUserView  navigator={navigator} />;
+      case 'selectUserView':
+        return <SelectUserView  navigator={navigator} />;
+      case 'chatView':
+        return <ChatView        navigator={navigator} chat={route.chat} users={route.users} />;
+      default:
+        return <TabsView        navigator={navigator} />;
+    }
+
   }
 
   render() {

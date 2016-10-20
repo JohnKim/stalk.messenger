@@ -1,12 +1,20 @@
-import React, { Component } from 'react';
+/**
+ *
+ * @flow
+ */
+
+import React, { Component, PropTypes } from 'react';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { TabViewAnimated, TabViewPagerPan, TabBar, TabBarTop } from 'react-native-tab-view';
 import NavigationBar from 'react-native-navbar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NavBarButton from './NavBarButton';
+
 import Colors from 'S5Colors';
 
+import FollowsView    from './follows';
 import ChatsView      from './chats';
+import ProfileView    from './profile';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,26 +43,26 @@ const styles = StyleSheet.create({
 
 export default class TabView extends Component {
 
-  static title = 'No animation';
-
   static propTypes = {
     style: View.propTypes.style,
+    navigator: PropTypes.object.isRequired,
   };
 
   state = {
     index: 0,
     routes: [
-      { key: '1', title: 'Friends', actions: [{
-          icon: 'md-rewind'
-        },
-        {
-          icon: 'md-settings'
-        }], },
-      { key: '2', title: 'Chats' },
-      { key: '3', title: 'Profile' },
+      { key: 'follows', title: 'Friends', actions: [{ key: 'searchFollow', icon: 'search' }] },
+      { key: 'chats',   title: 'Chats'  , actions: [{ key: 'addChat', icon: 'add' }] },
+      { key: 'profile', title: 'Profile' },
     ],
     actions: [],
   };
+
+  componentWillMount() {
+    /* set initial tab */
+    let index = 1;
+    this._handleChangeTab(index);
+  }
 
   _handleChangeTab = (index) => {
     this.setState({
@@ -66,7 +74,7 @@ export default class TabView extends Component {
   _renderLabel = ({ navigationState }: any) => ({ route, index }) => {
     return (
       <Text style={[ styles.label, {
-        color: navigationState.index === index ? Colors.primaryText : Colors.secondaryText,
+        color:      navigationState.index === index ? Colors.primaryText : Colors.secondaryText,
         fontWeight: navigationState.index === index ? 'bold' : 'normal',
       } ]}>
         {route.title}
@@ -89,10 +97,9 @@ export default class TabView extends Component {
   /* FOR IOS */
   _renderFooter = (props) => {
     return (
-      <TabBarTop
+      <TabBar
         {...props}
         renderLabel={this._renderLabel(props)}
-        indicatorStyle={styles.indicator}
         style={styles.tabbar}
       />
     );
@@ -100,14 +107,14 @@ export default class TabView extends Component {
 
   _renderScene = ({ route }) => {
     switch (route.key) {
-    case '1':
-      return <View style={[ styles.page, { backgroundColor: '#ff4081' } ]} />;
-    case '2':
-      return <ChatsView style={[ styles.page, { backgroundColor: '#673ab7' } ]} />;
-    case '3':
-      return <View style={[ styles.page, { backgroundColor: '#4caf50' } ]} />;
-    default:
-      return null;
+      case 'follows':
+        return <FollowsView navigator={this.props.navigator} />;
+      case 'chats':
+        return <ChatsView   navigator={this.props.navigator} />;
+      case 'profile':
+        return <ProfileView navigator={this.props.navigator} />;
+      default:
+        return null;
     }
   };
 
@@ -117,6 +124,10 @@ export default class TabView extends Component {
 
   _configureTransition = () => null;
 
+  _onPressNavBarButton = (name) => {
+    this.props.navigator.push({name});
+  }
+
   render() {
 
     return (
@@ -124,9 +135,12 @@ export default class TabView extends Component {
 
         <NavigationBar
           style={styles.toolbar}
-          title={{ title: 'Stalk', }}
+          title={{ title: 'STALK', }}
           rightButton={
-            <NavBarButton actions={this.state.actions} />
+            <NavBarButton
+              style={{ marginRight: 10 }}
+              onPress={ this._onPressNavBarButton }
+              actions={this.state.actions} />
           }
         />
 
@@ -138,7 +152,7 @@ export default class TabView extends Component {
             configureTransition={this._configureTransition}
             renderPager={this._renderPager}
             renderScene={this._renderScene}
-            renderFooter={this._renderFooter}
+            renderHeader={this._renderHeader}
             onRequestChangeTab={this._handleChangeTab}
           />
 
@@ -150,7 +164,7 @@ export default class TabView extends Component {
             configureTransition={this._configureTransition}
             renderPager={this._renderPager}
             renderScene={this._renderScene}
-            renderHeader={this._renderHeader}
+            renderFooter={this._renderFooter}
             onRequestChangeTab={this._handleChangeTab}
           />
 

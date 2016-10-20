@@ -1,16 +1,20 @@
+/**
+ *
+ * @flow
+ */
 
 import React, { Component, PropTypes } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import Colors from 'S5Colors';
+import Icon from 'S5Icon';
 
 export default class NavBarButton extends Component {
 
   static propTypes = {
     actions: PropTypes.arrayOf(PropTypes.shape({
       icon: PropTypes.string.isRequired,
-      onPress: PropTypes.func,
     })),
+    onPress: PropTypes.func.isRequired,
     size: PropTypes.number,
     color: PropTypes.string,
     style: PropTypes.any,
@@ -25,20 +29,15 @@ export default class NavBarButton extends Component {
   _updateIconSources = (props) => {
 
     Promise.all((props.actions || []).map((action) => {
-      console.log(action.icon);
       if (action.icon) {
         return (
-            <TouchableOpacity onPress={action.onPress} key={action.icon}>
-              <Icon key={action.icon} name={action.icon} size={props.size} color={props.color} style={props.style} />
+            <TouchableOpacity onPress={() => props.onPress(action.key || action.icon)} key={action.key || action.icon} style={styles.content}>
+              <Icon key={action.key || action.icon} name={action.icon} size={props.size} color={props.color} style={[ props.style, {} ]} />
             </TouchableOpacity>
           );
       }
       return Promise.resolve(action);
-    })).then(actions => {
-      console.log(actions)
-      this.setState({ actions })
-    }
-    );
+    })).then(actions => { this.setState({ actions }) } );
 
   }
 
@@ -60,9 +59,15 @@ export default class NavBarButton extends Component {
 
   render() {
     return (
-      <View style={{flexDirection: 'row', height: 100, padding: 20}}>
+      <View style={{flexDirection: 'row'}}>
         {this.state.actions}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  content: {
+    justifyContent:'center'
+  }
+});

@@ -12,7 +12,7 @@ import {
   Text
 } from 'react-native';
 
-class ChatsMain extends Component {
+class FollowsMain extends Component {
 
   static propTypes = {
     navigator: React.PropTypes.object.isRequired,
@@ -37,7 +37,7 @@ class ChatsMain extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>CHATS VIEW</Text>
+        <Text>FOLLOWS VIEW</Text>
       </View>
     );
   }
@@ -51,4 +51,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = ChatsMain;
+module.exports = FollowsMain;
