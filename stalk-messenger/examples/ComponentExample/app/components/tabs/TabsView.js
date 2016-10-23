@@ -10,7 +10,8 @@ import NavigationBar from 'react-native-navbar';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NavBarButton from './NavBarButton';
 
-import Colors from 'S5Colors';
+import S5Colors from 'S5Colors';
+import S5Header from 'S5Header';
 
 import FollowsView    from './follows';
 import ChatsView      from './chats';
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   tabbar: {
-    backgroundColor: Colors.primaryDark,
+    backgroundColor: S5Colors.primaryDark,
   },
   label: {
     fontSize: 14,
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   toolbar: {
-    backgroundColor: Colors.primary,
+    backgroundColor: S5Colors.primary,
     height: 52,
   }
 });
@@ -51,8 +52,8 @@ export default class TabView extends Component {
   state = {
     index: 0,
     routes: [
-      { key: 'follows', title: 'Friends', actions: [{ key: 'searchFollow', icon: 'search' }] },
-      { key: 'chats',   title: 'Chats'  , actions: [{ key: 'addChat', icon: 'add' }] },
+      { key: 'follows', title: 'Friends', actions: [{ key: 'SearchUserView', icon: 'search' }] },
+      { key: 'chats',   title: 'Chats'  , actions: [{ key: 'ChatView', icon: 'add' }] },
       { key: 'profile', title: 'Profile' },
     ],
     actions: [],
@@ -74,7 +75,7 @@ export default class TabView extends Component {
   _renderLabel = ({ navigationState }: any) => ({ route, index }) => {
     return (
       <Text style={[ styles.label, {
-        color:      navigationState.index === index ? Colors.primaryText : Colors.secondaryText,
+        color:      navigationState.index === index ? S5Colors.primaryText : S5Colors.secondaryText,
         fontWeight: navigationState.index === index ? 'bold' : 'normal',
       } ]}>
         {route.title}
@@ -131,20 +132,17 @@ export default class TabView extends Component {
   render() {
 
     return (
-      <View style={{ flex: 1, backgroundColor: Colors.background, }}>
+      <View style={{ flex: 1, backgroundColor: S5Colors.background, }}>
 
-        <NavigationBar
-          style={styles.toolbar}
-          title={{ title: 'STALK', }}
-          rightButton={
-            <NavBarButton
-              style={{ marginRight: 10 }}
-              onPress={ this._onPressNavBarButton }
-              actions={this.state.actions} />
-          }
-        />
 
-        {Platform.OS === 'android' > -1 ? (
+      <S5Header
+        title="STALK"
+        rightItem={ this.state.actions }
+        onPress={ this._onPressNavBarButton }
+      />
+
+
+        {Platform.OS == 'android' ? /* FOR ANDROID */ (
 
           <TabViewAnimated
             style={[ styles.container, this.props.style ]}
@@ -156,7 +154,7 @@ export default class TabView extends Component {
             onRequestChangeTab={this._handleChangeTab}
           />
 
-        ) : (
+        ) : /* FOR IOS */ (
 
           <TabViewAnimated
             style={[ styles.container, this.props.style ]}

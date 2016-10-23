@@ -81,12 +81,14 @@ export default class AppNavigator extends Component {
 
   renderScene (route, navigator) {
 
+    console.log(route.name);
+
     switch (route.name) {
-      case 'searchUserView':
+      case 'SearchUserView':
         return <SearchUserView  navigator={navigator} />;
-      case 'selectUserView':
+      case 'SelectUserView':
         return <SelectUserView  navigator={navigator} />;
-      case 'chatView':
+      case 'ChatView':
         return <ChatView        navigator={navigator} chat={route.chat} users={route.users} />;
       default:
         return <TabsView        navigator={navigator} />;
