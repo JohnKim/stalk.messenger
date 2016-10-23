@@ -6,9 +6,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { TabViewAnimated, TabViewPagerPan, TabBar, TabBarTop } from 'react-native-tab-view';
-import NavigationBar from 'react-native-navbar';
-import Icon from 'react-native-vector-icons/Ionicons';
-import NavBarButton from './NavBarButton';
 
 import S5Colors from 'S5Colors';
 import S5Header from 'S5Header';
@@ -61,11 +58,13 @@ export default class TabView extends Component {
 
   componentWillMount() {
     /* set initial tab */
-    let index = 1;
+    let index = 0;
     this._handleChangeTab(index);
   }
 
   _handleChangeTab = (index) => {
+
+    console.log(index);
     this.setState({
       index,
       actions: this.state.routes[index].actions,
@@ -125,7 +124,7 @@ export default class TabView extends Component {
 
   _configureTransition = () => null;
 
-  _onPressNavBarButton = (name) => {
+  _onPressHeader = (name) => {
     this.props.navigator.push({name});
   }
 
@@ -134,11 +133,10 @@ export default class TabView extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: S5Colors.background, }}>
 
-
       <S5Header
         title="STALK"
         rightItem={ this.state.actions }
-        onPress={ this._onPressNavBarButton }
+        onPress={ this._onPressHeader }
       />
 
 

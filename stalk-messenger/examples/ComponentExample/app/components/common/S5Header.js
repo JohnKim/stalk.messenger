@@ -3,8 +3,6 @@
  * @flow
  */
 
-'use strict';
-
 import React, { Component, PropTypes } from 'react';
 import {
   Platform,
@@ -15,6 +13,7 @@ import {
   Image,
   ToolbarAndroid,
 } from 'react-native';
+
 import NavigationBar from 'react-native-navbar';
 import S5Colors from './S5Colors';
 import S5Icon   from './S5Icon';
